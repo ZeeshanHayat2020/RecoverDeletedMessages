@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/acMain_btm_nav_btnWhatsapp"
+        android:icon="@drawable/ic_baseline_brightness_1_24"
+        android:title="WhatsApp"
+        app:showAsAction="ifRoom"
+        />
+    <item android:id="@+id/acMain_btm_nav_btnFacebook"
+        android:icon="@drawable/ic_baseline_brightness_1_24"
+        app:showAsAction="ifRoom"
+        android:title="Facebook"/>
+    <item android:id="@+id/acMain_btm_nav_btnInstagram"
+        android:icon="@drawable/ic_baseline_brightness_1_24"
+        android:title="Instagram"
+        app:showAsAction="ifRoom"
+        />
+    <item android:id="@+id/acMain_btm_nav_btnInsDefault"
+        android:icon="@drawable/ic_baseline_brightness_1_24"
+        android:title="Default"
+        app:showAsAction="ifRoom"
+        />
+</menu>

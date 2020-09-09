@@ -1,20 +1,24 @@
 package com.example.recoverdeletedmessages.adapters;
 
 import android.content.Context;
-import android.text.Html;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recoverdeletedmessages.R;
-import com.example.recoverdeletedmessages.models.ModelMain;
+import com.example.recoverdeletedmessages.constants.TableName;
+import com.example.recoverdeletedmessages.database.MyDataBaseHelper;
+import com.example.recoverdeletedmessages.interfaces.OnRecyclerItemClickeListener;
+import com.example.recoverdeletedmessages.models.Messages;
+import com.example.recoverdeletedmessages.models.Users;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.File;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -22,10 +26,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> {
 
     private Context context;
-    private List<ModelMain> modelMainList;
+    private List<Users> modelMainList;
+    private OnRecyclerItemClickeListener onRecyclerItemClickeListener;
+
+    public void setOnRecyclerItemClickListener(OnRecyclerItemClickeListener onRecyclerItemClickeListener) {
+        this.onRecyclerItemClickeListener = onRecyclerItemClickeListener;
+    }
 
 
-    public AdapterMain(Context context, List<ModelMain> notesList) {
+    public AdapterMain(Context context, List<Users> notesList) {
         this.context = context;
         this.modelMainList = notesList;
     }
@@ -55,10 +64,25 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        ModelMain currentItem = modelMainList.get(position);
-        holder.titleTV.setText(currentItem.getTitle());
-        holder.descTV.setText(currentItem.getMessage());
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
+        Users currentItem = modelMainList.get(position);
+        holder.titleTV.setText(currentItem.getUserTitle());
+        setImageFromFile(currentItem.getLargeIconUri(), holder.imageView);
+        MyDataBaseHelper helper = new MyDataBaseHelper(context);
+        List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, currentItem.getUserTitle());
+        holder.descTV.setText(list.get(0).getMessage());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onRecyclerItemClickeListener != null) {
+                    if (position != RecyclerView.NO_POSITION) {
+                        onRecyclerItemClickeListener.onItemClicked(position);
+                    }
+                }
+            }
+        });
+
     }
 
     @Override
@@ -66,16 +90,14 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
         return modelMainList.size();
     }
 
-    private String formatDate(String dateStr) {
-        try {
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = fmt.parse(dateStr);
-            SimpleDateFormat fmtOut = new SimpleDateFormat("MMM d");
-            return fmtOut.format(date);
-        } catch (ParseException e) {
 
+    private void setImageFromFile(String filePath, ImageView imageView) {
+        File imgFile = new File(filePath);
+        if (imgFile.exists()) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            imageView.setImageBitmap(myBitmap);
         }
-
-        return "";
     }
+
+
 }

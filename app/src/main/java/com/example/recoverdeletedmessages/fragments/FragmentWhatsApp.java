@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,14 +18,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recoverdeletedmessages.R;
+import com.example.recoverdeletedmessages.activities.ActivityMessagesViewer;
 import com.example.recoverdeletedmessages.adapters.AdapterMain;
 import com.example.recoverdeletedmessages.constants.Constant;
-import com.example.recoverdeletedmessages.database.DatabaseHelper;
-import com.example.recoverdeletedmessages.models.ModelMain;
-import com.example.recoverdeletedmessages.models.TableSetter;
+import com.example.recoverdeletedmessages.constants.TableName;
+import com.example.recoverdeletedmessages.database.MyDataBaseHelper;
+import com.example.recoverdeletedmessages.interfaces.OnRecyclerItemClickeListener;
+import com.example.recoverdeletedmessages.models.Users;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FragmentWhatsApp extends Fragment {
 
@@ -35,12 +35,10 @@ public class FragmentWhatsApp extends Fragment {
     private Context context;
     private RecyclerView recyclerView;
     private AdapterMain mAdapter;
-    private List<ModelMain> modelMainList = new ArrayList<>();
-    private WhatsAppDataReceiver whatsAppDataReceiver;
-    private SQLiteDatabase sqLiteDatabase;
-    private DatabaseHelper databaseHelper;
-    private TableSetter tableSetter;
+    private ArrayList<Users> usersList = new ArrayList<>();
 
+    private WhatsAppDataReceiver whatsAppDataReceiver;
+    private MyDataBaseHelper myDataBaseHelper;
 
     @Nullable
     @Override
@@ -61,10 +59,7 @@ public class FragmentWhatsApp extends Fragment {
     }
 
     private void initViews() {
-        tableSetter = new TableSetter();
-        tableSetter.setTABLE_NAME("testtable");
-        databaseHelper = new DatabaseHelper(getContext());
-
+        myDataBaseHelper = new MyDataBaseHelper(getContext());
     }
 
     private void registerReceiver() {
@@ -83,26 +78,53 @@ public class FragmentWhatsApp extends Fragment {
     }
 
     private void buildRecyclerView() {
-        modelMainList.addAll(databaseHelper.getAllData());
-        mAdapter = new AdapterMain(context, modelMainList);
+        usersList.addAll(myDataBaseHelper.getALLUsers(TableName.TABLE_NAME_USER_WHATS_APP));
+        mAdapter = new AdapterMain(context, usersList);
         recyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
+        mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickeListener() {
+            @Override
+            public void onItemClicked(int position) {
+                Intent intent = new Intent(context, ActivityMessagesViewer.class);
+                intent.putExtra(Constant.KEY_INTENT_SELECTED_MAIN_ITEM_TITLE, usersList.get(position).getUserTitle());
+                startActivity(intent);
+
+            }
+        });
+
 
     }
 
     public class WhatsAppDataReceiver extends BroadcastReceiver {
         @Override
+
         public void onReceive(Context context, Intent intent) {
 
             long id = intent.getLongExtra(Constant.KEY_INTENT_ID, 0);
             String title = intent.getStringExtra(Constant.KEY_INTENT_TITLE);
             String message = intent.getStringExtra(Constant.KEY_INTENT_MESSAGE);
+            String largeIconUri = intent.getStringExtra(Constant.KEY_INTENT_LATG_ICON_URI);
             long timeStamp = intent.getLongExtra(Constant.KEY_INTENT_TIMESTAMP, 0);
-            databaseHelper.insertData(id, title, message, timeStamp);
-//            Log.d(TAG, "WhatsAppDataReceiver: Success" + databaseHelper.getData("Sender"));
-//            databaseHelper.getData("Sender");
-//            buildRecyclerView();
 
+
+            if (!myDataBaseHelper.isColumnExist(TableName.TABLE_NAME_USER_WHATS_APP, myDataBaseHelper.KEY_USER_TITLE, title)) {
+                myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_WHATS_APP, id, title, largeIconUri);
+                Log.d(TAG, "onReceive: Column Does not Exists");
+            }
+//           myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_WHATS_APP, id, title, largeIconUri);
+            myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, title, message, timeStamp);
+
+            Log.d(TAG, "onReceive: Received Notification");
+            for (int i = 0; i < myDataBaseHelper.getUsersCount(); i++) {
+                myDataBaseHelper.deleteUsers(i);
+                Log.d(TAG, "onReceive: Table Users Count :" + i);
+            }
+            for (int i = 0; i < myDataBaseHelper.getMessagesCount(TableName.TABLE_NAME_MESSAGES_WHATS_APP); i++) {
+
+                Log.d(TAG, "onReceive: Table Messages Count:" + i);
+            }
+
+            buildRecyclerView();
         }
     }
 
@@ -111,5 +133,8 @@ public class FragmentWhatsApp extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         getContext().unregisterReceiver(whatsAppDataReceiver);
+        if (!usersList.isEmpty()) {
+            usersList.clear();
+        }
     }
 }

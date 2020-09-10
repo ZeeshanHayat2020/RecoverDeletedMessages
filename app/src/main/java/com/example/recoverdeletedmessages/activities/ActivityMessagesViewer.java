@@ -32,6 +32,7 @@ public class ActivityMessagesViewer extends AppCompatActivity {
     private ArrayList<Messages> messagesList = new ArrayList<>();
     private MyDataBaseHelper myDataBaseHelper;
     private String userTitle;
+    private String tableName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class ActivityMessagesViewer extends AppCompatActivity {
         setContentView(R.layout.activity_messages_viewer);
         Intent intent = getIntent();
         userTitle = intent.getStringExtra(Constant.KEY_INTENT_SELECTED_MAIN_ITEM_TITLE);
+        tableName = intent.getStringExtra(Constant.KEY_INTENT_SELECTED_TABLE_NAME);
         iniRecyclerView();
         buildRecyclerView();
     }
@@ -55,24 +57,27 @@ public class ActivityMessagesViewer extends AppCompatActivity {
 
     private void buildRecyclerView() {
 
-        messagesList.addAll(myDataBaseHelper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, userTitle));
+        messagesList.addAll(myDataBaseHelper.getSelectedMessages(tableName, userTitle));
         mAdapter = new AdapterMessageViewer(this, messagesList);
         recyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickeListener() {
             @Override
             public void onItemClicked(int position) {
-//                Users users = myDataBaseHelper.getUsers(position);
+
+            }
+
+            @Override
+            public void onItemLongClicked(int position) {
+
+            }
+
+            @Override
+            public void onItemCheckBoxClicked(View view, int position) {
 
             }
         });
 
-        for (int i = 0; i < myDataBaseHelper.getMessagesCount("messages_whats_app"); i++) {
-
-            Log.d(TAG, "onReceive: Table Messages Count:" + i);
-            Log.d(TAG, "onReceive: Message:" + messagesList.get(i).getMessage());
-            Log.d(TAG, "onReceive: Time:" + messagesList.get(i).getTimeStamp());
-        }
 
     }
 }

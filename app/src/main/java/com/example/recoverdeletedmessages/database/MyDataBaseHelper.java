@@ -9,13 +9,20 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.recoverdeletedmessages.constants.TableName;
 import com.example.recoverdeletedmessages.models.Messages;
 import com.example.recoverdeletedmessages.models.Users;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.recoverdeletedmessages.constants.TableName.TABLE_NAME_MESSAGES_DEFAULT;
+import static com.example.recoverdeletedmessages.constants.TableName.TABLE_NAME_MESSAGES_FACEBOOK;
+import static com.example.recoverdeletedmessages.constants.TableName.TABLE_NAME_MESSAGES_INSTAGRAM;
 import static com.example.recoverdeletedmessages.constants.TableName.TABLE_NAME_MESSAGES_WHATS_APP;
+import static com.example.recoverdeletedmessages.constants.TableName.TABLE_NAME_USER_DEFAULT;
+import static com.example.recoverdeletedmessages.constants.TableName.TABLE_NAME_USER_FACEBOOK;
+import static com.example.recoverdeletedmessages.constants.TableName.TABLE_NAME_USER_INSTAGRAM;
 import static com.example.recoverdeletedmessages.constants.TableName.TABLE_NAME_USER_WHATS_APP;
 
 
@@ -41,12 +48,44 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     public static final String KEY_LARGE_ICON_URI = "larg_icon_uri";
 
     private static final String CREATE_TABLE_USER_WHATS_APP = "CREATE TABLE IF NOT EXISTS "
-            + TABLE_NAME_USER_WHATS_APP + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+            + TABLE_NAME_USER_WHATS_APP + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_USER_TITLE + " TEXT , " + KEY_LARGE_ICON_URI + " TEXT " + ")";
 
 
     // Tag table create statement
     private static final String CREATE_TABLE_MESSAGES_WHATS_APP = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_MESSAGES_WHATS_APP
+            + "(" + KEY_USER_TITLE + "  TEXT," + KEY_MESSAGE + " TEXT,"
+            + KEY_TIME + " TEXT" + ")";
+
+
+    private static final String CREATE_TABLE_USER_FACEBOOK = "CREATE TABLE IF NOT EXISTS "
+            + TableName.TABLE_NAME_USER_FACEBOOK + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + KEY_USER_TITLE + " TEXT , " + KEY_LARGE_ICON_URI + " TEXT " + ")";
+
+
+    // Tag table create statement
+    private static final String CREATE_TABLE_MESSAGES_FACEBOOK = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_MESSAGES_FACEBOOK
+            + "(" + KEY_USER_TITLE + "  TEXT," + KEY_MESSAGE + " TEXT,"
+            + KEY_TIME + " TEXT" + ")";
+
+
+    private static final String CREATE_TABLE_USER_INSTAGRAM = "CREATE TABLE IF NOT EXISTS "
+            + TableName.TABLE_NAME_USER_INSTAGRAM + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + KEY_USER_TITLE + " TEXT , " + KEY_LARGE_ICON_URI + " TEXT " + ")";
+
+
+    // Tag table create statement
+    private static final String CREATE_TABLE_MESSAGES_INSTAGRAM = "CREATE TABLE IF NOT EXISTS " + TableName.TABLE_NAME_MESSAGES_INSTAGRAM
+            + "(" + KEY_USER_TITLE + "  TEXT," + KEY_MESSAGE + " TEXT,"
+            + KEY_TIME + " TEXT" + ")";
+
+    private static final String CREATE_TABLE_USER_DEFAULT = "CREATE TABLE IF NOT EXISTS "
+            + TableName.TABLE_NAME_USER_DEFAULT + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + KEY_USER_TITLE + " TEXT , " + KEY_LARGE_ICON_URI + " TEXT " + ")";
+
+
+    // Tag table create statement
+    private static final String CREATE_TABLE_MESSAGES_DEFAULT = "CREATE TABLE IF NOT EXISTS " + TableName.TABLE_NAME_MESSAGES_DEFAULT
             + "(" + KEY_USER_TITLE + "  TEXT," + KEY_MESSAGE + " TEXT,"
             + KEY_TIME + " TEXT" + ")";
 
@@ -60,12 +99,25 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USER_WHATS_APP);
         db.execSQL(CREATE_TABLE_MESSAGES_WHATS_APP);
+        db.execSQL(CREATE_TABLE_USER_FACEBOOK);
+        db.execSQL(CREATE_TABLE_MESSAGES_FACEBOOK);
+        db.execSQL(CREATE_TABLE_USER_INSTAGRAM);
+        db.execSQL(CREATE_TABLE_MESSAGES_INSTAGRAM);
+        db.execSQL(CREATE_TABLE_USER_DEFAULT);
+        db.execSQL(CREATE_TABLE_MESSAGES_DEFAULT);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_USER_WHATS_APP);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_MESSAGES_WHATS_APP);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_USER_FACEBOOK);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_MESSAGES_FACEBOOK);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_USER_INSTAGRAM);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_MESSAGES_INSTAGRAM);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_USER_DEFAULT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_MESSAGES_DEFAULT);
+
         onCreate(db);
     }
 
@@ -74,7 +126,6 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_ID, userID);
         values.put(KEY_USER_TITLE, title);
         values.put(KEY_LARGE_ICON_URI, largeIconUri);
         // insert row
@@ -82,30 +133,9 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         return todo_id;
     }
 
-    public Users getUsers(long user_id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        String selectQuery = "SELECT  * FROM " + TABLE_NAME_USER_WHATS_APP + " WHERE "
-                + KEY_ID + " = " + user_id;
-
-        Log.e(LOG, selectQuery);
-
-        Cursor c = db.rawQuery(selectQuery, null);
-
-        if (c != null)
-            c.moveToFirst();
-
-        Users user = new Users();
-        user.setId(c.getLong(c.getColumnIndex(KEY_ID)));
-        user.setUserTitle((c.getString(c.getColumnIndex(KEY_USER_TITLE))));
-        user.setLargeIconUri((c.getString(c.getColumnIndex(KEY_LARGE_ICON_URI))));
-
-        return user;
-    }
-
-    public ArrayList<Users> getALLUsers(String TABLE_NAME) {
+    public ArrayList<Users> getALLUsers(String USERS_TABLE_NAME) {
         ArrayList<Users> usersList = new ArrayList<Users>();
-        String selectQuery = "SELECT  * FROM " + TABLE_NAME;
+        String selectQuery = "SELECT  * FROM " + USERS_TABLE_NAME;
 
         Log.e(LOG, selectQuery);
 
@@ -127,8 +157,8 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         return usersList;
     }
 
-    public int getUsersCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_NAME_USER_WHATS_APP;
+    public int getUsersCount(String USERS_TABLE_NAME) {
+        String countQuery = "SELECT  * FROM " + USERS_TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
 
@@ -150,10 +180,10 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(users.getId())});
     }
 
-    public void deleteUsers(long user_id) {
+    public void deleteUsers(String USER_ABLE_NAME, String columnName) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_NAME_USER_WHATS_APP, KEY_ID + " = ?",
-                new String[]{String.valueOf(user_id)});
+        db.delete(USER_ABLE_NAME, KEY_USER_TITLE + " = ?",
+                new String[]{String.valueOf(columnName)});
     }
 
 
@@ -229,16 +259,23 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         return messagesList;
     }
 
-    public boolean isColumnExist(String TABLE_NAME, String columnName, String columnValue) {
-        String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + columnName + " = '" + columnValue + " '";
-        Log.e(LOG, selectQuery);
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        cursor.moveToLast(); //if you not place this cursor.getCount() always give same integer (1) or current position of cursor.
-        if (cursor.getCount() > 0) {
-            return true;
-        } else {
-            return false;
+    public boolean checkIsRecordExist(String nameOfTable, String columnName, String columnValue) {
+        SQLiteDatabase objDatabase = this.getReadableDatabase();
+        try {
+            Cursor cursor = objDatabase.rawQuery("SELECT " + columnName + " FROM " + nameOfTable + " WHERE " + columnName + "='" + columnValue + "'", null);
+            if (cursor.moveToFirst()) {
+
+                Log.d(LOG, "Record  Already Exists" + "Table is:" + nameOfTable + " ColumnName:" + columnName);
+                return true;//record Exists
+
+            }
+            Log.d(LOG, "New Record  " + "Table is:" + nameOfTable + " ColumnName:" + columnName + " Column Value:" + columnValue);
+
+        } catch (Exception errorException) {
+            Log.d(LOG, "Exception occured" + "Exception occured " + errorException);
+            objDatabase.close();
         }
+        return false;
     }
+
 }

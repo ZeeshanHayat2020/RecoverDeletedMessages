@@ -67,66 +67,60 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
 
-
-//        checkNotificationComeFrom(sbn);
-
-        Log.i(TAG, "Notification Success :" + sbn.getPackageName() + "Larg Icon URi" + largeIconUri);
+        checkNotificationComeFrom(sbn);
+        Log.i(TAG, "Notification Success :" + sbn.getPackageName());
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         Log.i(TAG, "********** onNotificationRemoved");
         Log.i(TAG, "ID :" + sbn.getId() + " \t " + sbn.getNotification().tickerText + " \t " + sbn.getPackageName());
-        checkNotificationComeFrom(sbn);
+//        checkNotificationComeFrom(sbn);
     }
+
 
     private void checkNotificationComeFrom(StatusBarNotification sbn) {
         String packageName = sbn.getPackageName();
         Bundle extras = sbn.getNotification().extras;
-
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                Icon iconLarge = extras.getParcelable(Notification.EXTRA_LARGE_ICON);
-                Drawable drawable = null;
-                Bitmap bitmap = null;
-                if (iconLarge != null) {
-
-                    drawable = iconLarge.loadDrawable(this);
-                    bitmap = drawableToBitmap(drawable);
-                    saveImage(bitmap);
-                }
-                if (bitmap != null) {
-                    Toast.makeText(this, "bitmap get success", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "bitmap get null", Toast.LENGTH_SHORT).show();
-                }
-            }
-        } catch (Exception e) {
-            Log.d(TAG, "Catch: " + e);
-        }
-
-
-        long id = sbn.getId();
-        long timeStamp = sbn.getPostTime();
-        String title = extras.getString("android.title");
-        String message = extras.getCharSequence("android.text").toString();
-
         switch (packageName) {
             case ApplicationPackagesName.FACEBOOK_PACK_NAME: {
             }
             break;
+
             case ApplicationPackagesName.FACEBOOK_MESSENGER_PACK_NAME: {
+                getLargeIcon(extras);
+                long id = sbn.getId();
+                long timeStamp = sbn.getPostTime();
+                String title = extras.getString("android.title");
+                String message = extras.getCharSequence("android.text").toString();
+                sendBroadCast(Constant.ACTION_INTENT_FILTER_FACEBOOK_RECEIVER, id, title, message, timeStamp);
             }
             break;
+
             case ApplicationPackagesName.INSTAGRAM_PACK_NAME: {
+                getLargeIcon(extras);
+                long id = sbn.getId();
+                long timeStamp = sbn.getPostTime();
+                String title = extras.getString("android.title");
+                String message = extras.getCharSequence("android.text").toString();
+                sendBroadCast(Constant.ACTION_INTENT_FILTER_INSTAGRAM_RECEIVER, id, title, message, timeStamp);
             }
             break;
             case ApplicationPackagesName.WHATSAPP_PACK_NAME: {
+                getLargeIcon(extras);
+                long id = sbn.getId();
+                long timeStamp = sbn.getPostTime();
+                String title = extras.getString("android.title");
+                String message = extras.getCharSequence("android.text").toString();
                 sendBroadCast(Constant.ACTION_INTENT_FILTER_WHATS_APP_RECEIVER, id, title, message, timeStamp);
             }
             break;
             case ApplicationPackagesName.MY_NOTIFICATION_SENDER: {
-                sendBroadCast(Constant.ACTION_INTENT_FILTER_WHATS_APP_RECEIVER, id, title, message, timeStamp);
+                long id = sbn.getId();
+                long timeStamp = sbn.getPostTime();
+                String title = extras.getString("android.title");
+                String message = extras.getCharSequence("android.text").toString();
+                sendBroadCast(Constant.ACTION_INTENT_FILTER_DEFAULT_RECEIVER, id, title, message, timeStamp);
             }
             break;
 
@@ -145,6 +139,23 @@ public class NotificationService extends NotificationListenerService {
         sendBroadcast(intent);
     }
 
+    private void getLargeIcon(Bundle extras) {
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Icon iconLarge = extras.getParcelable(Notification.EXTRA_LARGE_ICON);
+                Drawable drawable = null;
+                Bitmap bitmap = null;
+                if (iconLarge != null) {
+                    drawable = iconLarge.loadDrawable(this);
+                    bitmap = drawableToBitmap(drawable);
+                    saveImage(bitmap);
+                }
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Catch: " + e);
+        }
+    }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap bitmap = null;
@@ -172,7 +183,7 @@ public class NotificationService extends NotificationListenerService {
         File rootDir = Environment.getExternalStorageDirectory();
         File dir = new File(rootDir.getAbsolutePath() + "/ZeeshanRecovery");
         final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-        File file = new File(dir, "Large_" + timeStamp + ".png");
+        File file = new File(dir, "Profile_" + timeStamp + ".jpg");
         if (!dir.exists()) {
             dir.mkdir();
         }
@@ -180,7 +191,7 @@ public class NotificationService extends NotificationListenerService {
         try {
             outputStream = new FileOutputStream(file);
             largeIconUri = file.getAbsolutePath();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

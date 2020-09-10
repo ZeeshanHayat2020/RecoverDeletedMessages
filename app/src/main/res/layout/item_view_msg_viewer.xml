@@ -2,10 +2,12 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_50sdp"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_10sdp"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:paddingBottom="@dimen/_10sdp">
+    android:paddingBottom="@dimen/_10sdp"
+    app:cardCornerRadius="@dimen/_10sdp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,6 +26,7 @@
                 android:id="@+id/itemView_ac_msgView_msgTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
                 android:text="Message"
                 android:textColor="@color/colorBlack"
                 android:textSize="18sp" />
@@ -32,6 +35,8 @@
                 android:id="@+id/itemView_ac_msgView_timeTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_margin="@dimen/_5sdp"
                 android:text="Time"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp" />

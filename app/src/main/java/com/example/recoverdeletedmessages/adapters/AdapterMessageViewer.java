@@ -75,9 +75,9 @@ public class AdapterMessageViewer extends RecyclerView.Adapter<AdapterMessageVie
     }
 
     private String formatDate(long timestamp) {
-        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(timestamp * 1000L);
-        String date = DateFormat.format("dd-MM-yyyy hh:mm:ss", cal).toString();
+        String date = DateFormat.format("MMMM d hh:mm a", cal).toString();
 
         return date;
     }

@@ -3,9 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/fr_whatsApp_toolbar"
+        layout="@layout/toolbar_custom" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_fr_whatsApp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/fr_whatsApp_toolbar" />
 
+    <ProgressBar
+        android:id="@+id/fr_whatsApp_loadingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="visible" />
 </RelativeLayout>

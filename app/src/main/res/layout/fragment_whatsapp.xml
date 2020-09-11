@@ -7,11 +7,27 @@
         android:id="@+id/fr_whatsApp_toolbar"
         layout="@layout/toolbar_custom" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_fr_whatsApp"
+    <RelativeLayout
+        android:id="@+id/rootView_recycler_fr_whatsApp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/fr_whatsApp_toolbar" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fr_whatsApp_toolbar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_fr_whatsApp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnFab_fr_whatsApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/_15sdp"
+        android:contentDescription="@string/fab_whatsApp" />
 
     <ProgressBar
         android:id="@+id/fr_whatsApp_loadingBar"

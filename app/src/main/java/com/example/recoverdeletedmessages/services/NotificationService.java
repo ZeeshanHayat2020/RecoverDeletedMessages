@@ -11,6 +11,8 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
+import android.provider.Telephony;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
@@ -23,6 +25,8 @@ import com.example.recoverdeletedmessages.R;
 import com.example.recoverdeletedmessages.activities.MainActivity;
 import com.example.recoverdeletedmessages.constants.ApplicationPackagesName;
 import com.example.recoverdeletedmessages.constants.Constant;
+import com.example.recoverdeletedmessages.constants.TableName;
+import com.example.recoverdeletedmessages.database.MyDataBaseHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -38,6 +43,9 @@ public class NotificationService extends NotificationListenerService {
     private String TAG = this.getClass().getSimpleName();
     private final static String default_notification_channel_id = "default";
     private String largeIconUri = "";
+    private long lastMessageTime;
+    private String lastMessageContent;
+    private MyDataBaseHelper myDataBaseHelper;
 
     @Override
     public void onCreate() {
@@ -67,75 +75,119 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
 
+
+        if ((sbn.getNotification().flags & Notification.FLAG_GROUP_SUMMARY) != 0) {
+            Log.d(TAG, "Ignore the notification FLAG_GROUP_SUMMARY");
+            Log.d(TAG, "May be twice");
+            return;
+        }
         checkNotificationComeFrom(sbn);
-        Log.i(TAG, "Notification Success :" + sbn.getPackageName());
+
+        Log.i(TAG, "********** onNotificationSuccess");
+        Log.i(TAG, "ID :" + sbn.getId() + " \t " + "Key: " + sbn.getKey() + " \t " + "Tag: " + sbn.getTag() + " \t Package: " + sbn.getPackageName());
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         Log.i(TAG, "********** onNotificationRemoved");
         Log.i(TAG, "ID :" + sbn.getId() + " \t " + sbn.getNotification().tickerText + " \t " + sbn.getPackageName());
-//        checkNotificationComeFrom(sbn);
+
     }
 
 
     private void checkNotificationComeFrom(StatusBarNotification sbn) {
+        myDataBaseHelper = new MyDataBaseHelper(getApplicationContext());
         String packageName = sbn.getPackageName();
         Bundle extras = sbn.getNotification().extras;
-        switch (packageName) {
-            case ApplicationPackagesName.FACEBOOK_PACK_NAME: {
+        if (packageName.equals(Telephony.Sms.getDefaultSmsPackage(getApplicationContext()))) {
+            long id = sbn.getId();
+            long timeStamp = sbn.getPostTime();
+            String title = extras.getString("android.title");
+            String message = extras.getCharSequence("android.text").toString();
+            boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_DEFAULT, myDataBaseHelper.KEY_USER_TITLE, title);
+            if (!recordExists) {
+                myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_DEFAULT, id, title, largeIconUri);
             }
-            break;
+            if (!message.contains("new messages")) {
+                myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, title, message, timeStamp);
+            }
+            sendBroadCast(Constant.ACTION_INTENT_FILTER_DEFAULT_RECEIVER, id, title, message, timeStamp);
+        } else {
+            switch (packageName) {
+                case ApplicationPackagesName.FACEBOOK_PACK_NAME: {
+                }
+                break;
 
-            case ApplicationPackagesName.FACEBOOK_MESSENGER_PACK_NAME: {
-                getLargeIcon(extras);
-                long id = sbn.getId();
-                long timeStamp = sbn.getPostTime();
-                String title = extras.getString("android.title");
-                String message = extras.getCharSequence("android.text").toString();
-                sendBroadCast(Constant.ACTION_INTENT_FILTER_FACEBOOK_RECEIVER, id, title, message, timeStamp);
-            }
-            break;
+                case ApplicationPackagesName.FACEBOOK_MESSENGER_PACK_NAME: {
+                    getLargeIcon(extras);
+                    long id = sbn.getId();
+                    long timeStamp = sbn.getPostTime();
+                    String title = extras.getString("android.title");
+                    String message = extras.getCharSequence("android.text").toString();
 
-            case ApplicationPackagesName.INSTAGRAM_PACK_NAME: {
-                getLargeIcon(extras);
-                long id = sbn.getId();
-                long timeStamp = sbn.getPostTime();
-                String title = extras.getString("android.title");
-                String message = extras.getCharSequence("android.text").toString();
-                sendBroadCast(Constant.ACTION_INTENT_FILTER_INSTAGRAM_RECEIVER, id, title, message, timeStamp);
-            }
-            break;
-            case ApplicationPackagesName.WHATSAPP_PACK_NAME: {
-                getLargeIcon(extras);
-                long id = sbn.getId();
-                long timeStamp = sbn.getPostTime();
-                String title = extras.getString("android.title");
-                String message = extras.getCharSequence("android.text").toString();
-                sendBroadCast(Constant.ACTION_INTENT_FILTER_WHATS_APP_RECEIVER, id, title, message, timeStamp);
-            }
-            break;
-            case ApplicationPackagesName.MY_NOTIFICATION_SENDER: {
-                long id = sbn.getId();
-                long timeStamp = sbn.getPostTime();
-                String title = extras.getString("android.title");
-                String message = extras.getCharSequence("android.text").toString();
-                sendBroadCast(Constant.ACTION_INTENT_FILTER_DEFAULT_RECEIVER, id, title, message, timeStamp);
-            }
-            break;
+                    boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_FACEBOOK, myDataBaseHelper.KEY_USER_TITLE, title);
+                    if (!recordExists) {
+                        myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_FACEBOOK, id, title, largeIconUri);
+                    }
+                    if (!message.contains("new messages")) {
+                        myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, title, message, timeStamp);
+                    }
 
+                    sendBroadCast(Constant.ACTION_INTENT_FILTER_FACEBOOK_RECEIVER, id, title, message, timeStamp);
+                }
+                break;
+
+                case ApplicationPackagesName.INSTAGRAM_PACK_NAME: {
+                    getLargeIcon(extras);
+                    long id = sbn.getId();
+                    long timeStamp = sbn.getPostTime();
+                    String title = extras.getString("android.title");
+                    String message = extras.getCharSequence("android.text").toString();
+
+                    boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_INSTAGRAM, myDataBaseHelper.KEY_USER_TITLE, title);
+                    if (!recordExists) {
+                        myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_INSTAGRAM, id, title, largeIconUri);
+                    }
+                    if (!message.contains("new messages")) {
+                        myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_INSTAGRAM, title, message, timeStamp);
+                    }
+
+                    sendBroadCast(Constant.ACTION_INTENT_FILTER_INSTAGRAM_RECEIVER, id, title, message, timeStamp);
+                }
+                break;
+                case ApplicationPackagesName.WHATSAPP_PACK_NAME: {
+
+                    getLargeIcon(extras);
+                    long id = sbn.getId();
+                    long timeStamp = sbn.getPostTime();
+                    String title = extras.getString("android.title");
+                    String message = extras.getCharSequence("android.text").toString();
+
+                    boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_WHATS_APP, myDataBaseHelper.KEY_USER_TITLE, title);
+                    if (!recordExists) {
+                        myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_WHATS_APP, id, title, largeIconUri);
+                    }
+
+                    if (!message.contains("new messages")) {
+                        myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, title, message, timeStamp);
+                    }
+
+                    sendBroadCast(Constant.ACTION_INTENT_FILTER_WHATS_APP_RECEIVER, id, title, message, timeStamp);
+                }
+                break;
+            }
         }
 
     }
 
 
     private void sendBroadCast(String action, long id, String title, String message, long timeStamp) {
-        Intent intent = new Intent(action);
+        Intent intent = new Intent(action);/*
         intent.putExtra(Constant.KEY_INTENT_ID, id);
         intent.putExtra(Constant.KEY_INTENT_TITLE, title);
         intent.putExtra(Constant.KEY_INTENT_MESSAGE, message);
         intent.putExtra(Constant.KEY_INTENT_TIMESTAMP, timeStamp);
-        intent.putExtra(Constant.KEY_INTENT_LATG_ICON_URI, largeIconUri);
+        intent.putExtra(Constant.KEY_INTENT_LATG_ICON_URI, largeIconUri);*/
         sendBroadcast(intent);
     }
 

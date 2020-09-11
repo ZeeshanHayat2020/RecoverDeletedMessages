@@ -150,6 +150,7 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
                 }
 
             }
+            break;
 
             case Constant.ACTIVE_FRAGMENT_DEFAULT: {
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, currentItem.getUserTitle());

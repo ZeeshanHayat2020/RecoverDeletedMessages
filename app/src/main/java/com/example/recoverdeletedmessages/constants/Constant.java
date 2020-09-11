@@ -23,5 +23,5 @@ public class Constant {
     public static final String ACTIVE_FRAGMENT_ACTIVE_INSTA = "ACTIVE_FRAGMENT_ACTIVE_INSTA";
     public static final String ACTIVE_FRAGMENT_DEFAULT = "ACTIVE_FRAGMENT_DEFAULT";
 
-    public static final int REQUEST_STORAGE_PERMISSION =192 ;
+    public static final int REQUEST_STORAGE_PERMISSION = 192;
 }

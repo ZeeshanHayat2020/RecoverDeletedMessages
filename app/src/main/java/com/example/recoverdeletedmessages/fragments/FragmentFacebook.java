@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,10 +56,11 @@ public class FragmentFacebook extends Fragment {
     private String TAG = "FragmentFacebook";
     private View view;
     private Context context;
+    private RelativeLayout recyclerRootView;
     private RecyclerView recyclerView;
     private AdapterMain mAdapter;
     private ArrayList<Users> usersList = new ArrayList<>();
-    private FragmentFacebook.FacebookMessagesReceiver facebookMessagesReceiver;
+    private FacebookMessagesReceiver facebookMessagesReceiver;
     private MyDataBaseHelper myDataBaseHelper;
 
     public boolean isContextualMenuOpen = false;
@@ -123,6 +125,7 @@ public class FragmentFacebook extends Fragment {
 
     private void initViews() {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
+        recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_facebook);
         toolbar = (Toolbar) view.findViewById(R.id.fr_facebook_toolbar);
         loadingBar = (ProgressBar) view.findViewById(R.id.fr_facebook_loadingBar);
         loadingBar.setVisibility(View.INVISIBLE);
@@ -294,6 +297,7 @@ public class FragmentFacebook extends Fragment {
                             @Override
                             protected void onPreExecute() {
                                 super.onPreExecute();
+                                recyclerRootView.setVisibility(View.INVISIBLE);
                                 loadingBar.setVisibility(View.VISIBLE);
                             }
 
@@ -312,6 +316,7 @@ public class FragmentFacebook extends Fragment {
                                 super.onPostExecute(aVoid);
                                 closeContextualMenu();
                                 loadingBar.setVisibility(View.GONE);
+                                recyclerRootView.setVisibility(View.VISIBLE);
                             }
                         }.execute();
 
@@ -334,21 +339,7 @@ public class FragmentFacebook extends Fragment {
 
         public void onReceive(Context context, Intent intent) {
 
-            long id = intent.getLongExtra(Constant.KEY_INTENT_ID, 0);
-            String title = intent.getStringExtra(Constant.KEY_INTENT_TITLE);
-            String message = intent.getStringExtra(Constant.KEY_INTENT_MESSAGE);
-            String largeIconUri = intent.getStringExtra(Constant.KEY_INTENT_LATG_ICON_URI);
-            long timeStamp = intent.getLongExtra(Constant.KEY_INTENT_TIMESTAMP, 0);
-
-            boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_FACEBOOK, myDataBaseHelper.KEY_USER_TITLE, title);
-            if (!recordExists) {
-                myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_FACEBOOK, id, title, largeIconUri);
-            }
-            if (!message.contains("new messages")) {
-                myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, title, message, timeStamp);
-            }
             Log.d(TAG, "onReceive: Received Notification");
-
             getMessageInBackgroundTask();
         }
     }
@@ -368,7 +359,7 @@ public class FragmentFacebook extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        getContext().unregisterReceiver(facebookMessagesReceiver);
+        getContext().unregisterReceiver(facebookMessagesReceiver);
         if (!usersList.isEmpty()) {
             usersList.clear();
         }

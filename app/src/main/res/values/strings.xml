@@ -9,4 +9,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete_alert">Delete Alert</string>
+    <string name="fab_home">Open</string>
+    <string name="fab_whatsApp">OpenWhatsApp</string>
 </resources>

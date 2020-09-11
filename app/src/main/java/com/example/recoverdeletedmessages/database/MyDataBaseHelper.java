@@ -180,9 +180,9 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(users.getId())});
     }
 
-    public void deleteUsers(String USER_ABLE_NAME, String columnName) {
+    public void deleteUsers(String USER_TABLE_NAME, String columnName) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(USER_ABLE_NAME, KEY_USER_TITLE + " = ?",
+        db.delete(USER_TABLE_NAME, KEY_USER_TITLE + " = ?",
                 new String[]{String.valueOf(columnName)});
     }
 
@@ -197,6 +197,11 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         // insert row
         long todo_id = db.insert(MESSAGE_TABLE_NAME, null, values);
         return todo_id;
+    }
+    public void deleteMessages(String MESSAGE_TABLE_NAME, String columnName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(MESSAGE_TABLE_NAME, KEY_USER_TITLE + " = ?",
+                new String[]{String.valueOf(columnName)});
     }
 
     public int getMessagesCount(String MESSAGE_TABLE_NAME) {

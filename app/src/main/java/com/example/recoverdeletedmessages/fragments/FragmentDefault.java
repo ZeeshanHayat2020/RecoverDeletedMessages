@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,7 @@ public class FragmentDefault extends Fragment {
     private String TAG = "FragmentDefault";
     private View view;
     private Context context;
+    private RelativeLayout recyclerRootView;
     private RecyclerView recyclerView;
     private AdapterMain mAdapter;
     private ArrayList<Users> usersList = new ArrayList<>();
@@ -125,6 +127,7 @@ public class FragmentDefault extends Fragment {
 
     private void initViews() {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
+        recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_default);
         toolbar = (Toolbar) view.findViewById(R.id.fr_default_toolbar);
         loadingBar = (ProgressBar) view.findViewById(R.id.fr_default_loadingBar);
         loadingBar.setVisibility(View.INVISIBLE);
@@ -296,6 +299,7 @@ public class FragmentDefault extends Fragment {
                             @Override
                             protected void onPreExecute() {
                                 super.onPreExecute();
+                                recyclerRootView.setVisibility(View.INVISIBLE);
                                 loadingBar.setVisibility(View.VISIBLE);
                             }
 
@@ -303,7 +307,8 @@ public class FragmentDefault extends Fragment {
                             protected Void doInBackground(Void... voids) {
 
                                 for (int i = 0; i < multiSelectedItemList.size(); i++) {
-                                    myDataBaseHelper.deleteUsers(TableName.TABLE_NAME_USER_WHATS_APP, multiSelectedItemList.get(i).getUserTitle());
+                                    myDataBaseHelper.deleteUsers(TableName.TABLE_NAME_USER_DEFAULT, multiSelectedItemList.get(i).getUserTitle());
+                                    myDataBaseHelper.deleteMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, multiSelectedItemList.get(i).getUserTitle());
                                     usersList.remove(multiSelectedItemList.get(i));
                                 }
                                 return null;
@@ -314,6 +319,7 @@ public class FragmentDefault extends Fragment {
                                 super.onPostExecute(aVoid);
                                 closeContextualMenu();
                                 loadingBar.setVisibility(View.GONE);
+                                recyclerRootView.setVisibility(View.VISIBLE);
                             }
                         }.execute();
 
@@ -336,19 +342,6 @@ public class FragmentDefault extends Fragment {
 
         public void onReceive(Context context, Intent intent) {
 
-            long id = intent.getLongExtra(Constant.KEY_INTENT_ID, 0);
-            String title = intent.getStringExtra(Constant.KEY_INTENT_TITLE);
-            String message = intent.getStringExtra(Constant.KEY_INTENT_MESSAGE);
-            String largeIconUri = intent.getStringExtra(Constant.KEY_INTENT_LATG_ICON_URI);
-            long timeStamp = intent.getLongExtra(Constant.KEY_INTENT_TIMESTAMP, 0);
-
-            boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_DEFAULT, myDataBaseHelper.KEY_USER_TITLE, title);
-            if (!recordExists) {
-                myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_DEFAULT, id, title, largeIconUri);
-            }
-            if (!message.contains("new messages")) {
-                myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, title, message, timeStamp);
-            }
             Log.d(TAG, "onReceive: Received Notification");
 
             getMessageInBackgroundTask();
@@ -370,7 +363,7 @@ public class FragmentDefault extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        getContext().unregisterReceiver(facebookMessagesReceiver);
+        getContext().unregisterReceiver(defaultMessagesReceiver);
         if (!usersList.isEmpty()) {
             usersList.clear();
         }

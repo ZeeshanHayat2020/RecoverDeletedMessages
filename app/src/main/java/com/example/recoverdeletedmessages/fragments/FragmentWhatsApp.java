@@ -1,5 +1,6 @@
 package com.example.recoverdeletedmessages.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recoverdeletedmessages.R;
 import com.example.recoverdeletedmessages.activities.ActivityMessagesViewer;
+import com.example.recoverdeletedmessages.activities.ActivityOpenWhatsApp;
 import com.example.recoverdeletedmessages.adapters.AdapterMain;
 import com.example.recoverdeletedmessages.constants.Constant;
 import com.example.recoverdeletedmessages.constants.TableName;
@@ -41,6 +44,7 @@ import com.example.recoverdeletedmessages.database.MyDataBaseHelper;
 import com.example.recoverdeletedmessages.interfaces.OnRecyclerItemClickeListener;
 import com.example.recoverdeletedmessages.models.Users;
 import com.example.recoverdeletedmessages.services.NotificationService;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -55,7 +59,9 @@ public class FragmentWhatsApp extends FragmentBase {
     private ProgressBar loadingBar;
     private CheckBox selectAllMenuItem;
     private Context context;
+    private RelativeLayout recyclerRootView;
     private RecyclerView recyclerView;
+    private FloatingActionButton btnFab;
     private AdapterMain mAdapter;
     private ArrayList<Users> usersList = new ArrayList<>();
     private WhatsAppDataReceiver whatsAppDataReceiver;
@@ -126,10 +132,21 @@ public class FragmentWhatsApp extends FragmentBase {
 
     private void initViews() {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
+        recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_whatsApp);
         toolbar = (Toolbar) view.findViewById(R.id.fr_whatsApp_toolbar);
+        btnFab = view.findViewById(R.id.btnFab_fr_whatsApp);
+        btnFab.setOnClickListener(onFabButtonClicked);
         loadingBar = (ProgressBar) view.findViewById(R.id.fr_whatsApp_loadingBar);
         loadingBar.setVisibility(View.INVISIBLE);
     }
+
+    private View.OnClickListener onFabButtonClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            startActivity(new Intent(context, ActivityOpenWhatsApp.class));
+
+        }
+    };
 
     private void setUpToolBar() {
         selected = getResources().getString(R.string.item_selected);
@@ -313,6 +330,7 @@ public class FragmentWhatsApp extends FragmentBase {
                             @Override
                             protected void onPreExecute() {
                                 super.onPreExecute();
+                                recyclerRootView.setVisibility(View.INVISIBLE);
                                 loadingBar.setVisibility(View.VISIBLE);
                             }
 
@@ -331,6 +349,7 @@ public class FragmentWhatsApp extends FragmentBase {
                                 super.onPostExecute(aVoid);
                                 closeContextualMenu();
                                 loadingBar.setVisibility(View.GONE);
+                                recyclerRootView.setVisibility(View.VISIBLE);
                             }
                         }.execute();
 
@@ -346,7 +365,7 @@ public class FragmentWhatsApp extends FragmentBase {
 
         public void onReceive(Context context, Intent intent) {
 
-            long id = intent.getLongExtra(Constant.KEY_INTENT_ID, 0);
+           /* long id = intent.getLongExtra(Constant.KEY_INTENT_ID, 0);
             String title = intent.getStringExtra(Constant.KEY_INTENT_TITLE);
             String message = intent.getStringExtra(Constant.KEY_INTENT_MESSAGE);
             String largeIconUri = intent.getStringExtra(Constant.KEY_INTENT_LATG_ICON_URI);
@@ -356,10 +375,11 @@ public class FragmentWhatsApp extends FragmentBase {
             if (!recordExists) {
                 myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_WHATS_APP, id, title, largeIconUri);
             }
+
             if (!message.contains("new messages")) {
                 myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, title, message, timeStamp);
             }
-
+*/
             Log.d(TAG, "onReceive: Received Notification");
 
             getMessageInBackgroundTask();
@@ -381,7 +401,7 @@ public class FragmentWhatsApp extends FragmentBase {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        getContext().unregisterReceiver(whatsAppDataReceiver);
+        getContext().unregisterReceiver(whatsAppDataReceiver);
         if (isContextualMenuOpen) {
             closeContextualMenu();
         }

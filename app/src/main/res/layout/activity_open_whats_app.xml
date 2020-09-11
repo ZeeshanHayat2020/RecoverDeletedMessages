@@ -10,11 +10,22 @@
         android:id="@+id/toolBar_acOpenWhatsApp"
         layout="@layout/toolbar_custom" />
 
+    <com.hbb20.CountryCodePicker
+        android:id="@+id/countryPicker"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_marginTop="56dp"
+        app:ccp_countryPreference="us,in"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar_acOpenWhatsApp" />
+
     <EditText
         android:id="@+id/editText_acOpenWhatsApp"
         android:layout_width="324dp"
         android:layout_height="35dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:gravity="center"
         android:hint="Enter Number"
@@ -23,13 +34,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar_acOpenWhatsApp" />
+        app:layout_constraintTop_toBottomOf="@+id/countryPicker" />
 
     <Button
         android:id="@+id/btnOpenChat_acOpenWhatsApp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="Open Chat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

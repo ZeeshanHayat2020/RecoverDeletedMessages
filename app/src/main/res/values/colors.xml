@@ -6,4 +6,28 @@
 
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
+
+
+    <!-- dots inactive colors -->
+    <color name="dot_dark_screen1">#F9BDBD</color>
+    <color name="dot_dark_screen2">#F9BDBD</color>
+    <color name="dot_dark_screen3">#F9BDBD</color>
+
+    <!-- dots active colors -->
+    <color name="dot_light_screen1">#F93434</color>
+    <color name="dot_light_screen2">#F93434</color>
+    <color name="dot_light_screen3">#F93434</color>
+
+    <array name="array_dot_active">
+        <item>@color/dot_light_screen1</item>
+        <item>@color/dot_light_screen2</item>
+        <item>@color/dot_light_screen3</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>@color/dot_dark_screen1</item>
+        <item>@color/dot_dark_screen2</item>
+        <item>@color/dot_dark_screen3</item>
+    </array>
+
 </resources>

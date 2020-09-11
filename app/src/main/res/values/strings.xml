@@ -11,4 +11,18 @@
     <string name="delete_alert">Delete Alert</string>
     <string name="fab_home">Open</string>
     <string name="fab_whatsApp">OpenWhatsApp</string>
+
+    <string name="whatsAppNotInstalled" type="id">Whats app is not installed in your phone./</string>
+
+    <string name="app_Id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="banner_Id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="interstitial_Id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="start">Start</string>
+    <string name="next">Next</string>
+    <string name="decline">Decline</string>
+    <string name="Accept">Accept</string>
+    <string name="skip">Skip</string>
+    <string name="storagePermission">Allow app to reade write storage permission.</string>
+    <string name="allow">Allow</string>
+
 </resources>

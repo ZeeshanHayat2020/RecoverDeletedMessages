@@ -65,7 +65,7 @@ public class AdapterMessageViewer extends RecyclerView.Adapter<AdapterMessageVie
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         Messages currentItem = messagesList.get(position);
         holder.messageTV.setText(currentItem.getMessage());
-        holder.timeTv.setText(formatDate(currentItem.getTimeStamp()));
+        holder.timeTv.setText(formatDate(String.valueOf(currentItem.getTimeStamp())));
 
     }
 
@@ -74,11 +74,23 @@ public class AdapterMessageViewer extends RecyclerView.Adapter<AdapterMessageVie
         return messagesList.size();
     }
 
-    private String formatDate(long timestamp) {
+    private String formatDate(String dateStr) {
+        try {
+            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = fmt.parse(dateStr);
+            SimpleDateFormat fmtOut = new SimpleDateFormat("MMM d");
+            return fmtOut.format(date);
+        } catch (ParseException e) {
+
+        }
+
+        return "";
+    }
+   /* private String formatDate(long timestamp) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(timestamp * 1000L);
         String date = DateFormat.format("MMMM d hh:mm a", cal).toString();
 
         return date;
-    }
+    }*/
 }

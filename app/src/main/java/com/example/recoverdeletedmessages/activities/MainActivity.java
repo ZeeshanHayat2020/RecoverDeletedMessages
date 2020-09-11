@@ -3,9 +3,13 @@ package com.example.recoverdeletedmessages.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -22,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.recoverdeletedmessages.R;
@@ -34,6 +39,8 @@ import com.example.recoverdeletedmessages.interfaces.MyListener;
 import com.example.recoverdeletedmessages.services.NotificationService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.Set;
+
 public class MainActivity extends ActivityBase {
     private Button btnCreateNotification;
     private Button btnSettings;
@@ -42,6 +49,9 @@ public class MainActivity extends ActivityBase {
     private String TAG = this.getClass().getName();
 
 
+    private FrameLayout fragmentContainer;
+    private CardView permissionHolder;
+    private Button btnAllow;
     private BottomNavigationView bottom_Nav;
     private FragmentWhatsApp fragmentWhatsApp;
     private FragmentFacebook fragmentFacebook;
@@ -53,7 +63,15 @@ public class MainActivity extends ActivityBase {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragmentWhatsApp).commit();
+        if (hasStoragePermission()) {
+            permissionHolder.setVisibility(View.INVISIBLE);
+            fragmentContainer.setVisibility(View.VISIBLE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.acMain_fragments_container, fragmentWhatsApp).commit();
+        } else {
+            fragmentContainer.setVisibility(View.INVISIBLE);
+            permissionHolder.setVisibility(View.VISIBLE);
+        }
+
 
     }
 
@@ -63,19 +81,19 @@ public class MainActivity extends ActivityBase {
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.acMain_btm_nav_btnWhatsapp: {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragmentWhatsApp).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.acMain_fragments_container, fragmentWhatsApp).commit();
                 }
                 break;
                 case R.id.acMain_btm_nav_btnFacebook: {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragmentFacebook).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.acMain_fragments_container, fragmentFacebook).commit();
                 }
                 break;
                 case R.id.acMain_btm_nav_btnInstagram: {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragmentInstagram).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.acMain_fragments_container, fragmentInstagram).commit();
                 }
                 break;
                 case R.id.acMain_btm_nav_btnInsDefault: {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container, fragmentDefault).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.acMain_fragments_container, fragmentDefault).commit();
                 }
                 break;
             }
@@ -85,12 +103,16 @@ public class MainActivity extends ActivityBase {
 
 
     private void initViews() {
+        fragmentContainer = (FrameLayout) findViewById(R.id.acMain_fragments_container);
+        permissionHolder = (CardView) findViewById(R.id.cardView_permissionHolder_acMain);
+        btnAllow = (Button) findViewById(R.id.btnAllow_acMain);
         bottom_Nav = findViewById(R.id.bottom_navigation_tab);
         bottom_Nav.setOnNavigationItemSelectedListener(onBottomItemClicked);
         fragmentWhatsApp = new FragmentWhatsApp();
         fragmentFacebook = new FragmentFacebook();
         fragmentInstagram = new FragmentInstagram();
         fragmentDefault = new FragmentDefault();
+        btnAllow.setOnClickListener(onClickListener);
 
     }
 
@@ -106,6 +128,13 @@ public class MainActivity extends ActivityBase {
         ContextCompat.startForegroundService(this, serviceIntent);
     }
 
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            checkStoragePermission();
+        }
+    };
+
     @Override
     public void onRequestPermissionsResult(final int requestCode,
                                            @NonNull final String[] permissions,
@@ -113,7 +142,12 @@ public class MainActivity extends ActivityBase {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Constant.REQUEST_STORAGE_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+                permissionHolder.setVisibility(View.INVISIBLE);
+                fragmentContainer.setVisibility(View.VISIBLE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.acMain_fragments_container, fragmentWhatsApp).commit();
+            } else {
+                fragmentContainer.setVisibility(View.INVISIBLE);
+                permissionHolder.setVisibility(View.VISIBLE);
             }
         }
 

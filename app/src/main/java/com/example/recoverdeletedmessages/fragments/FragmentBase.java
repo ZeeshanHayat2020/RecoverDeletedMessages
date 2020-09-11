@@ -16,7 +16,7 @@ public class FragmentBase extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        checkStoragePermission();
+//        checkStoragePermission();
     }
 
     public void checkStoragePermission() {

@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
         android:name=".activities.ActivityApplication"
@@ -16,15 +17,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.ActivityOpenWhatsApp"></activity>
-        <activity android:name=".activities.ActivityMessagesViewer" />
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.ActivityNotificationAccess"></activity>
+        <activity android:name=".activities.ActivityPrivacyPolicy"></activity>
+        <activity android:name=".activities.ActivitySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.ActivityIntroSLides"></activity>
+        <activity android:name=".activities.ActivityOpenWhatsApp" />
+        <activity android:name=".activities.ActivityMessagesViewer" />
+        <activity android:name=".activities.MainActivity"></activity>
 
         <service
             android:name=".services.NotificationService"
@@ -34,6 +39,10 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/app_Id" />
     </application>
 
 </manifest>

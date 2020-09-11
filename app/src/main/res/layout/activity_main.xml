@@ -7,7 +7,7 @@
     tools:context="activities.MainActivity">
 
     <FrameLayout
-        android:id="@+id/fragments_container"
+        android:id="@+id/acMain_fragments_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_navigation_tab" />
@@ -17,6 +17,37 @@
         android:layout_height="0.8dp"
         android:layout_above="@+id/bottom_navigation_tab"
         android:background="@android:color/darker_gray" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_permissionHolder_acMain"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_150sdp"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/_5sdp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/storagePermission"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btnAllow_acMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"
+                android:text="@string/allow" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_tab"

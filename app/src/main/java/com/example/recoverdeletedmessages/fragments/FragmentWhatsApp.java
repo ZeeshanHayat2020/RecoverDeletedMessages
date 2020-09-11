@@ -91,8 +91,6 @@ public class FragmentWhatsApp extends FragmentBase {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         context = getContext();
-
-
         initViews();
         setUpToolBar();
         iniRecyclerView();

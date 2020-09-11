@@ -106,6 +106,7 @@ public class NotificationService extends NotificationListenerService {
             String message = extras.getCharSequence("android.text").toString();
             boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_DEFAULT, myDataBaseHelper.KEY_USER_TITLE, title);
             if (!recordExists) {
+                getLargeIcon(extras);
                 myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_DEFAULT, id, title, largeIconUri);
             }
             if (!message.contains("new messages")) {
@@ -119,7 +120,7 @@ public class NotificationService extends NotificationListenerService {
                 break;
 
                 case ApplicationPackagesName.FACEBOOK_MESSENGER_PACK_NAME: {
-                    getLargeIcon(extras);
+
                     long id = sbn.getId();
                     long timeStamp = sbn.getPostTime();
                     String title = extras.getString("android.title");
@@ -127,6 +128,7 @@ public class NotificationService extends NotificationListenerService {
 
                     boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_FACEBOOK, myDataBaseHelper.KEY_USER_TITLE, title);
                     if (!recordExists) {
+                        getLargeIcon(extras);
                         myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_FACEBOOK, id, title, largeIconUri);
                     }
                     if (!message.contains("new messages")) {
@@ -138,7 +140,7 @@ public class NotificationService extends NotificationListenerService {
                 break;
 
                 case ApplicationPackagesName.INSTAGRAM_PACK_NAME: {
-                    getLargeIcon(extras);
+
                     long id = sbn.getId();
                     long timeStamp = sbn.getPostTime();
                     String title = extras.getString("android.title");
@@ -146,6 +148,7 @@ public class NotificationService extends NotificationListenerService {
 
                     boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_INSTAGRAM, myDataBaseHelper.KEY_USER_TITLE, title);
                     if (!recordExists) {
+                        getLargeIcon(extras);
                         myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_INSTAGRAM, id, title, largeIconUri);
                     }
                     if (!message.contains("new messages")) {
@@ -157,7 +160,7 @@ public class NotificationService extends NotificationListenerService {
                 break;
                 case ApplicationPackagesName.WHATSAPP_PACK_NAME: {
 
-                    getLargeIcon(extras);
+
                     long id = sbn.getId();
                     long timeStamp = sbn.getPostTime();
                     String title = extras.getString("android.title");
@@ -165,6 +168,7 @@ public class NotificationService extends NotificationListenerService {
 
                     boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_WHATS_APP, myDataBaseHelper.KEY_USER_TITLE, title);
                     if (!recordExists) {
+                        getLargeIcon(extras);
                         myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_WHATS_APP, id, title, largeIconUri);
                     }
 

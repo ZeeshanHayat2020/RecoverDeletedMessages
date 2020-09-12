@@ -103,14 +103,17 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
         Users currentItem = usersList.get(position);
         holder.titleTV.setText(currentItem.getUserTitle());
         setImageFromFile(currentItem.getLargeIconUri(), holder.imageView);
-        if (currentItem.getReadStatus().equals("Read")) {
+        /*if (currentItem.getReadStatus().equals("Read")) {
             holder.readStatusTV.setVisibility(View.INVISIBLE);
-        }
+        }*/
         MyDataBaseHelper helper = new MyDataBaseHelper(context);
         switch (activeFragment) {
             case Constant.ACTIVE_FRAGMENT_WHATS_APP: {
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
+                    if (list.get(list.size() - 1).getReadStatus().equals("Read")) {
+                        holder.readStatusTV.setVisibility(View.INVISIBLE);
+                    }
                     holder.descTV.setText(list.get(list.size() - 1).getMessage());
                     holder.timeTV.setText(createDateTime(list.get(list.size() - 1).getTimeStamp()));
                 }
@@ -129,6 +132,9 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
             case Constant.ACTIVE_FRAGMENT_FACEBOOK: {
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
+                    if (list.get(list.size() - 1).getReadStatus().equals("Read")) {
+                        holder.readStatusTV.setVisibility(View.INVISIBLE);
+                    }
                     holder.descTV.setText(list.get(list.size() - 1).getMessage());
                     holder.timeTV.setText(createDateTime(list.get(list.size() - 1).getTimeStamp()));
                 }
@@ -148,6 +154,9 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
             case Constant.ACTIVE_FRAGMENT_ACTIVE_INSTA: {
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_INSTAGRAM, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
+                    if (list.get(list.size() - 1).getReadStatus().equals("Read")) {
+                        holder.readStatusTV.setVisibility(View.INVISIBLE);
+                    }
                     holder.descTV.setText(list.get(list.size() - 1).getMessage());
                     holder.timeTV.setText(createDateTime(list.get(list.size() - 1).getTimeStamp()));
                 }
@@ -168,6 +177,9 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
             case Constant.ACTIVE_FRAGMENT_DEFAULT: {
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
+                    if (list.get(list.size() - 1).getReadStatus().equals("Read")) {
+                        holder.readStatusTV.setVisibility(View.INVISIBLE);
+                    }
                     holder.descTV.setText(list.get(list.size() - 1).getMessage());
                     holder.timeTV.setText(createDateTime(list.get(list.size() - 1).getTimeStamp()));
                 }

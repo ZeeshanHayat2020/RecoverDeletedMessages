@@ -104,10 +104,10 @@ public class NotificationService extends NotificationListenerService {
                 boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_DEFAULT, myDataBaseHelper.KEY_USER_TITLE, title);
                 if (!recordExists) {
                     getLargeIcon(extras);
-                    myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_DEFAULT, id, title, largeIconUri, readStatus);
+                    myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_DEFAULT, id, title, largeIconUri);
                 }
                 if (!message.contains("new messages")) {
-                    myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, title, message, timeStamp);
+                    myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, title, message, timeStamp, readStatus);
                 }
                 sendBroadCast(Constant.ACTION_INTENT_FILTER_DEFAULT_RECEIVER);
             }
@@ -129,10 +129,10 @@ public class NotificationService extends NotificationListenerService {
                         boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_FACEBOOK, myDataBaseHelper.KEY_USER_TITLE, title);
                         if (!recordExists) {
                             getLargeIcon(extras);
-                            myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_FACEBOOK, id, title, largeIconUri, readStatus);
+                            myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_FACEBOOK, id, title, largeIconUri);
                         }
                         if (!message.contains("new messages")) {
-                            myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, title, message, timeStamp);
+                            myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, title, message, timeStamp, readStatus);
                         }
                         sendBroadCast(Constant.ACTION_INTENT_FILTER_FACEBOOK_RECEIVER);
                     }
@@ -151,10 +151,10 @@ public class NotificationService extends NotificationListenerService {
                         boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_INSTAGRAM, myDataBaseHelper.KEY_USER_TITLE, title);
                         if (!recordExists) {
                             getLargeIcon(extras);
-                            myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_INSTAGRAM, id, title, largeIconUri, readStatus);
+                            myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_INSTAGRAM, id, title, largeIconUri);
                         }
                         if (!message.contains("new messages")) {
-                            myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_INSTAGRAM, title, message, timeStamp);
+                            myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_INSTAGRAM, title, message, timeStamp, readStatus);
                         }
                         sendBroadCast(Constant.ACTION_INTENT_FILTER_INSTAGRAM_RECEIVER);
                     }
@@ -173,10 +173,10 @@ public class NotificationService extends NotificationListenerService {
                             boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_WHATS_APP, myDataBaseHelper.KEY_USER_TITLE, title);
                             if (!recordExists) {
                                 getLargeIcon(extras);
-                                myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_WHATS_APP, id, title, largeIconUri, readStatus);
+                                myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_WHATS_APP, id, title, largeIconUri);
                             }
                             if (!message.contains("new messages")) {
-                                myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, title, message, timeStamp);
+                                myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, title, message, timeStamp, readStatus);
                             }
                             sendBroadCast(Constant.ACTION_INTENT_FILTER_WHATS_APP_RECEIVER);
                         }

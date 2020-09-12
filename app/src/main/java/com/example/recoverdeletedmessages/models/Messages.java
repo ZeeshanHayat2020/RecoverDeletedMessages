@@ -6,6 +6,7 @@ public class Messages {
     private String title;
     private String message;
     private long timeStamp;
+    private String readStatus;
 
     public Messages() {
     }
@@ -39,5 +40,14 @@ public class Messages {
 
     public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+
+    public String getReadStatus() {
+        return readStatus;
+    }
+
+    public void setReadStatus(String readStatus) {
+        this.readStatus = readStatus;
     }
 }

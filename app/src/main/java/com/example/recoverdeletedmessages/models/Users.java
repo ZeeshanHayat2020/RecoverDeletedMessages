@@ -5,7 +5,6 @@ public class Users {
     private long id;
     private String userTitle;
     private String largeIconUri;
-    private String readStatus;
 
 
     public Users() {
@@ -35,11 +34,4 @@ public class Users {
         this.largeIconUri = largeIconUri;
     }
 
-    public String getReadStatus() {
-        return readStatus;
-    }
-
-    public void setReadStatus(String readStatus) {
-        this.readStatus = readStatus;
-    }
 }

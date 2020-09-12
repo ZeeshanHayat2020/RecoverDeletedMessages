@@ -50,14 +50,13 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_USER_WHATS_APP = "CREATE TABLE IF NOT EXISTS "
             + TABLE_NAME_USER_WHATS_APP + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + KEY_USER_TITLE + " TEXT , " + KEY_LARGE_ICON_URI + " TEXT," +
-            KEY_USER_READ_STATUS + " TEXT  " + ")";
+            + KEY_USER_TITLE + " TEXT , " + KEY_LARGE_ICON_URI + " TEXT" + ")";
 
 
     // Tag table create statement
     private static final String CREATE_TABLE_MESSAGES_WHATS_APP = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_MESSAGES_WHATS_APP
             + "(" + KEY_USER_TITLE + "  TEXT," + KEY_MESSAGE + " TEXT,"
-            + KEY_TIME + " TEXT" + ")";
+            + KEY_TIME + " TEXT," + KEY_USER_READ_STATUS + " TEXT" + ")";
 
 
     private static final String CREATE_TABLE_USER_FACEBOOK = "CREATE TABLE IF NOT EXISTS "
@@ -68,7 +67,7 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     // Tag table create statement
     private static final String CREATE_TABLE_MESSAGES_FACEBOOK = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_MESSAGES_FACEBOOK
             + "(" + KEY_USER_TITLE + "  TEXT," + KEY_MESSAGE + " TEXT,"
-            + KEY_TIME + " TEXT" + ")";
+            + KEY_TIME + " TEXT," + KEY_USER_READ_STATUS + " TEXT" + ")";
 
 
     private static final String CREATE_TABLE_USER_INSTAGRAM = "CREATE TABLE IF NOT EXISTS "
@@ -79,7 +78,7 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     // Tag table create statement
     private static final String CREATE_TABLE_MESSAGES_INSTAGRAM = "CREATE TABLE IF NOT EXISTS " + TableName.TABLE_NAME_MESSAGES_INSTAGRAM
             + "(" + KEY_USER_TITLE + "  TEXT," + KEY_MESSAGE + " TEXT,"
-            + KEY_TIME + " TEXT" + ")";
+            + KEY_TIME + " TEXT," + KEY_USER_READ_STATUS + " TEXT" + ")";
 
     private static final String CREATE_TABLE_USER_DEFAULT = "CREATE TABLE IF NOT EXISTS "
             + TableName.TABLE_NAME_USER_DEFAULT + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -89,7 +88,7 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     // Tag table create statement
     private static final String CREATE_TABLE_MESSAGES_DEFAULT = "CREATE TABLE IF NOT EXISTS " + TableName.TABLE_NAME_MESSAGES_DEFAULT
             + "(" + KEY_USER_TITLE + "  TEXT," + KEY_MESSAGE + " TEXT,"
-            + KEY_TIME + " TEXT" + ")";
+            + KEY_TIME + " TEXT," + KEY_USER_READ_STATUS + " TEXT" + ")";
 
 
     public MyDataBaseHelper(Context context) {
@@ -124,13 +123,12 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public long insertUsers(String USERS_TABLE_NAME, long userID, String title, String largeIconUri, String readStatus) {
+    public long insertUsers(String USERS_TABLE_NAME, long userID, String title, String largeIconUri) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_USER_TITLE, title);
         values.put(KEY_LARGE_ICON_URI, largeIconUri);
-        values.put(KEY_USER_READ_STATUS, readStatus);
         // insert row
         long todo_id = db.insert(USERS_TABLE_NAME, null, values);
         return todo_id;
@@ -152,7 +150,6 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
                 user.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 user.setUserTitle((c.getString(c.getColumnIndex(KEY_USER_TITLE))));
                 user.setLargeIconUri((c.getString(c.getColumnIndex(KEY_LARGE_ICON_URI))));
-                user.setReadStatus((c.getString(c.getColumnIndex(KEY_USER_READ_STATUS))));
                 // adding to todo list
                 usersList.add(user);
             } while (c.moveToNext());
@@ -178,7 +175,6 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_ID, users.getId());
         values.put(KEY_USER_TITLE, users.getUserTitle());
-        values.put(KEY_USER_READ_STATUS, users.getReadStatus());
 
         // updating row
         return db.update(USERS_TABLE_NAME, values, KEY_ID + " = ?",
@@ -193,13 +189,14 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public long insertMessages(String MESSAGE_TABLE_NAME, String User_title, String message, long time) {
+    public long insertMessages(String MESSAGE_TABLE_NAME, String User_title, String message, long time, String readStatus) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_USER_TITLE, User_title);
         values.put(KEY_MESSAGE, message);
         values.put(KEY_TIME, time);
+        values.put(KEY_USER_READ_STATUS, readStatus);
         // insert row
         long todo_id = db.insert(MESSAGE_TABLE_NAME, null, values);
         return todo_id;
@@ -209,6 +206,21 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(MESSAGE_TABLE_NAME, KEY_USER_TITLE + " = ?",
                 new String[]{String.valueOf(columnName)});
+    }
+
+    public int updateMessages(String USERS_TABLE_NAME, Messages messages) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_USER_TITLE, messages.getTitle());
+        values.put(KEY_MESSAGE, messages.getMessage());
+        values.put(KEY_TIME, messages.getTimeStamp());
+        values.put(KEY_USER_READ_STATUS, messages.getReadStatus());
+
+        // updating row
+        return db.update(USERS_TABLE_NAME, values, KEY_USER_TITLE + " = ?",
+
+                new String[]{String.valueOf(messages.getTitle())});
     }
 
     public int getMessagesCount(String MESSAGE_TABLE_NAME) {
@@ -263,6 +275,7 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
                 messages.setTitle(c.getString(c.getColumnIndex(KEY_USER_TITLE)));
                 messages.setMessage((c.getString(c.getColumnIndex(KEY_MESSAGE))));
                 messages.setTimeStamp((c.getLong(c.getColumnIndex(KEY_TIME))));
+                messages.setReadStatus((c.getString(c.getColumnIndex(KEY_USER_READ_STATUS))));
                 // adding to todo list
                 messagesList.add(messages);
             } while (c.moveToNext());

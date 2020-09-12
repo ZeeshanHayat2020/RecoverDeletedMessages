@@ -45,6 +45,7 @@ import com.example.recoverdeletedmessages.constants.Constant;
 import com.example.recoverdeletedmessages.constants.TableName;
 import com.example.recoverdeletedmessages.database.MyDataBaseHelper;
 import com.example.recoverdeletedmessages.interfaces.OnRecyclerItemClickeListener;
+import com.example.recoverdeletedmessages.models.Messages;
 import com.example.recoverdeletedmessages.models.Users;
 import com.example.recoverdeletedmessages.services.NotificationService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -59,6 +60,7 @@ import com.google.android.play.core.tasks.Task;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
@@ -206,7 +208,7 @@ public class FragmentWhatsApp extends FragmentBase {
             @Override
             public void onItemClicked(int position) {
 
-                updateTable(position);
+                updateTableMessages(position);
                 Intent intent = new Intent(context, ActivityMessagesViewer.class);
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_MAIN_ITEM_TITLE, usersList.get(position).getUserTitle());
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_TABLE_NAME, TableName.TABLE_NAME_MESSAGES_WHATS_APP);
@@ -341,10 +343,13 @@ public class FragmentWhatsApp extends FragmentBase {
         }.execute();
     }
 
-    private void updateTable(int position) {
-        Users users = usersList.get(position);
-        users.setReadStatus("Read");
-        myDataBaseHelper.updateUsers(TableName.TABLE_NAME_USER_WHATS_APP, users);
+
+    private void updateTableMessages(int position) {
+        Users currentUser = usersList.get(position);
+        List<Messages> list = myDataBaseHelper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, currentUser.getUserTitle());
+        list.get(list.size() - 1).setReadStatus("Read");
+        Messages messages = list.get(list.size() - 1);
+        myDataBaseHelper.updateMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, messages);
     }
 
     private void updateMessages() {

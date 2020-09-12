@@ -41,6 +41,7 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     // Common column names
     public static final String KEY_ID = "id";
     public static final String KEY_USER_TITLE = "user_title";
+    public static final String KEY_USER_READ_STATUS = "read_status";
 
     // NOTES Table - column nmaes
     public static final String KEY_MESSAGE = "message";
@@ -49,7 +50,8 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_USER_WHATS_APP = "CREATE TABLE IF NOT EXISTS "
             + TABLE_NAME_USER_WHATS_APP + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + KEY_USER_TITLE + " TEXT , " + KEY_LARGE_ICON_URI + " TEXT " + ")";
+            + KEY_USER_TITLE + " TEXT , " + KEY_LARGE_ICON_URI + " TEXT," +
+            KEY_USER_READ_STATUS + " TEXT  " + ")";
 
 
     // Tag table create statement
@@ -122,12 +124,13 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public long insertUsers(String USERS_TABLE_NAME, long userID, String title, String largeIconUri) {
+    public long insertUsers(String USERS_TABLE_NAME, long userID, String title, String largeIconUri, String readStatus) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_USER_TITLE, title);
         values.put(KEY_LARGE_ICON_URI, largeIconUri);
+        values.put(KEY_USER_READ_STATUS, readStatus);
         // insert row
         long todo_id = db.insert(USERS_TABLE_NAME, null, values);
         return todo_id;
@@ -149,6 +152,7 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
                 user.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 user.setUserTitle((c.getString(c.getColumnIndex(KEY_USER_TITLE))));
                 user.setLargeIconUri((c.getString(c.getColumnIndex(KEY_LARGE_ICON_URI))));
+                user.setReadStatus((c.getString(c.getColumnIndex(KEY_USER_READ_STATUS))));
                 // adding to todo list
                 usersList.add(user);
             } while (c.moveToNext());
@@ -168,15 +172,17 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    public int updateUsers(Users users) {
+    public int updateUsers(String USERS_TABLE_NAME, Users users) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_ID, users.getId());
         values.put(KEY_USER_TITLE, users.getUserTitle());
+        values.put(KEY_USER_READ_STATUS, users.getReadStatus());
 
         // updating row
-        return db.update(TABLE_NAME_USER_WHATS_APP, values, KEY_ID + " = ?",
+        return db.update(USERS_TABLE_NAME, values, KEY_ID + " = ?",
+
                 new String[]{String.valueOf(users.getId())});
     }
 
@@ -198,6 +204,7 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         long todo_id = db.insert(MESSAGE_TABLE_NAME, null, values);
         return todo_id;
     }
+
     public void deleteMessages(String MESSAGE_TABLE_NAME, String columnName) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(MESSAGE_TABLE_NAME, KEY_USER_TITLE + " = ?",

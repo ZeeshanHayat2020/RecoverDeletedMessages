@@ -23,6 +23,7 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.service.notification.NotificationListenerService;
 import android.util.Log;
 import android.view.Menu;
@@ -48,7 +49,12 @@ import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.testing.FakeReviewManager;
+import com.google.android.play.core.tasks.OnCompleteListener;
 import com.google.android.play.core.tasks.OnSuccessListener;
+import com.google.android.play.core.tasks.Task;
 
 import java.util.Set;
 
@@ -64,6 +70,7 @@ public class MainActivity extends ActivityBase {
     private FragmentFacebook fragmentFacebook;
     private FragmentInstagram fragmentInstagram;
     private FragmentDefault fragmentDefault;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +100,6 @@ public class MainActivity extends ActivityBase {
             checkForUpdate();
         }
     }
-
-
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener onBottomItemClicked = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -249,6 +254,8 @@ public class MainActivity extends ActivityBase {
 
 
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

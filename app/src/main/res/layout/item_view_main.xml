@@ -38,6 +38,7 @@
                 android:id="@+id/itemView_main_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Title"
                 android:textColor="@color/colorBlack"
                 android:textSize="18sp" />
 
@@ -45,20 +46,40 @@
                 android:id="@+id/itemView_main_desc_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Description"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp" />
-            <TextView
-                android:id="@+id/itemView_main_time_tv"
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorBlack"
-                android:textSize="14sp"
-                android:layout_gravity="right"
-                />
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/itemView_main_readStatus_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="UNREAD"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:id="@+id/itemView_main_time_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="time"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
 
 
         </LinearLayout>
-
 
 
         <CheckBox

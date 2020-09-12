@@ -26,4 +26,5 @@ public class Constant {
 
     public static final int REQUEST_STORAGE_PERMISSION = 192;
     public static final int REQUEST_CODE_FOR_IN_APP_UPDATE =124;
+    public static final int REQUEST_CODE_IN_APP_REVIEW =129;
 }

@@ -61,7 +61,6 @@ public class ActivityMessagesViewer extends AppCompatActivity {
     private ArrayList<Messages> multiSelectedItemList;
     private String selected;
     private String currentMessagesTitle = "";
-    public int selectedIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +111,8 @@ public class ActivityMessagesViewer extends AppCompatActivity {
         if (isContextualMenuOpen) {
             closeContextualMenu();
         } else {
+            setResult(RESULT_OK);
+            finish();
             super.onBackPressed();
         }
     }
@@ -186,10 +187,9 @@ public class ActivityMessagesViewer extends AppCompatActivity {
                         multiSelectedItemList.remove(messagesList.get(position));
                         String text = multiSelectedItemList.size() + selected;
                         updateToolBarTitle(text);
-                        selectedIndex = position;
-                        if (multiSelectedItemList.size() != messagesList.size()) {
+                       /* if (multiSelectedItemList.size() != messagesList.size()) {
                             selectAllMenuItem.setChecked(false);
-                        }
+                        }*/
                         Log.d(TAG, "onItemCheckBoxClicked For UnCheck and Selection==== List Size:" + multiSelectedItemList.size() + "User List Size" + messagesList.size());
 
 
@@ -243,11 +243,8 @@ public class ActivityMessagesViewer extends AppCompatActivity {
             String text = multiSelectedItemList.size() + selected;
             updateToolBarTitle(text);
         } else {
-           /* multiSelectedItemList.removeAll(messagesList);
-            multiSelectedItemList.clear();*/
-            for (int i = 0; i < messagesList.size(); i++) {
-                multiSelectedItemList.remove(messagesList.get(i));
-            }
+            multiSelectedItemList.removeAll(messagesList);
+            multiSelectedItemList.clear();
             String text = multiSelectedItemList.size() + selected;
             updateToolBarTitle(text);
         }

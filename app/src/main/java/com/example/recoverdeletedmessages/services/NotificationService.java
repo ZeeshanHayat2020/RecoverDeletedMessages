@@ -74,18 +74,12 @@ public class NotificationService extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-
-
         if ((sbn.getNotification().flags & Notification.FLAG_GROUP_SUMMARY) != 0) {
             Log.d(TAG, "Ignore the notification FLAG_GROUP_SUMMARY");
             Log.d(TAG, "May be twice");
             return;
         }
         checkNotificationComeFrom(sbn);
-
-        long time = System.currentTimeMillis();
-        Log.i(TAG, "********** onNotificationSuccess Post Time:" + sbn.getPostTime() + "Current Time" + time);
-        Log.i(TAG, "ID :" + sbn.getId() + " \t " + "Key: " + sbn.getKey() + " \t " + "Tag: " + sbn.getTag() + " \t Package: " + sbn.getPackageName());
     }
 
     @Override
@@ -105,15 +99,18 @@ public class NotificationService extends NotificationListenerService {
             long timeStamp = sbn.getPostTime();
             String title = extras.getString("android.title");
             String message = extras.getCharSequence("android.text").toString();
-            boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_DEFAULT, myDataBaseHelper.KEY_USER_TITLE, title);
-            if (!recordExists) {
-                getLargeIcon(extras);
-                myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_DEFAULT, id, title, largeIconUri);
+            String readStatus = "unRead";
+            if (title != null) {
+                boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_DEFAULT, myDataBaseHelper.KEY_USER_TITLE, title);
+                if (!recordExists) {
+                    getLargeIcon(extras);
+                    myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_DEFAULT, id, title, largeIconUri, readStatus);
+                }
+                if (!message.contains("new messages")) {
+                    myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, title, message, timeStamp);
+                }
+                sendBroadCast(Constant.ACTION_INTENT_FILTER_DEFAULT_RECEIVER);
             }
-            if (!message.contains("new messages")) {
-                myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, title, message, timeStamp);
-            }
-            sendBroadCast(Constant.ACTION_INTENT_FILTER_DEFAULT_RECEIVER, id, title, message, timeStamp);
         } else {
             switch (packageName) {
                 case ApplicationPackagesName.FACEBOOK_PACK_NAME: {
@@ -126,17 +123,19 @@ public class NotificationService extends NotificationListenerService {
                     long timeStamp = sbn.getPostTime();
                     String title = extras.getString("android.title");
                     String message = extras.getCharSequence("android.text").toString();
+                    String readStatus = "unRead";
 
-                    boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_FACEBOOK, myDataBaseHelper.KEY_USER_TITLE, title);
-                    if (!recordExists) {
-                        getLargeIcon(extras);
-                        myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_FACEBOOK, id, title, largeIconUri);
+                    if (title != null) {
+                        boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_FACEBOOK, myDataBaseHelper.KEY_USER_TITLE, title);
+                        if (!recordExists) {
+                            getLargeIcon(extras);
+                            myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_FACEBOOK, id, title, largeIconUri, readStatus);
+                        }
+                        if (!message.contains("new messages")) {
+                            myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, title, message, timeStamp);
+                        }
+                        sendBroadCast(Constant.ACTION_INTENT_FILTER_FACEBOOK_RECEIVER);
                     }
-                    if (!message.contains("new messages")) {
-                        myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, title, message, timeStamp);
-                    }
-
-                    sendBroadCast(Constant.ACTION_INTENT_FILTER_FACEBOOK_RECEIVER, id, title, message, timeStamp);
                 }
                 break;
 
@@ -146,38 +145,42 @@ public class NotificationService extends NotificationListenerService {
                     long timeStamp = sbn.getPostTime();
                     String title = extras.getString("android.title");
                     String message = extras.getCharSequence("android.text").toString();
+                    String readStatus = "unRead";
 
-                    boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_INSTAGRAM, myDataBaseHelper.KEY_USER_TITLE, title);
-                    if (!recordExists) {
-                        getLargeIcon(extras);
-                        myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_INSTAGRAM, id, title, largeIconUri);
-                    }
-                    if (!message.contains("new messages")) {
-                        myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_INSTAGRAM, title, message, timeStamp);
+                    if (!title.contains("instagram") || title != null) {
+                        boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_INSTAGRAM, myDataBaseHelper.KEY_USER_TITLE, title);
+                        if (!recordExists) {
+                            getLargeIcon(extras);
+                            myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_INSTAGRAM, id, title, largeIconUri, readStatus);
+                        }
+                        if (!message.contains("new messages")) {
+                            myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_INSTAGRAM, title, message, timeStamp);
+                        }
+                        sendBroadCast(Constant.ACTION_INTENT_FILTER_INSTAGRAM_RECEIVER);
                     }
 
-                    sendBroadCast(Constant.ACTION_INTENT_FILTER_INSTAGRAM_RECEIVER, id, title, message, timeStamp);
+
                 }
                 break;
                 case ApplicationPackagesName.WHATSAPP_PACK_NAME: {
-
-
                     long id = sbn.getId();
-                    long timeStamp = /*sbn.getPostTime();*/ System.currentTimeMillis();
+                    long timeStamp = sbn.getPostTime();
                     String title = extras.getString("android.title");
                     String message = extras.getCharSequence("android.text").toString();
-
-                    boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_WHATS_APP, myDataBaseHelper.KEY_USER_TITLE, title);
-                    if (!recordExists) {
-                        getLargeIcon(extras);
-                        myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_WHATS_APP, id, title, largeIconUri);
+                    String readStatus = "unRead";
+                    if (title != null) {
+                        if (!title.contains("WhatsApp")) {
+                            boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_WHATS_APP, myDataBaseHelper.KEY_USER_TITLE, title);
+                            if (!recordExists) {
+                                getLargeIcon(extras);
+                                myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_WHATS_APP, id, title, largeIconUri, readStatus);
+                            }
+                            if (!message.contains("new messages")) {
+                                myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, title, message, timeStamp);
+                            }
+                            sendBroadCast(Constant.ACTION_INTENT_FILTER_WHATS_APP_RECEIVER);
+                        }
                     }
-
-                    if (!message.contains("new messages")) {
-                        myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, title, message, timeStamp);
-                    }
-
-                    sendBroadCast(Constant.ACTION_INTENT_FILTER_WHATS_APP_RECEIVER, id, title, message, timeStamp);
                 }
                 break;
             }
@@ -186,7 +189,7 @@ public class NotificationService extends NotificationListenerService {
     }
 
 
-    private void sendBroadCast(String action, long id, String title, String message, long timeStamp) {
+    private void sendBroadCast(String action) {
         Intent intent = new Intent(action);/*
         intent.putExtra(Constant.KEY_INTENT_ID, id);
         intent.putExtra(Constant.KEY_INTENT_TITLE, title);

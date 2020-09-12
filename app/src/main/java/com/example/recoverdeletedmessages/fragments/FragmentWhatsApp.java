@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,6 +39,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.recoverdeletedmessages.R;
 import com.example.recoverdeletedmessages.activities.ActivityMessagesViewer;
 import com.example.recoverdeletedmessages.activities.ActivityOpenWhatsApp;
+import com.example.recoverdeletedmessages.activities.MainActivity;
 import com.example.recoverdeletedmessages.adapters.AdapterMain;
 import com.example.recoverdeletedmessages.constants.Constant;
 import com.example.recoverdeletedmessages.constants.TableName;
@@ -45,10 +48,20 @@ import com.example.recoverdeletedmessages.interfaces.OnRecyclerItemClickeListene
 import com.example.recoverdeletedmessages.models.Users;
 import com.example.recoverdeletedmessages.services.NotificationService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.review.testing.FakeReviewManager;
+import com.google.android.play.core.tasks.OnCompleteListener;
+import com.google.android.play.core.tasks.OnFailureListener;
+import com.google.android.play.core.tasks.OnSuccessListener;
+import com.google.android.play.core.tasks.Task;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FragmentWhatsApp extends FragmentBase {
 
@@ -72,6 +85,11 @@ public class FragmentWhatsApp extends FragmentBase {
     private String selected;
     private String currentFragmentTitle = "Whats App";
 
+    ReviewManager reviewManager;
+    ReviewInfo reviewInfo = null;
+    Handler handler;
+    private int reviewCounter = 0;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,10 +112,16 @@ public class FragmentWhatsApp extends FragmentBase {
         initViews();
         setUpToolBar();
         iniRecyclerView();
-        getMessageInBackgroundTask();
+
         registerReceiver();
+        setUpInAppReview();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getMessageInBackgroundTask();
+    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -130,6 +154,7 @@ public class FragmentWhatsApp extends FragmentBase {
 
     private void initViews() {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
+        handler = new Handler(Looper.getMainLooper());
         recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_whatsApp);
         toolbar = (Toolbar) view.findViewById(R.id.fr_whatsApp_toolbar);
         btnFab = view.findViewById(R.id.btnFab_fr_whatsApp);
@@ -180,11 +205,13 @@ public class FragmentWhatsApp extends FragmentBase {
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickeListener() {
             @Override
             public void onItemClicked(int position) {
+
+                updateTable(position);
                 Intent intent = new Intent(context, ActivityMessagesViewer.class);
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_MAIN_ITEM_TITLE, usersList.get(position).getUserTitle());
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_TABLE_NAME, TableName.TABLE_NAME_MESSAGES_WHATS_APP);
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_MESSAGES_TITLE, "Whatsapp Messages");
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REQUEST_CODE_IN_APP_REVIEW);
 
             }
 
@@ -314,6 +341,12 @@ public class FragmentWhatsApp extends FragmentBase {
         }.execute();
     }
 
+    private void updateTable(int position) {
+        Users users = usersList.get(position);
+        users.setReadStatus("Read");
+        myDataBaseHelper.updateUsers(TableName.TABLE_NAME_USER_WHATS_APP, users);
+    }
+
     private void updateMessages() {
         new AsyncTask<Void, Void, Void>() {
 
@@ -435,6 +468,25 @@ public class FragmentWhatsApp extends FragmentBase {
     }
 
 
+    private void setUpInAppReview() {
+//        reviewManager = ReviewManagerFactory.create(context);
+        reviewManager = new FakeReviewManager(context);
+        Task<ReviewInfo> request = reviewManager.requestReviewFlow();
+        request.addOnCompleteListener(new OnCompleteListener<ReviewInfo>() {
+            @Override
+            public void onComplete(@NonNull Task<ReviewInfo> task) {
+                if (task.isSuccessful()) {
+                    // We can get the ReviewInfo object
+                    reviewInfo = task.getResult();
+                } else {
+                    // There was some problem, continue regardless of the result.
+                    reviewInfo = null;
+                }
+            }
+        });
+
+    }
+
     @Override
     public void onRequestPermissionsResult(final int requestCode,
                                            @NonNull final String[] permissions,
@@ -447,4 +499,42 @@ public class FragmentWhatsApp extends FragmentBase {
         }
     }
 
+
+ /*   @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.REQUEST_CODE_IN_APP_REVIEW) {
+            if (resultCode == RESULT_OK) {
+                reviewCounter++;
+                if (reviewCounter > 0) {
+                    reviewCounter = 0;
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Task<Void> flow = reviewManager.launchReviewFlow(getActivity(), reviewInfo);
+                            flow.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Log.d(TAG, "onComplete: Thanks for the feedback!");
+                                }
+                            });
+                            flow.addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void result) {
+                                    Log.d(TAG, "onSuccess:  Reviewed successfully");
+                                }
+                            });
+                            flow.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(Exception e) {
+                                    Log.d(TAG, "onFailed:  Reviewed Failed!");
+                                }
+                            });
+                        }
+                    }, 3000);
+                }
+            }
+        }
+    }*/
 }

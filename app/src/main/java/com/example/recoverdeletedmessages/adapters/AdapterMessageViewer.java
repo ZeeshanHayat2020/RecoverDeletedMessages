@@ -80,9 +80,7 @@ public class AdapterMessageViewer extends RecyclerView.Adapter<AdapterMessageVie
             if (activityMessagesViewer.isSelectAll) {
                 holder.checkBox.setChecked(true);
             } else {
-                if (activityMessagesViewer.selectedIndex == position) {
-                    holder.checkBox.setChecked(false);
-                }
+                holder.checkBox.setChecked(false);
             }
             holder.timeTv.setVisibility(View.INVISIBLE);
             holder.checkBox.setVisibility(View.VISIBLE);

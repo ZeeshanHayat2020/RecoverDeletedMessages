@@ -95,8 +95,13 @@ public class FragmentInstagram extends Fragment {
         initViews();
         setUpToolBar();
         iniRecyclerView();
-        getMessageInBackgroundTask();
         registerReceiver();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getMessageInBackgroundTask();
     }
 
 
@@ -173,7 +178,7 @@ public class FragmentInstagram extends Fragment {
             public void onClick(View view) {
                 if (isContextualMenuOpen) {
                     closeContextualMenu();
-                }else
+                } else
                     getActivity().finish();
             }
         });
@@ -195,6 +200,7 @@ public class FragmentInstagram extends Fragment {
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickeListener() {
             @Override
             public void onItemClicked(int position) {
+                updateTable(position);
                 Intent intent = new Intent(context, ActivityMessagesViewer.class);
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_MAIN_ITEM_TITLE, usersList.get(position).getUserTitle());
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_TABLE_NAME, TableName.TABLE_NAME_MESSAGES_INSTAGRAM);
@@ -324,6 +330,12 @@ public class FragmentInstagram extends Fragment {
                 recyclerRootView.setVisibility(View.VISIBLE);
             }
         }.execute();
+    }
+
+    private void updateTable(int position) {
+        Users users = usersList.get(position);
+        users.setReadStatus("Read");
+        myDataBaseHelper.updateUsers(TableName.TABLE_NAME_USER_INSTAGRAM, users);
     }
 
     private void updateMessages() {

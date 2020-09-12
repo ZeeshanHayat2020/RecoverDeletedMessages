@@ -73,7 +73,8 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
         public TextView titleTV;
         public TextView descTV;
         public TextView timeTV;
-        CheckBox checkBox;
+        public TextView readStatusTV;
+        public CheckBox checkBox;
 
         public MyViewHolder(View view) {
             super(view);
@@ -82,6 +83,7 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
             titleTV = view.findViewById(R.id.itemView_main_title_tv);
             descTV = view.findViewById(R.id.itemView_main_desc_tv);
             timeTV = view.findViewById(R.id.itemView_main_time_tv);
+            readStatusTV = view.findViewById(R.id.itemView_main_readStatus_tv);
             checkBox = itemView.findViewById(R.id.itemView_main_checkBox);
 
         }
@@ -101,6 +103,9 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
         Users currentItem = usersList.get(position);
         holder.titleTV.setText(currentItem.getUserTitle());
         setImageFromFile(currentItem.getLargeIconUri(), holder.imageView);
+        if (currentItem.getReadStatus().equals("Read")) {
+            holder.readStatusTV.setVisibility(View.INVISIBLE);
+        }
         MyDataBaseHelper helper = new MyDataBaseHelper(context);
         switch (activeFragment) {
             case Constant.ACTIVE_FRAGMENT_WHATS_APP: {
@@ -180,7 +185,6 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
             }
             break;
         }
-
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

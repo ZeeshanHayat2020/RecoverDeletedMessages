@@ -5,13 +5,10 @@ public class Users {
     private long id;
     private String userTitle;
     private String largeIconUri;
+    private String readStatus;
 
 
-    public Users(){}
-
-    public Users(long id, String userTitle) {
-        this.id = id;
-        this.userTitle = userTitle;
+    public Users() {
     }
 
     public long getId() {
@@ -36,5 +33,13 @@ public class Users {
 
     public void setLargeIconUri(String largeIconUri) {
         this.largeIconUri = largeIconUri;
+    }
+
+    public String getReadStatus() {
+        return readStatus;
+    }
+
+    public void setReadStatus(String readStatus) {
+        this.readStatus = readStatus;
     }
 }

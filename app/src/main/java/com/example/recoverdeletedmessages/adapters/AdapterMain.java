@@ -29,6 +29,9 @@ import com.example.recoverdeletedmessages.models.Messages;
 import com.example.recoverdeletedmessages.models.Users;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +72,7 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
         public CircleImageView imageView;
         public TextView titleTV;
         public TextView descTV;
+        public TextView timeTV;
         CheckBox checkBox;
 
         public MyViewHolder(View view) {
@@ -77,6 +81,7 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
             imageView = view.findViewById(R.id.itemView_main_iv);
             titleTV = view.findViewById(R.id.itemView_main_title_tv);
             descTV = view.findViewById(R.id.itemView_main_desc_tv);
+            timeTV = view.findViewById(R.id.itemView_main_time_tv);
             checkBox = itemView.findViewById(R.id.itemView_main_checkBox);
 
         }
@@ -102,6 +107,7 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
                     holder.descTV.setText(list.get(list.size() - 1).getMessage());
+                    holder.timeTV.setText(createDateTime(list.get(list.size() - 1).getTimeStamp()));
                 }
                 if (fragmentWhatsApp.isContextualMenuOpen) {
                     if (fragmentWhatsApp.isSelectAll) {
@@ -119,6 +125,7 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
                     holder.descTV.setText(list.get(list.size() - 1).getMessage());
+                    holder.timeTV.setText(createDateTime(list.get(list.size() - 1).getTimeStamp()));
                 }
                 if (fragmentFacebook.isContextualMenuOpen) {
                     if (fragmentFacebook.isSelectAll) {
@@ -137,6 +144,7 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_INSTAGRAM, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
                     holder.descTV.setText(list.get(list.size() - 1).getMessage());
+                    holder.timeTV.setText(createDateTime(list.get(list.size() - 1).getTimeStamp()));
                 }
                 if (fragmentInstagram.isContextualMenuOpen) {
                     if (fragmentInstagram.isSelectAll) {
@@ -156,6 +164,7 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
                     holder.descTV.setText(list.get(list.size() - 1).getMessage());
+                    holder.timeTV.setText(createDateTime(list.get(list.size() - 1).getTimeStamp()));
                 }
                 if (fragmentDefault.isContextualMenuOpen) {
                     if (fragmentDefault.isSelectAll) {
@@ -247,6 +256,14 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
 
     }
 
+    public static CharSequence createDateTime(long timestamp) {
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(timestamp);
+        Date d = c.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return sdf.format(d);
+    }
+
     @Override
     public int getItemCount() {
         return usersList.size();
@@ -259,6 +276,5 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
             imageView.setImageBitmap(myBitmap);
         }
     }
-
 
 }

@@ -157,7 +157,8 @@ public class FragmentWhatsApp extends FragmentBase {
             public void onClick(View view) {
                 if (isContextualMenuOpen) {
                     closeContextualMenu();
-                }
+                } else
+                    getActivity().finish();
             }
         });
         updateToolBarTitle(currentFragmentTitle);
@@ -182,6 +183,7 @@ public class FragmentWhatsApp extends FragmentBase {
                 Intent intent = new Intent(context, ActivityMessagesViewer.class);
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_MAIN_ITEM_TITLE, usersList.get(position).getUserTitle());
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_TABLE_NAME, TableName.TABLE_NAME_MESSAGES_WHATS_APP);
+                intent.putExtra(Constant.KEY_INTENT_SELECTED_MESSAGES_TITLE, "Whatsapp Messages");
                 startActivity(intent);
 
             }
@@ -200,7 +202,10 @@ public class FragmentWhatsApp extends FragmentBase {
                         updateToolBarTitle(text);
                         if (multiSelectedItemList.size() == usersList.size()) {
                             selectAllMenuItem.setChecked(true);
+                        } else {
+                            selectAllMenuItem.setChecked(false);
                         }
+                        Log.d(TAG, "onItemCheckBoxClicked For Check and Selection==== List Size:" + multiSelectedItemList.size() + "User List Size" + usersList.size());
                     } else {
                         multiSelectedItemList.remove(usersList.get(position));
                         String text = multiSelectedItemList.size() + selected;
@@ -208,6 +213,7 @@ public class FragmentWhatsApp extends FragmentBase {
                         if (multiSelectedItemList.size() == usersList.size()) {
                             selectAllMenuItem.setChecked(false);
                         }
+                        Log.d(TAG, "onItemCheckBoxClicked For Check and Selection==== List Size:" + multiSelectedItemList.size() + "User List Size" + usersList.size());
 
                     }
                 } catch (Exception e) {
@@ -222,7 +228,6 @@ public class FragmentWhatsApp extends FragmentBase {
     private void updateToolBarTitle(String title) {
         toolBarTitleTv.setText(title);
     }
-
 
     private void openContextualMenu() {
         multiSelectedItemList = new ArrayList<>();
@@ -286,6 +291,7 @@ public class FragmentWhatsApp extends FragmentBase {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                recyclerRootView.setVisibility(View.INVISIBLE);
                 loadingBar.setVisibility(View.VISIBLE);
             }
 
@@ -303,6 +309,27 @@ public class FragmentWhatsApp extends FragmentBase {
                 super.onPostExecute(aVoid);
                 buildRecyclerView();
                 loadingBar.setVisibility(View.INVISIBLE);
+                recyclerRootView.setVisibility(View.VISIBLE);
+            }
+        }.execute();
+    }
+
+    private void updateMessages() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                if (!usersList.isEmpty()) {
+                    usersList.clear();
+                }
+                usersList.addAll(myDataBaseHelper.getALLUsers(TableName.TABLE_NAME_USER_WHATS_APP));
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                buildRecyclerView();
             }
         }.execute();
     }
@@ -379,8 +406,7 @@ public class FragmentWhatsApp extends FragmentBase {
             }
 */
             Log.d(TAG, "onReceive: Received Notification");
-
-            getMessageInBackgroundTask();
+            updateMessages();
         }
     }
 

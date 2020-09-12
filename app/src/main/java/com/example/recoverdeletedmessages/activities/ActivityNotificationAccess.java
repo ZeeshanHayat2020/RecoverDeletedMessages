@@ -25,6 +25,14 @@ public class ActivityNotificationAccess extends AppCompatActivity {
         initViews();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (myPreferences.haveNotificationAccess()) {
+            btnNotifyAccess.setText("Next");
+        }
+    }
+
     private void initViews() {
         myPreferences = new MyPreferences(this);
         btnNotifyAccess = (Button) findViewById(R.id.btn_acNotificationAccess);

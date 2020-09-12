@@ -6,9 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".activities.ActivityMessagesViewer">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_ac_msg_viewer"
+    <include
+        android:id="@+id/toolBar_ac_messageViewer"
+        layout="@layout/toolbar_custom" />
+
+    <RelativeLayout
+        android:id="@+id/rootView_recycler_ac_messageViewer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolBar_ac_messageViewer">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_ac_messageViewer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+
+    <ProgressBar
+        android:id="@+id/loadingBar_ac_messageViewer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="visible" />
+
 
 </RelativeLayout>

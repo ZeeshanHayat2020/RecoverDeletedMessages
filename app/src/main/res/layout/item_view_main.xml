@@ -47,6 +47,14 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp" />
+            <TextView
+                android:id="@+id/itemView_main_time_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                android:layout_gravity="right"
+                />
 
 
         </LinearLayout>

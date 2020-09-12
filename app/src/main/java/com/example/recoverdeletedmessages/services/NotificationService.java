@@ -83,7 +83,8 @@ public class NotificationService extends NotificationListenerService {
         }
         checkNotificationComeFrom(sbn);
 
-        Log.i(TAG, "********** onNotificationSuccess");
+        long time = System.currentTimeMillis();
+        Log.i(TAG, "********** onNotificationSuccess Post Time:" + sbn.getPostTime() + "Current Time" + time);
         Log.i(TAG, "ID :" + sbn.getId() + " \t " + "Key: " + sbn.getKey() + " \t " + "Tag: " + sbn.getTag() + " \t Package: " + sbn.getPackageName());
     }
 
@@ -162,7 +163,7 @@ public class NotificationService extends NotificationListenerService {
 
 
                     long id = sbn.getId();
-                    long timeStamp = sbn.getPostTime();
+                    long timeStamp = /*sbn.getPostTime();*/ System.currentTimeMillis();
                     String title = extras.getString("android.title");
                     String message = extras.getCharSequence("android.text").toString();
 

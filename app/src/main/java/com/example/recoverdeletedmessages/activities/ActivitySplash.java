@@ -28,7 +28,8 @@ public class ActivitySplash extends ActivityBase {
         setContentView(R.layout.activity_splash);
         setStatusBarGradient(this);
         myPreferences = new MyPreferences(this);
-        reqNewInterstitial(this);
+//        reqNewInterstitial(this);
+        launchLanguageActivity();
 
     }
 
@@ -47,7 +48,7 @@ public class ActivitySplash extends ActivityBase {
     protected void onResume() {
         super.onResume();
         if (haveNetworkConnection()) {
-            loadInterstitial();
+//            loadInterstitial();
         } else {
             launchWithDelay();
         }
@@ -121,16 +122,9 @@ public class ActivitySplash extends ActivityBase {
                 super.onAdFailedToLoad(i);
             }
 
-
             @Override
             public void onAdClosed() {
                 launchLanguageActivity();
-            }
-
-
-            @Override
-            public void onAdLeftApplication() {
-                super.onAdLeftApplication();
             }
         });
     }

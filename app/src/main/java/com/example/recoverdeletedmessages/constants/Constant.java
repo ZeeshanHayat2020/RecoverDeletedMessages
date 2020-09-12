@@ -17,6 +17,7 @@ public class Constant {
     public static final String KEY_INTENT_SELECTED_MAIN_ITEM_TITLE = "KEY_INTENT_SELECTED_MAIN_ITEM_TITLE";
 
     public static final String KEY_INTENT_SELECTED_TABLE_NAME = "KEY_INTENT_SELECTED_TABLE_NAME";
+    public static final String KEY_INTENT_SELECTED_MESSAGES_TITLE = "KEY_INTENT_SELECTED_MESSAGES_TITLE";
 
     public static final String ACTIVE_FRAGMENT_WHATS_APP = "ACTIVE_FRAGMENT_WHATS_APP";
     public static final String ACTIVE_FRAGMENT_FACEBOOK = "ACTIVE_FRAGMENT_FACEBOOK";
@@ -24,4 +25,5 @@ public class Constant {
     public static final String ACTIVE_FRAGMENT_DEFAULT = "ACTIVE_FRAGMENT_DEFAULT";
 
     public static final int REQUEST_STORAGE_PERMISSION = 192;
+    public static final int REQUEST_CODE_FOR_IN_APP_UPDATE =124;
 }

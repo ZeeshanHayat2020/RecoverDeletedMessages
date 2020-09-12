@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recoverdeletedmessages.R;
 import com.example.recoverdeletedmessages.activities.ActivityMessagesViewer;
+import com.example.recoverdeletedmessages.activities.ActivityOpenWhatsApp;
 import com.example.recoverdeletedmessages.adapters.AdapterMain;
 import com.example.recoverdeletedmessages.constants.Constant;
 import com.example.recoverdeletedmessages.constants.TableName;
@@ -41,6 +44,7 @@ import com.example.recoverdeletedmessages.database.MyDataBaseHelper;
 import com.example.recoverdeletedmessages.interfaces.OnRecyclerItemClickeListener;
 import com.example.recoverdeletedmessages.models.Users;
 import com.example.recoverdeletedmessages.services.NotificationService;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -58,6 +62,7 @@ public class FragmentFacebook extends Fragment {
     private Context context;
     private RelativeLayout recyclerRootView;
     private RecyclerView recyclerView;
+    private FloatingActionButton btnFab;
     private AdapterMain mAdapter;
     private ArrayList<Users> usersList = new ArrayList<>();
     private FacebookMessagesReceiver facebookMessagesReceiver;
@@ -127,8 +132,34 @@ public class FragmentFacebook extends Fragment {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
         recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_facebook);
         toolbar = (Toolbar) view.findViewById(R.id.fr_facebook_toolbar);
+        btnFab = view.findViewById(R.id.btnFab_fr_facebook);
+        btnFab.setOnClickListener(onFabButtonClicked);
         loadingBar = (ProgressBar) view.findViewById(R.id.fr_facebook_loadingBar);
         loadingBar.setVisibility(View.INVISIBLE);
+    }
+
+    private View.OnClickListener onFabButtonClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String messengerUrl;
+            if (isMessengerAppInstalled()) {
+                messengerUrl = "fb://messaging";
+                Intent messengerIntent = new Intent(Intent.ACTION_VIEW);
+                messengerIntent.setData(Uri.parse(messengerUrl));
+                startActivity(messengerIntent);
+            } else {
+                Toast.makeText(context, "Facebook Messenger is not installed.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    public boolean isMessengerAppInstalled() {
+        try {
+            context.getPackageManager().getApplicationInfo("com.facebook.orca", 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
     private void setUpToolBar() {
@@ -142,11 +173,13 @@ public class FragmentFacebook extends Fragment {
             public void onClick(View view) {
                 if (isContextualMenuOpen) {
                     closeContextualMenu();
-                }
+                }else
+                    getActivity().finish();
             }
         });
         updateToolBarTitle(currentFragmentTitle);
     }
+
 
     private void iniRecyclerView() {
         recyclerView = view.findViewById(R.id.recycler_view_fr_facebook);
@@ -166,6 +199,7 @@ public class FragmentFacebook extends Fragment {
                 Intent intent = new Intent(context, ActivityMessagesViewer.class);
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_MAIN_ITEM_TITLE, usersList.get(position).getUserTitle());
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_TABLE_NAME, TableName.TABLE_NAME_MESSAGES_FACEBOOK);
+                intent.putExtra(Constant.KEY_INTENT_SELECTED_MESSAGES_TITLE, "Facebook Messages");
                 startActivity(intent);
 
             }
@@ -267,6 +301,36 @@ public class FragmentFacebook extends Fragment {
 
     private void getMessageInBackgroundTask() {
         new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                recyclerRootView.setVisibility(View.INVISIBLE);
+                loadingBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                if (!usersList.isEmpty()) {
+                    usersList.clear();
+                }
+                usersList.addAll(myDataBaseHelper.getALLUsers(TableName.TABLE_NAME_USER_FACEBOOK));
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                buildRecyclerView();
+                loadingBar.setVisibility(View.INVISIBLE);
+                recyclerRootView.setVisibility(View.VISIBLE);
+            }
+        }.execute();
+    }
+
+    private void updateMessages() {
+        new AsyncTask<Void, Void, Void>() {
+
             @Override
             protected Void doInBackground(Void... voids) {
                 if (!usersList.isEmpty()) {
@@ -283,6 +347,7 @@ public class FragmentFacebook extends Fragment {
             }
         }.execute();
     }
+
 
     private void deleteMultipleDialog() {
         new AlertDialog.Builder(context)
@@ -327,6 +392,7 @@ public class FragmentFacebook extends Fragment {
                 .show();
     }
 
+
     private void registerReceiver() {
         facebookMessagesReceiver = new FacebookMessagesReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -340,7 +406,7 @@ public class FragmentFacebook extends Fragment {
         public void onReceive(Context context, Intent intent) {
 
             Log.d(TAG, "onReceive: Received Notification");
-            getMessageInBackgroundTask();
+            updateMessages();
         }
     }
 

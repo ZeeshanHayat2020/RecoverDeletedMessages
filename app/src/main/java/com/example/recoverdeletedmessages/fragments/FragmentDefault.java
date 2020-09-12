@@ -5,8 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Telephony;
+import android.telephony.mbms.MbmsErrors;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,6 +45,7 @@ import com.example.recoverdeletedmessages.database.MyDataBaseHelper;
 import com.example.recoverdeletedmessages.interfaces.OnRecyclerItemClickeListener;
 import com.example.recoverdeletedmessages.models.Users;
 import com.example.recoverdeletedmessages.services.NotificationService;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -57,6 +62,7 @@ public class FragmentDefault extends Fragment {
     private Context context;
     private RelativeLayout recyclerRootView;
     private RecyclerView recyclerView;
+    private FloatingActionButton btnFab;
     private AdapterMain mAdapter;
     private ArrayList<Users> usersList = new ArrayList<>();
     private DefaultMessagesReceiver defaultMessagesReceiver;
@@ -129,9 +135,42 @@ public class FragmentDefault extends Fragment {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
         recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_default);
         toolbar = (Toolbar) view.findViewById(R.id.fr_default_toolbar);
+        btnFab = view.findViewById(R.id.btnFab_fr_default);
+        btnFab.setOnClickListener(onFabButtonClicked);
         loadingBar = (ProgressBar) view.findViewById(R.id.fr_default_loadingBar);
         loadingBar.setVisibility(View.INVISIBLE);
     }
+
+    private View.OnClickListener onFabButtonClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (isDefaultMessenger()) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_APP_MESSAGING);
+                    startActivity(intent);
+
+                } catch (Exception e) {
+                    Log.d(TAG, "onClick: ", e);
+                }
+
+                ;
+            } else {
+                Toast.makeText(context, "Default messenger  is not installed.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    public boolean isDefaultMessenger() {
+        try {
+            context.getPackageManager().getApplicationInfo(Telephony.Sms.getDefaultSmsPackage(context), 0)
+            ;
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
 
     private void setUpToolBar() {
         selected = getResources().getString(R.string.item_selected);
@@ -144,7 +183,8 @@ public class FragmentDefault extends Fragment {
             public void onClick(View view) {
                 if (isContextualMenuOpen) {
                     closeContextualMenu();
-                }
+                }else
+                    getActivity().finish();
             }
         });
         updateToolBarTitle(currentFragmentTitle);
@@ -168,6 +208,7 @@ public class FragmentDefault extends Fragment {
                 Intent intent = new Intent(context, ActivityMessagesViewer.class);
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_MAIN_ITEM_TITLE, usersList.get(position).getUserTitle());
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_TABLE_NAME, TableName.TABLE_NAME_MESSAGES_DEFAULT);
+                intent.putExtra(Constant.KEY_INTENT_SELECTED_MESSAGES_TITLE, "Default Messages");
                 startActivity(intent);
 
             }
@@ -270,6 +311,35 @@ public class FragmentDefault extends Fragment {
     private void getMessageInBackgroundTask() {
         new AsyncTask<Void, Void, Void>() {
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                recyclerRootView.setVisibility(View.INVISIBLE);
+                loadingBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                if (!usersList.isEmpty()) {
+                    usersList.clear();
+                }
+                usersList.addAll(myDataBaseHelper.getALLUsers(TableName.TABLE_NAME_USER_DEFAULT));
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                buildRecyclerView();
+                loadingBar.setVisibility(View.INVISIBLE);
+                recyclerRootView.setVisibility(View.VISIBLE);
+            }
+        }.execute();
+    }
+
+    private void updateMessages() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
             protected Void doInBackground(Void... voids) {
                 if (!usersList.isEmpty()) {
                     usersList.clear();
@@ -285,6 +355,7 @@ public class FragmentDefault extends Fragment {
             }
         }.execute();
     }
+
 
     private void deleteMultipleDialog() {
         new AlertDialog.Builder(context)
@@ -344,7 +415,7 @@ public class FragmentDefault extends Fragment {
 
             Log.d(TAG, "onReceive: Received Notification");
 
-            getMessageInBackgroundTask();
+            updateMessages();
         }
     }
 

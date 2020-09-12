@@ -1,6 +1,7 @@
 package com.example.recoverdeletedmessages.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -8,8 +9,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -17,6 +20,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
@@ -38,17 +42,20 @@ import com.example.recoverdeletedmessages.fragments.FragmentWhatsApp;
 import com.example.recoverdeletedmessages.interfaces.MyListener;
 import com.example.recoverdeletedmessages.services.NotificationService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.OnSuccessListener;
 
 import java.util.Set;
 
 public class MainActivity extends ActivityBase {
-    private Button btnCreateNotification;
-    private Button btnSettings;
-    public static final String NOTIFICATION_CHANNEL_ID = "10001";
-    private final static String default_notification_channel_id = "default";
+
+    private AppUpdateManager appUpdateManager;
     private String TAG = this.getClass().getName();
-
-
     private FrameLayout fragmentContainer;
     private CardView permissionHolder;
     private Button btnAllow;
@@ -62,6 +69,10 @@ public class MainActivity extends ActivityBase {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (!isNotificationServiceRunning()) {
+            startNotificationService();
+        }
+        setUpInAppUpdate();
         initViews();
         if (hasStoragePermission()) {
             permissionHolder.setVisibility(View.INVISIBLE);
@@ -76,24 +87,54 @@ public class MainActivity extends ActivityBase {
     }
 
 
+    protected void onResume() {
+        super.onResume();
+        if (haveNetworkConnection()) {
+            checkForUpdate();
+        }
+    }
+
+
+
+
     private BottomNavigationView.OnNavigationItemSelectedListener onBottomItemClicked = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.acMain_btm_nav_btnWhatsapp: {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.acMain_fragments_container, fragmentWhatsApp).commit();
+                    if (hasStoragePermission()) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .replace(R.id.acMain_fragments_container, fragmentWhatsApp)
+                                .commit();
+                    }
                 }
                 break;
                 case R.id.acMain_btm_nav_btnFacebook: {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.acMain_fragments_container, fragmentFacebook).commit();
+                    if (hasStoragePermission()) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .replace(R.id.acMain_fragments_container, fragmentFacebook)
+                                .commit();
+                    }
                 }
                 break;
                 case R.id.acMain_btm_nav_btnInstagram: {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.acMain_fragments_container, fragmentInstagram).commit();
+                    if (hasStoragePermission()) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .replace(R.id.acMain_fragments_container, fragmentInstagram)
+                                .commit();
+                    }
                 }
                 break;
                 case R.id.acMain_btm_nav_btnInsDefault: {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.acMain_fragments_container, fragmentDefault).commit();
+                    if (hasStoragePermission()) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .replace(R.id.acMain_fragments_container, fragmentDefault)
+                                .commit();
+                    }
                 }
                 break;
             }
@@ -116,11 +157,15 @@ public class MainActivity extends ActivityBase {
 
     }
 
-
-    private void settingsIntent() {
-        Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-        startActivity(intent);
-        Log.d(TAG, "settingsIntent: Clicked ");
+    public boolean isNotificationServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        assert manager != null;
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (NotificationService.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void startNotificationService() {
@@ -134,6 +179,57 @@ public class MainActivity extends ActivityBase {
             checkStoragePermission();
         }
     };
+
+
+    private void setUpInAppUpdate() {
+        appUpdateManager = (AppUpdateManager) AppUpdateManagerFactory.create(this);
+        // Returns an intent object that you use to check for an update.
+        com.google.android.play.core.tasks.Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener(new OnSuccessListener<AppUpdateInfo>() {
+            @Override
+            public void onSuccess(AppUpdateInfo appUpdateInfo) {
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                        // For a flexible update, use AppUpdateType.FLEXIBLE
+                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(
+                                // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                                appUpdateInfo,
+                                // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+                                AppUpdateType.IMMEDIATE,
+                                // The current activity making the update request.
+                                MainActivity.this,
+                                // Include a request code to later monitor this update request.
+                                Constant.REQUEST_CODE_FOR_IN_APP_UPDATE);
+                    } catch (IntentSender.SendIntentException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void checkForUpdate() {
+        appUpdateManager.getAppUpdateInfo().addOnSuccessListener(new OnSuccessListener<AppUpdateInfo>() {
+            @Override
+            public void onSuccess(AppUpdateInfo appUpdateInfo) {
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                    // If an in-app update is already running, resume the update.
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(
+                                appUpdateInfo,
+                                AppUpdateType.IMMEDIATE,
+                                MainActivity.this,
+                                Constant.REQUEST_CODE_FOR_IN_APP_UPDATE);
+                    } catch (IntentSender.SendIntentException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+    }
 
     @Override
     public void onRequestPermissionsResult(final int requestCode,
@@ -152,5 +248,18 @@ public class MainActivity extends ActivityBase {
         }
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.REQUEST_CODE_FOR_IN_APP_UPDATE) {
+            if (resultCode != RESULT_OK) {
+                View parentLayout = findViewById(android.R.id.content);
+                Snackbar snackbar = Snackbar
+                        .make(parentLayout, "Installation Failed!", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        }
     }
 }

@@ -51,7 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class FragmentFacebook extends Fragment {
+public class FragmentFacebook extends FragmentBase {
 
 
     private Toolbar toolbar;
@@ -180,8 +180,9 @@ public class FragmentFacebook extends Fragment {
             public void onClick(View view) {
                 if (isContextualMenuOpen) {
                     closeContextualMenu();
-                } else
-                    getActivity().finish();
+                } else {
+                    getBackToWhatsAppFragment();
+                }
             }
         });
         updateToolBarTitle(currentFragmentTitle);

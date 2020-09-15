@@ -147,7 +147,7 @@ public class NotificationService extends NotificationListenerService {
                     String message = extras.getCharSequence("android.text").toString();
                     String readStatus = "unRead";
 
-                    if (!title.contains("instagram") || title != null) {
+                    if (!title.contains("Instagram") || title != null) {
                         boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_INSTAGRAM, myDataBaseHelper.KEY_USER_TITLE, title);
                         if (!recordExists) {
                             getLargeIcon(extras);
@@ -169,7 +169,7 @@ public class NotificationService extends NotificationListenerService {
                     String message = extras.getCharSequence("android.text").toString();
                     String readStatus = "unRead";
                     if (title != null) {
-                        if (!title.contains("WhatsApp")) {
+                        if (!title.contains("WhatsApp") || !title.contains("Backup in progress")) {
                             boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_WHATS_APP, myDataBaseHelper.KEY_USER_TITLE, title);
                             if (!recordExists) {
                                 getLargeIcon(extras);

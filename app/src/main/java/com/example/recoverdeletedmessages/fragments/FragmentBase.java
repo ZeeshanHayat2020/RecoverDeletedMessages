@@ -7,8 +7,11 @@ import android.os.Build;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.example.recoverdeletedmessages.R;
 import com.example.recoverdeletedmessages.constants.Constant;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class FragmentBase extends Fragment {
 
@@ -18,6 +21,27 @@ public class FragmentBase extends Fragment {
         super.onStart();
 //        checkStoragePermission();
     }
+
+    public void getBackToWhatsAppFragment() {
+        Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.acMain_fragments_container);
+        if (f instanceof FragmentWhatsApp) {
+            getActivity().finish();
+        } else {
+            FragmentWhatsApp fragmentWhatsApp = new FragmentWhatsApp();
+            BottomNavigationView navigationView = getActivity().findViewById(R.id.bottom_navigation_tab);
+            navigationView.getMenu().getItem(0).setChecked(true);
+            openFragment(fragmentWhatsApp);
+        }
+
+    }
+
+    private void openFragment(Fragment fragment) {
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .replace(R.id.acMain_fragments_container, fragment)
+                .commit();
+    }
+
 
     public void checkStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

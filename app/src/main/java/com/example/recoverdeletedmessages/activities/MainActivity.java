@@ -1,46 +1,38 @@
 package com.example.recoverdeletedmessages.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.Manifest;
 import android.app.ActivityManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.service.notification.NotificationListenerService;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recoverdeletedmessages.R;
+import com.example.recoverdeletedmessages.adapters.AdapterMainBottomView;
+import com.example.recoverdeletedmessages.adapters.AdapterMessageViewer;
 import com.example.recoverdeletedmessages.constants.Constant;
 import com.example.recoverdeletedmessages.fragments.FragmentDefault;
 import com.example.recoverdeletedmessages.fragments.FragmentFacebook;
 import com.example.recoverdeletedmessages.fragments.FragmentInstagram;
 import com.example.recoverdeletedmessages.fragments.FragmentWhatsApp;
-import com.example.recoverdeletedmessages.interfaces.MyListener;
+import com.example.recoverdeletedmessages.interfaces.OnRecyclerItemClickeListener;
+import com.example.recoverdeletedmessages.models.Messages;
+import com.example.recoverdeletedmessages.models.ModelBottomView;
 import com.example.recoverdeletedmessages.services.NotificationService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -49,14 +41,10 @@ import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
-import com.google.android.play.core.review.ReviewInfo;
-import com.google.android.play.core.review.ReviewManager;
-import com.google.android.play.core.review.testing.FakeReviewManager;
-import com.google.android.play.core.tasks.OnCompleteListener;
 import com.google.android.play.core.tasks.OnSuccessListener;
-import com.google.android.play.core.tasks.Task;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends ActivityBase {
 
@@ -71,6 +59,13 @@ public class MainActivity extends ActivityBase {
     private FragmentInstagram fragmentInstagram;
     private FragmentDefault fragmentDefault;
 
+    private RelativeLayout recyclerRootView;
+    private RecyclerView recyclerView;
+    RecyclerView.LayoutManager mLayoutManager;
+
+    private AdapterMainBottomView mAdapter;
+    private List<ModelBottomView> bottomViewList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +76,8 @@ public class MainActivity extends ActivityBase {
         }
         setUpInAppUpdate();
         initViews();
+        iniRecyclerView();
+        setUpRecyclerView();
         if (hasStoragePermission()) {
             permissionHolder.setVisibility(View.INVISIBLE);
             fragmentContainer.setVisibility(View.VISIBLE);
@@ -93,60 +90,89 @@ public class MainActivity extends ActivityBase {
 
     }
 
-
     protected void onResume() {
         super.onResume();
         if (haveNetworkConnection()) {
             checkForUpdate();
         }
+
     }
 
+    @Override
+    public void onBackPressed() {
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.acMain_fragments_container);
+        if (f instanceof FragmentWhatsApp) {
+            super.onBackPressed();
+            this.finish();
+        } else {
+            bottom_Nav.getMenu().getItem(0).setChecked(true);
+            openFragment(fragmentWhatsApp);
 
-    private BottomNavigationView.OnNavigationItemSelectedListener onBottomItemClicked = new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            switch (menuItem.getItemId()) {
-                case R.id.acMain_btm_nav_btnWhatsapp: {
-                    if (hasStoragePermission()) {
-                        getSupportFragmentManager().beginTransaction()
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                .replace(R.id.acMain_fragments_container, fragmentWhatsApp)
-                                .commit();
-                    }
-                }
-                break;
-                case R.id.acMain_btm_nav_btnFacebook: {
-                    if (hasStoragePermission()) {
-                        getSupportFragmentManager().beginTransaction()
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                .replace(R.id.acMain_fragments_container, fragmentFacebook)
-                                .commit();
-                    }
-                }
-                break;
-                case R.id.acMain_btm_nav_btnInstagram: {
-                    if (hasStoragePermission()) {
-                        getSupportFragmentManager().beginTransaction()
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                .replace(R.id.acMain_fragments_container, fragmentInstagram)
-                                .commit();
-                    }
-                }
-                break;
-                case R.id.acMain_btm_nav_btnInsDefault: {
-                    if (hasStoragePermission()) {
-                        getSupportFragmentManager().beginTransaction()
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                .replace(R.id.acMain_fragments_container, fragmentDefault)
-                                .commit();
-                    }
-                }
-                break;
-            }
-            return true;
         }
-    };
 
+    }
+
+    private void iniRecyclerView() {
+        recyclerView = findViewById(R.id.acMain_bottom_recycler);
+        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        bottomViewList = new ArrayList<>();
+    }
+
+    private void setUpRecyclerView() {
+        int[] imgIds = {
+                R.drawable.ic_user,
+                R.drawable.ic_user,
+                R.drawable.ic_user,
+                R.drawable.ic_user
+        };
+        String[] title = {
+                "Whatsapp",
+                "Messenger",
+                "Instagram",
+                "Sms"
+        };
+        for (int i = 0; i < imgIds.length; i++) {
+            bottomViewList.add(new ModelBottomView(imgIds[i], title[i]));
+        }
+        mAdapter = new AdapterMainBottomView(this, bottomViewList);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+        mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickeListener() {
+            @Override
+            public void onItemClicked(int position) {
+                switch (position) {
+                    case 0: {
+                        openFragment(fragmentWhatsApp);
+                    }
+                    break;
+                    case 1: {
+                        openFragment(fragmentFacebook);
+                    }
+                    break;
+                    case 2: {
+                        openFragment(fragmentInstagram);
+                    }
+                    break;
+                    case 3: {
+                        openFragment(fragmentDefault);
+                    }
+                    break;
+                }
+            }
+
+            @Override
+            public void onItemLongClicked(int position) {
+
+            }
+
+            @Override
+            public void onItemCheckBoxClicked(View view, int position) {
+
+            }
+        });
+    }
 
     private void initViews() {
         fragmentContainer = (FrameLayout) findViewById(R.id.acMain_fragments_container);
@@ -160,6 +186,61 @@ public class MainActivity extends ActivityBase {
         fragmentDefault = new FragmentDefault();
         btnAllow.setOnClickListener(onClickListener);
 
+    }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener onBottomItemClicked = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.acMain_btm_nav_btnWhatsapp: {
+                    if (hasStoragePermission()) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                .replace(R.id.acMain_fragments_container, fragmentWhatsApp)
+                                .commit();
+                    }
+                }
+                break;
+                case R.id.acMain_btm_nav_btnFacebook: {
+                    if (hasStoragePermission()) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                .replace(R.id.acMain_fragments_container, fragmentFacebook)
+                                .commit();
+                    }
+                }
+                break;
+                case R.id.acMain_btm_nav_btnInstagram: {
+                    if (hasStoragePermission()) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                .replace(R.id.acMain_fragments_container, fragmentInstagram)
+                                .commit();
+                    }
+                }
+                break;
+                case R.id.acMain_btm_nav_btnInsDefault: {
+                    if (hasStoragePermission()) {
+                        getSupportFragmentManager().beginTransaction()
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                .replace(R.id.acMain_fragments_container, fragmentDefault)
+                                .commit();
+                    }
+                }
+                break;
+            }
+            return true;
+        }
+    };
+
+
+    private void openFragment(Fragment fragment) {
+        if (hasStoragePermission()) {
+            getSupportFragmentManager().beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .replace(R.id.acMain_fragments_container, fragment)
+                    .commit();
+        }
     }
 
     public boolean isNotificationServiceRunning() {
@@ -256,7 +337,6 @@ public class MainActivity extends ActivityBase {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -269,4 +349,6 @@ public class MainActivity extends ActivityBase {
             }
         }
     }
+
+
 }

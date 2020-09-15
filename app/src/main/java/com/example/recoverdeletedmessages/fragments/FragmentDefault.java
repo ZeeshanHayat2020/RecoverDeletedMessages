@@ -52,7 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class FragmentDefault extends Fragment {
+public class FragmentDefault extends FragmentBase {
 
     private Toolbar toolbar;
     private TextView toolBarTitleTv;
@@ -190,8 +190,9 @@ public class FragmentDefault extends Fragment {
             public void onClick(View view) {
                 if (isContextualMenuOpen) {
                     closeContextualMenu();
-                } else
-                    getActivity().finish();
+                } else {
+                    getBackToWhatsAppFragment();
+                }
             }
         });
         updateToolBarTitle(currentFragmentTitle);

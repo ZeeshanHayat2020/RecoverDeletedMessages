@@ -184,8 +184,9 @@ public class FragmentWhatsApp extends FragmentBase {
             public void onClick(View view) {
                 if (isContextualMenuOpen) {
                     closeContextualMenu();
-                } else
-                    getActivity().finish();
+                } else {
+                    getBackToWhatsAppFragment();
+                }
             }
         });
         updateToolBarTitle(currentFragmentTitle);

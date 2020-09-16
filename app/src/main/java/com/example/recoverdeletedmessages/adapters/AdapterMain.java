@@ -1,8 +1,12 @@
 package com.example.recoverdeletedmessages.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.widget.CompoundButtonCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -103,19 +108,20 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
         Users currentItem = usersList.get(position);
         holder.titleTV.setText(currentItem.getUserTitle());
         setImageFromFile(currentItem.getLargeIconUri(), holder.imageView);
-        /*if (currentItem.getReadStatus().equals("Read")) {
-            holder.readStatusTV.setVisibility(View.INVISIBLE);
-        }*/
+
         MyDataBaseHelper helper = new MyDataBaseHelper(context);
         switch (activeFragment) {
             case Constant.ACTIVE_FRAGMENT_WHATS_APP: {
+                int color = context.getResources().getColor(R.color.colorFragmentWhatsappToolbar);
+                holder.readStatusTV.setBackground(setReadStatusBackground(color));
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
                     if (list.get(list.size() - 1).getReadStatus().equals("Read")) {
                         holder.readStatusTV.setVisibility(View.INVISIBLE);
                     }
-                    holder.descTV.setText(list.get(list.size() - 1).getMessage());
+                    setLimitedMessage(list.get(list.size() - 1).getMessage(), holder.descTV);
                     holder.timeTV.setText(createDateTime(list.get(list.size() - 1).getTimeStamp()));
+                    setCheckBoxTintColor(holder.checkBox, color);
                 }
                 if (fragmentWhatsApp.isContextualMenuOpen) {
                     if (fragmentWhatsApp.isSelectAll) {
@@ -124,19 +130,25 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
                         holder.checkBox.setChecked(false);
                     }
                     holder.checkBox.setVisibility(View.VISIBLE);
+                    holder.timeTV.setVisibility(View.INVISIBLE);
+
                 } else {
                     holder.checkBox.setVisibility(View.INVISIBLE);
+                    holder.timeTV.setVisibility(View.VISIBLE);
                 }
             }
             break;
             case Constant.ACTIVE_FRAGMENT_FACEBOOK: {
+                int color = context.getResources().getColor(R.color.colorFragmentFbToolbar);
+                holder.readStatusTV.setBackground(setReadStatusBackground(context.getResources().getColor(R.color.colorFragmentFbToolbar)));
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
                     if (list.get(list.size() - 1).getReadStatus().equals("Read")) {
                         holder.readStatusTV.setVisibility(View.INVISIBLE);
                     }
-                    holder.descTV.setText(list.get(list.size() - 1).getMessage());
+                    setLimitedMessage(list.get(list.size() - 1).getMessage(), holder.descTV);
                     holder.timeTV.setText(createDateTime(list.get(list.size() - 1).getTimeStamp()));
+                    setCheckBoxTintColor(holder.checkBox, color);
                 }
                 if (fragmentFacebook.isContextualMenuOpen) {
                     if (fragmentFacebook.isSelectAll) {
@@ -145,20 +157,26 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
                         holder.checkBox.setChecked(false);
                     }
                     holder.checkBox.setVisibility(View.VISIBLE);
+                    holder.timeTV.setVisibility(View.INVISIBLE);
+
                 } else {
                     holder.checkBox.setVisibility(View.INVISIBLE);
+                    holder.timeTV.setVisibility(View.VISIBLE);
                 }
 
             }
             break;
             case Constant.ACTIVE_FRAGMENT_ACTIVE_INSTA: {
+                int color = context.getResources().getColor(R.color.colorFragmentInstaToolbar);
+                holder.readStatusTV.setBackground(setReadStatusBackground(context.getResources().getColor(R.color.colorFragmentInstaToolbar)));
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_INSTAGRAM, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
                     if (list.get(list.size() - 1).getReadStatus().equals("Read")) {
                         holder.readStatusTV.setVisibility(View.INVISIBLE);
                     }
-                    holder.descTV.setText(list.get(list.size() - 1).getMessage());
+                    setLimitedMessage(list.get(list.size() - 1).getMessage(), holder.descTV);
                     holder.timeTV.setText(createDateTime(list.get(list.size() - 1).getTimeStamp()));
+                    setCheckBoxTintColor(holder.checkBox, color);
                 }
                 if (fragmentInstagram.isContextualMenuOpen) {
                     if (fragmentInstagram.isSelectAll) {
@@ -167,21 +185,27 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
                         holder.checkBox.setChecked(false);
                     }
                     holder.checkBox.setVisibility(View.VISIBLE);
+                    holder.timeTV.setVisibility(View.INVISIBLE);
+
                 } else {
                     holder.checkBox.setVisibility(View.INVISIBLE);
+                    holder.timeTV.setVisibility(View.VISIBLE);
                 }
 
             }
             break;
 
             case Constant.ACTIVE_FRAGMENT_DEFAULT: {
+                int color = context.getResources().getColor(R.color.colorFragmentInstaToolbar);
+                holder.readStatusTV.setBackground(setReadStatusBackground(context.getResources().getColor(R.color.colorFragmentSmsToolbar)));
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
                     if (list.get(list.size() - 1).getReadStatus().equals("Read")) {
                         holder.readStatusTV.setVisibility(View.INVISIBLE);
                     }
-                    holder.descTV.setText(list.get(list.size() - 1).getMessage());
+                    setLimitedMessage(list.get(list.size() - 1).getMessage(), holder.descTV);
                     holder.timeTV.setText(createDateTime(list.get(list.size() - 1).getTimeStamp()));
+                    setCheckBoxTintColor(holder.checkBox, color);
                 }
                 if (fragmentDefault.isContextualMenuOpen) {
                     if (fragmentDefault.isSelectAll) {
@@ -190,8 +214,11 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
                         holder.checkBox.setChecked(false);
                     }
                     holder.checkBox.setVisibility(View.VISIBLE);
+                    holder.timeTV.setVisibility(View.INVISIBLE);
+
                 } else {
                     holder.checkBox.setVisibility(View.INVISIBLE);
+                    holder.timeTV.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -276,8 +303,28 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(timestamp);
         Date d = c.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, HH:mm a");
         return sdf.format(d);
+    }
+
+    private void setLimitedMessage(String message, TextView textView) {
+
+        if (message.length() > 25) {
+            message = message.substring(0, 25) + "...";
+            textView.setText(message);
+        } else {
+
+            textView.setText(message);
+
+        }
+    }
+
+    private void setCheckBoxTintColor(CheckBox btn, int tintColor) {
+        if (Build.VERSION.SDK_INT < 21) {
+            CompoundButtonCompat.setButtonTintList(btn, ColorStateList.valueOf(tintColor));//Use android.support.v4.widget.CompoundButtonCompat when necessary else
+        } else {
+            btn.setButtonTintList(ColorStateList.valueOf(tintColor));//setButtonTintList is accessible directly on API>19
+        }
     }
 
     @Override
@@ -291,6 +338,14 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             imageView.setImageBitmap(myBitmap);
         }
+    }
+
+    private GradientDrawable setReadStatusBackground(int backgroundColor) {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.RECTANGLE);
+        shape.setCornerRadius(10f);
+        shape.setColor(backgroundColor);
+        return shape;
     }
 
 }

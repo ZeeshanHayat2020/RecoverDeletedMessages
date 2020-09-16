@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorOffWhite">
+
+   <!-- <include
+        android:id="@+id/toolBar_acIntroSlide"
+        layout="@layout/toolbar_custom" />-->
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/acIntroSlide_viewPager"
@@ -26,16 +31,16 @@
         android:layout_margin="@dimen/_5sdp"
         android:text="@string/next"
         android:textColor="@color/colorWhite"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+
+        />
 
     <Button
         android:id="@+id/acIntroSlides_btnSkip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="34dp"
-        android:background="@android:color/transparent"
         android:text="@string/skip"
         android:textAllCaps="false"
         android:textSize="20dp" />

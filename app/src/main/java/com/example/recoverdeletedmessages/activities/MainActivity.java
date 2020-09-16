@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -53,7 +55,6 @@ public class MainActivity extends ActivityBase {
     private FrameLayout fragmentContainer;
     private CardView permissionHolder;
     private Button btnAllow;
-    private BottomNavigationView bottom_Nav;
     private FragmentWhatsApp fragmentWhatsApp;
     private FragmentFacebook fragmentFacebook;
     private FragmentInstagram fragmentInstagram;
@@ -65,6 +66,7 @@ public class MainActivity extends ActivityBase {
 
     private AdapterMainBottomView mAdapter;
     private List<ModelBottomView> bottomViewList = new ArrayList<>();
+    public int selectedIndex = -1;
 
 
     @Override
@@ -105,10 +107,22 @@ public class MainActivity extends ActivityBase {
             super.onBackPressed();
             this.finish();
         } else {
-            bottom_Nav.getMenu().getItem(0).setChecked(true);
             openFragment(fragmentWhatsApp);
 
         }
+
+    }
+
+    private void initViews() {
+        fragmentContainer = (FrameLayout) findViewById(R.id.acMain_fragments_container);
+        permissionHolder = (CardView) findViewById(R.id.cardView_permissionHolder_acMain);
+        recyclerRootView = (RelativeLayout) findViewById(R.id.acMain_bottomRecycler_root);
+        btnAllow = (Button) findViewById(R.id.btnAllow_acMain);
+        fragmentWhatsApp = new FragmentWhatsApp();
+        fragmentFacebook = new FragmentFacebook();
+        fragmentInstagram = new FragmentInstagram();
+        fragmentDefault = new FragmentDefault();
+        btnAllow.setOnClickListener(onClickListener);
 
     }
 
@@ -122,10 +136,11 @@ public class MainActivity extends ActivityBase {
 
     private void setUpRecyclerView() {
         int[] imgIds = {
-                R.drawable.ic_user,
-                R.drawable.ic_user,
-                R.drawable.ic_user,
-                R.drawable.ic_user
+                R.drawable.ic_bottom_nav_whatsapp,
+                R.drawable.ic_bottom_nav_fb,
+                R.drawable.ic_bottom_nav_insta,
+                R.drawable.ic_botttom_nav_sms
+
         };
         String[] title = {
                 "Whatsapp",
@@ -136,26 +151,32 @@ public class MainActivity extends ActivityBase {
         for (int i = 0; i < imgIds.length; i++) {
             bottomViewList.add(new ModelBottomView(imgIds[i], title[i]));
         }
-        mAdapter = new AdapterMainBottomView(this, bottomViewList);
+        mAdapter = new AdapterMainBottomView(this, this, bottomViewList);
         recyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickeListener() {
             @Override
             public void onItemClicked(int position) {
+                selectedIndex = position;
+                mAdapter.notifyDataSetChanged();
                 switch (position) {
                     case 0: {
+                        setUpBottomBacgorund(R.drawable.ic_main_bottom_whatsapp);
                         openFragment(fragmentWhatsApp);
                     }
                     break;
                     case 1: {
+                        setUpBottomBacgorund(R.drawable.ic_main_bottom_fb);
                         openFragment(fragmentFacebook);
                     }
                     break;
                     case 2: {
+                        setUpBottomBacgorund(R.drawable.ic_main_bottom_insta);
                         openFragment(fragmentInstagram);
                     }
                     break;
                     case 3: {
+                        setUpBottomBacgorund(R.drawable.ic_main_bottom_sms);
                         openFragment(fragmentDefault);
                     }
                     break;
@@ -174,70 +195,15 @@ public class MainActivity extends ActivityBase {
         });
     }
 
-    private void initViews() {
-        fragmentContainer = (FrameLayout) findViewById(R.id.acMain_fragments_container);
-        permissionHolder = (CardView) findViewById(R.id.cardView_permissionHolder_acMain);
-        btnAllow = (Button) findViewById(R.id.btnAllow_acMain);
-        bottom_Nav = findViewById(R.id.bottom_navigation_tab);
-        bottom_Nav.setOnNavigationItemSelectedListener(onBottomItemClicked);
-        fragmentWhatsApp = new FragmentWhatsApp();
-        fragmentFacebook = new FragmentFacebook();
-        fragmentInstagram = new FragmentInstagram();
-        fragmentDefault = new FragmentDefault();
-        btnAllow.setOnClickListener(onClickListener);
+
+    private void setUpBottomBacgorund(int source) {
+        recyclerRootView.setBackgroundResource(source);
 
     }
-
-    private BottomNavigationView.OnNavigationItemSelectedListener onBottomItemClicked = new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            switch (menuItem.getItemId()) {
-                case R.id.acMain_btm_nav_btnWhatsapp: {
-                    if (hasStoragePermission()) {
-                        getSupportFragmentManager().beginTransaction()
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                .replace(R.id.acMain_fragments_container, fragmentWhatsApp)
-                                .commit();
-                    }
-                }
-                break;
-                case R.id.acMain_btm_nav_btnFacebook: {
-                    if (hasStoragePermission()) {
-                        getSupportFragmentManager().beginTransaction()
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                .replace(R.id.acMain_fragments_container, fragmentFacebook)
-                                .commit();
-                    }
-                }
-                break;
-                case R.id.acMain_btm_nav_btnInstagram: {
-                    if (hasStoragePermission()) {
-                        getSupportFragmentManager().beginTransaction()
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                .replace(R.id.acMain_fragments_container, fragmentInstagram)
-                                .commit();
-                    }
-                }
-                break;
-                case R.id.acMain_btm_nav_btnInsDefault: {
-                    if (hasStoragePermission()) {
-                        getSupportFragmentManager().beginTransaction()
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                .replace(R.id.acMain_fragments_container, fragmentDefault)
-                                .commit();
-                    }
-                }
-                break;
-            }
-            return true;
-        }
-    };
-
 
     private void openFragment(Fragment fragment) {
         if (hasStoragePermission()) {
             getSupportFragmentManager().beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .replace(R.id.acMain_fragments_container, fragment)
                     .commit();
         }

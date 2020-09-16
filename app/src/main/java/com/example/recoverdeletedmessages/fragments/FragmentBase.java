@@ -3,6 +3,8 @@ package com.example.recoverdeletedmessages.fragments;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -27,10 +29,10 @@ public class FragmentBase extends Fragment {
         if (f instanceof FragmentWhatsApp) {
             getActivity().finish();
         } else {
-            FragmentWhatsApp fragmentWhatsApp = new FragmentWhatsApp();
+           /* FragmentWhatsApp fragmentWhatsApp = new FragmentWhatsApp();
             BottomNavigationView navigationView = getActivity().findViewById(R.id.bottom_navigation_tab);
             navigationView.getMenu().getItem(0).setChecked(true);
-            openFragment(fragmentWhatsApp);
+            openFragment(fragmentWhatsApp);*/
         }
 
     }
@@ -42,6 +44,14 @@ public class FragmentBase extends Fragment {
                 .commit();
     }
 
+    public void setUpStatusBar(int color) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(color);
+        }
+    }
 
     public void checkStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

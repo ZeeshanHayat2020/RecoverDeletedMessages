@@ -2,83 +2,86 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_60sdp"
-    android:layout_margin="@dimen/_5sdp"
+    android:layout_height="@dimen/_58sdp"
+    android:layout_marginLeft="@dimen/_8sdp"
+    android:layout_marginTop="@dimen/_8sdp"
+    android:layout_marginRight="@dimen/_8sdp"
     android:clickable="true"
+    android:elevation="@dimen/_4sdp"
     android:foreground="?attr/selectableItemBackground"
-    android:paddingBottom="@dimen/_10sdp">
+    app:cardBackgroundColor="@color/colorWhite"
+    app:cardCornerRadius="@dimen/_9sdp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_2sdp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/itemView_main_iv"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             android:layout_margin="@dimen/_5sdp"
-            android:src="@drawable/ic_user"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />
+            android:src="@drawable/ic_bottom_nav_whatsapp" />
+
+        <TextView
+            android:id="@+id/itemView_main_readStatus_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@color/colorFragmentWhatsappToolbar"
+            android:paddingLeft="@dimen/_2sdp"
+            android:paddingRight="@dimen/_2sdp"
+            android:text="Unread"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/itemView_main_iv"
-            android:orientation="vertical"
-
-
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/itemView_main_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
                 android:text="Title"
                 android:textColor="@color/colorBlack"
-                android:textSize="18sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/itemView_main_desc_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/_170sdp"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
                 android:text="Description"
                 android:textColor="@color/colorBlack"
-                android:textSize="14sp" />
+                android:textSize="14sp"
 
-            <LinearLayout
-                android:layout_width="match_parent"
+                />
+
+            <TextView
+                android:id="@+id/itemView_main_time_tv"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <TextView
-                    android:id="@+id/itemView_main_readStatus_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="UNREAD"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    />
-
-                <TextView
-                    android:id="@+id/itemView_main_time_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="time"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
-
-
+                android:layout_gravity="right"
+                android:maxLines="1"
+                android:text="time"
+                android:textColor="@color/colorBlack"
+                android:textSize="12sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
 

@@ -1,35 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="@dimen/_70sdp"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/_3sdp"
-    android:clickable="true"
-    android:foreground="?attr/selectableItemBackground"
-    app:cardCornerRadius="@dimen/_10sdp">
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/_4sdp"
+    android:layout_marginRight="@dimen/_4sdp"
+    android:background="@android:color/transparent"
+    >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/itemView_ac_main_bottomRecycler_cardView"
+        android:layout_width="@dimen/_65sdp"
+        android:layout_height="@dimen/_65sdp"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:elevation="@dimen/_4sdp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/colorWhite"
+        app:cardCornerRadius="@dimen/_9sdp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/itemView_ac_main_bottomRecycler_iv"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/_3sdp"
-            android:src="@drawable/ic_user" />
+            android:gravity="center"
+            android:orientation="vertical"
 
-        <TextView
-            android:id="@+id/itemView_ac_main_bottomRecycler_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/_5sdp"
-            android:text="WhatsApp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            >
 
-</androidx.cardview.widget.CardView>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/itemView_ac_main_bottomRecycler_iv"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:elevation="@dimen/_3sdp"
+                android:src="@drawable/ic_bottom_nav_whatsapp" />
+
+            <TextView
+                android:id="@+id/itemView_ac_main_bottomRecycler_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_2sdp"
+                android:text="WhatsApp"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

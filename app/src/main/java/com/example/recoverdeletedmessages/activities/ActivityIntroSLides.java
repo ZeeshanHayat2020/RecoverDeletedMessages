@@ -16,16 +16,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.recoverdeletedmessages.R;
 import com.example.recoverdeletedmessages.adapters.AdapterIntroSlidesViewPager;
 import com.example.recoverdeletedmessages.database.MyPreferences;
 
+import java.util.Objects;
+
 
 public class ActivityIntroSLides extends AppCompatActivity {
 
 
+    private Toolbar toolbar;
+    private TextView toolBarTitleTv;
     private PreferenceManager preferenceManager;
     private LinearLayout dotsLayout;
     private TextView[] dots;
@@ -39,24 +44,25 @@ public class ActivityIntroSLides extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setStatusBarGradient(this);
+        setStatusBarGradient(this);
         setContentView(R.layout.activity_intro_slides);
         myPreferences = new MyPreferences(this);
         initViews();
         setUpViewPager();
         addBottomDots(0);
+//        setUpToolBar();
     }
-/*
+
     public static void setStatusBarGradient(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
-            Drawable background = activity.getResources().getDrawable(R.drawable.ic_main_bg);
+
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(activity.getResources().getColor(android.R.color.transparent));
-            window.setNavigationBarColor(activity.getResources().getColor(android.R.color.transparent));
-            window.setBackgroundDrawable(background);
+            window.setStatusBarColor(activity.getResources().getColor(R.color.colorOffWhite));
+            window.setNavigationBarColor(activity.getResources().getColor(R.color.colorOffWhite));
+
         }
-    }*/
+    }
 
     private void initViews() {
         viewPager = (ViewPager) findViewById(R.id.acIntroSlide_viewPager);
@@ -66,6 +72,25 @@ public class ActivityIntroSLides extends AppCompatActivity {
         viewPager.setOnPageChangeListener(viewPagerPageChangeListener);
         btnNext.setOnClickListener(onButtonsClicked);
         btnSkip.setOnClickListener(onButtonsClicked);
+    }
+
+    private void setUpToolBar() {
+//        toolbar = findViewById(R.id.toolBar_acIntroSlide);
+        toolBarTitleTv = findViewById(R.id.toolBar_title_tv);
+        setSupportActionBar(toolbar);
+        changeColors(getResources().getColor(R.color.colorFragmentWhatsappToolbar), getResources().getColor(R.color.colorFragmentWhatsappToolbar), "Whats App");
+
+    }
+
+    private void changeColors(int statusBarColor, int toolbarColor, String currentSlideHead) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(statusBarColor);
+        }
+        toolbar.setBackgroundColor(toolbarColor);
+        toolBarTitleTv.setText(currentSlideHead);
     }
 
     private void setUpViewPager() {

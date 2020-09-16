@@ -6,18 +6,31 @@
 
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorOffWhite">#F7F6F6</color>
     <color name="colorGray">#A8A8A8</color>
+    <color name="colorSplashText">#009BFF</color>
+    <color name="colorbackgrounMain">#F7F6F6</color>
+
+    <color name="colorFragmentWhatsappToolbar">#06711C</color>
+    <color name="colorFragmentFbToolbar">#009BFF</color>
+    <color name="colorFragmentInstaToolbar">#BD338E</color>
+    <color name="colorFragmentSmsToolbar">#FFB400</color>
+
+    <color name="colorFragmentWhatsappStatusBar">#045314</color>
+    <color name="colorFragmentFbStatusBar">#0783D4</color>
+    <color name="colorFragmentInstaStatusBar">#A8247B</color>
+    <color name="colorFragmentSmsStatusBar">#FF9C00</color>
 
 
     <!-- dots inactive colors -->
-    <color name="dot_dark_screen1">#F9BDBD</color>
-    <color name="dot_dark_screen2">#F9BDBD</color>
-    <color name="dot_dark_screen3">#F9BDBD</color>
+    <color name="dot_dark_screen1">#B306711C</color>
+    <color name="dot_dark_screen2">#B3009BFF</color>
+    <color name="dot_dark_screen3">#B3BD338E</color>
 
     <!-- dots active colors -->
-    <color name="dot_light_screen1">#F93434</color>
-    <color name="dot_light_screen2">#F93434</color>
-    <color name="dot_light_screen3">#F93434</color>
+    <color name="dot_light_screen1">#045314</color>
+    <color name="dot_light_screen2">#0783D4</color>
+    <color name="dot_light_screen3">#A8247B</color>
 
     <array name="array_dot_active">
         <item>@color/dot_light_screen1</item>

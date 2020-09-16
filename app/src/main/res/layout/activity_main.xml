@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorOffWhite"
     tools:context="activities.MainActivity">
 
     <FrameLayout
         android:id="@+id/acMain_fragments_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_navigation_tab" />
+        android:layout_above="@+id/acMain_bottomRecycler_root" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView_permissionHolder_acMain"
@@ -43,26 +44,24 @@
 
     </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_tab"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@android:color/darker_gray"
-        app:itemRippleColor="?attr/colorPrimary"
-        app:menu="@menu/menu_main_bottom_nav_bar" />
-
     <RelativeLayout
         android:id="@+id/acMain_bottomRecycler_root"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bottom_navigation_tab"
-       >
+        android:layout_height="@dimen/_90sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/ic_main_bottom_whatsapp"
+
+        >
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/acMain_bottom_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipChildren="false"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/_2sdp"
+            android:layout_marginRight="@dimen/_2sdp"
+
             android:scrollbars="none" />
     </RelativeLayout>
 

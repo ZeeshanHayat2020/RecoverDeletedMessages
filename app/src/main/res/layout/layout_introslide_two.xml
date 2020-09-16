@@ -4,9 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/slide_cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Slide Two" />
+        android:layout_margin="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_10sdp"
+        android:elevation="@dimen/_3sdp"
+        >
+
+        <ImageView
+            android:id="@+id/intro_slideOne_imageView"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_150sdp"
+            android:src="@drawable/ic_intro_slide_fb" />
+    </androidx.cardview.widget.CardView>
+
+
+    <TextView
+        android:id="@+id/slide_titleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/slide_cardView"
+        android:layout_centerInParent="true"
+        android:text="Facebook Messages"
+        android:textColor="@color/colorFragmentFbToolbar"
+        android:textSize="18sp"
+        android:layout_margin="@dimen/_5sdp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/slide_titleTV"
+        android:layout_centerInParent="true"
+        android:text="See all Facebook messages on just one click"
+        android:textColor="@color/colorFragmentFbToolbar"
+        android:textSize="16sp" />
 </RelativeLayout>

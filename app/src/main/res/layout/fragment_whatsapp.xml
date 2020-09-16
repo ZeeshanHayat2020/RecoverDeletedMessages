@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
 
     <include
         android:id="@+id/fr_whatsApp_toolbar"
@@ -25,9 +27,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/_15sdp"
-        android:contentDescription="@string/fab_whatsApp" />
+        app:backgroundTint="@color/colorFragmentWhatsappToolbar"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        android:src="@drawable/ic_fab_direct"
+        />
 
     <ProgressBar
         android:id="@+id/fr_whatsApp_loadingBar"

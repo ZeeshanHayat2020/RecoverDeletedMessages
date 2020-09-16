@@ -28,19 +28,16 @@ public class ActivitySplash extends ActivityBase {
         setContentView(R.layout.activity_splash);
         setStatusBarGradient(this);
         myPreferences = new MyPreferences(this);
-//        reqNewInterstitial(this);
-        launchLanguageActivity();
+        reqNewInterstitial(this);
 
     }
 
     public static void setStatusBarGradient(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
-//            Drawable background = activity.getResources().getDrawable(R.drawable.ic_main_bg);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(activity.getResources().getColor(android.R.color.transparent));
             window.setNavigationBarColor(activity.getResources().getColor(android.R.color.transparent));
-//            window.setBackgroundDrawable(background);
         }
     }
 
@@ -48,7 +45,7 @@ public class ActivitySplash extends ActivityBase {
     protected void onResume() {
         super.onResume();
         if (haveNetworkConnection()) {
-//            loadInterstitial();
+            loadInterstitial();
         } else {
             launchWithDelay();
         }
@@ -94,8 +91,7 @@ public class ActivitySplash extends ActivityBase {
         }.execute();
 
     }
-
-
+    
     void loadInterstitial() {
         mInterstitialAd.setAdListener(new AdListener() {
             @Override

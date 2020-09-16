@@ -24,5 +24,9 @@
     <string name="skip">Skip</string>
     <string name="storagePermission">Allow app to reade write storage permission.</string>
     <string name="allow">Allow</string>
+    <string name="splash_heading">Delete Message Recovery</string>
+    <string name="splash_description">Recover all your social media messages</string>
+    <string name="introSlideWaTtitle">Whats App Messages</string>
+    <string name="introSlideWaDesc">See all Whats App messages on just one click.</string>
 
 </resources>

@@ -85,6 +85,7 @@ public class FragmentFacebook extends FragmentBase {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setUpStatusBar(getContext().getResources().getColor(R.color.colorFragmentFbStatusBar));
         view = inflater.inflate(R.layout.fragment_facebook, container, false);
         return view;
     }
@@ -172,7 +173,7 @@ public class FragmentFacebook extends FragmentBase {
     private void setUpToolBar() {
         selected = getResources().getString(R.string.item_selected);
         ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.colorFragmentFbToolbar));
         toolBarTitleTv = (TextView) view.findViewById(R.id.toolBar_title_tv);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

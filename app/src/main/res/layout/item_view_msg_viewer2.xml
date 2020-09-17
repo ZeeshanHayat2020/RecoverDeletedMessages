@@ -3,34 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/_10sdp"
-    android:clickable="true"
-    android:foreground="?attr/selectableItemBackground"
-    android:paddingBottom="@dimen/_10sdp"
-    app:cardCornerRadius="@dimen/_10sdp">
+    android:layout_marginBottom="@dimen/_5sdp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:id="@+id/itemView_ac_msgView_cardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:elevation="@dimen/_3sdp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/colorWhite"
+        app:cardCornerRadius="@dimen/_5sdp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_margin="@dimen/_5sdp"
             android:orientation="vertical"
-
-            >
+            android:padding="@dimen/_2sdp">
 
             <TextView
                 android:id="@+id/itemView_ac_msgView_msgTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
+
                 android:text="Message"
                 android:textColor="@color/colorBlack"
                 android:textSize="18sp" />
@@ -40,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:text="Time"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp" />
@@ -48,16 +46,14 @@
         </LinearLayout>
 
 
-        <CheckBox
-            android:id="@+id/itemView_ac_msgView_checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"
-            android:buttonTint="@color/colorAccent"
-            android:visibility="invisible" />
-    </RelativeLayout>
-
     </androidx.cardview.widget.CardView>
 
+    <CheckBox
+        android:id="@+id/itemView_ac_msgView_checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:buttonTint="@color/colorAccent"
+        android:visibility="invisible" />
 </RelativeLayout>

@@ -5,41 +5,100 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/acPrivacyPolicy_toolbar"
-        layout="@layout/toolbar_custom" />
-
     <LinearLayout
+        android:id="@+id/pp_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_weight="2"
-        android:orientation="horizontal">
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/acPP_btnDecline"
-            android:layout_width="0dp"
+
+        <RelativeLayout
+            android:id="@+id/rootView_pp_texts"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_350sdp"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@drawable/ic_bg_privacy_policy">
+
+            <TextView
+                android:id="@+id/acPP_headTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="Privacy Policy"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/acPP_DescTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/acPP_headTV"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_50sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:text="Privacy Policy"
+                android:textColor="@color/colorBlack"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/acPP_LinkTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/acPP_DescTV"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/decline"
-            android:textAllCaps="false"
-            android:textColor="@color/colorWhite"
-            android:textSize="18sp" />
+            android:layout_below="@+id/rootView_pp_texts"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_weight="2"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/acPP_btnAccept"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/Accept"
-            android:textAllCaps="false"
-            android:textColor="@color/colorWhite"
-            android:textSize="18sp" />
+            <Button
+                android:id="@+id/acPP_btnDecline"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:background="@drawable/background_btns"
+                android:gravity="center"
+                android:text="@string/decline"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp" />
 
+            <Button
+                android:id="@+id/acPP_btnAccept"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:background="@drawable/background_btns"
+                android:gravity="center"
+                android:text="@string/Accept"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

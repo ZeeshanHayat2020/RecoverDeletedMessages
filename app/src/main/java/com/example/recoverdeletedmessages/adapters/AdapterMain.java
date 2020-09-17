@@ -140,7 +140,7 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
             break;
             case Constant.ACTIVE_FRAGMENT_FACEBOOK: {
                 int color = context.getResources().getColor(R.color.colorFragmentFbToolbar);
-                holder.readStatusTV.setBackground(setReadStatusBackground(context.getResources().getColor(R.color.colorFragmentFbToolbar)));
+                holder.readStatusTV.setBackground(setReadStatusBackground(color));
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
                     if (list.get(list.size() - 1).getReadStatus().equals("Read")) {
@@ -168,7 +168,7 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
             break;
             case Constant.ACTIVE_FRAGMENT_ACTIVE_INSTA: {
                 int color = context.getResources().getColor(R.color.colorFragmentInstaToolbar);
-                holder.readStatusTV.setBackground(setReadStatusBackground(context.getResources().getColor(R.color.colorFragmentInstaToolbar)));
+                holder.readStatusTV.setBackground(setReadStatusBackground(color));
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_INSTAGRAM, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
                     if (list.get(list.size() - 1).getReadStatus().equals("Read")) {
@@ -196,8 +196,8 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
             break;
 
             case Constant.ACTIVE_FRAGMENT_DEFAULT: {
-                int color = context.getResources().getColor(R.color.colorFragmentInstaToolbar);
-                holder.readStatusTV.setBackground(setReadStatusBackground(context.getResources().getColor(R.color.colorFragmentSmsToolbar)));
+                int color = context.getResources().getColor(R.color.colorFragmentSmsToolbar);
+                holder.readStatusTV.setBackground(setReadStatusBackground(color));
                 List<Messages> list = helper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, currentItem.getUserTitle());
                 if (!list.isEmpty()) {
                     if (list.get(list.size() - 1).getReadStatus().equals("Read")) {

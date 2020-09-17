@@ -22,11 +22,35 @@
     <string name="decline">Decline</string>
     <string name="Accept">Accept</string>
     <string name="skip">Skip</string>
-    <string name="storagePermission">Allow app to reade write storage permission.</string>
+    <string name="storagePermission">Allow application to reade and write storage permission.</string>
     <string name="allow">Allow</string>
     <string name="splash_heading">Delete Message Recovery</string>
     <string name="splash_description">Recover all your social media messages</string>
     <string name="introSlideWaTtitle">Whats App Messages</string>
-    <string name="introSlideWaDesc">See all Whats App messages on just one click.</string>
+
+    <string name="introSlideWaDesc">See all Whats App messages on whats\'app category screen.</string>
+    <string name="introSlideFbDesc">See all Facebook messages on facebook category screen.</string>
+    <string name="fbIntroHead">Facebook Messages</string>
+    <string name="introSlideInstaDesc">See all Instagram messages on instagram category screen.</string>
+    <string name="introSlideInstaHead">Instagram Messages</string>
+
+
+    <string name="pp_url" translatable="false">https://sites.google.com/view/furesticdocumentsreader/home</string>
+    <string name="privacy_policy_text" translatable="false"><![CDATA[
+
+<p>This application needs following permissions to work properly.</p>
+<ul>
+  <li><b>Read External Storage</b></li>
+  <li><b>Write External Storage</b></li>
+   <li><b>Foreground Services</b></li>
+  <li><b>Access Notification Policy</b></li>
+</ul>
+<p>Application needs these permissions to read your messages and retrieve user profile.</p>
+]]></string>
+    <string name="privacy_policy_linkText" translatable="false"><![CDATA[
+<a href="">Click here to visit privacy policy…</a>
+]]></string>
+    <string name="allowNotificationText">Application needs notification access to read messages and store in database.\nTo allow access click on Allow button.</string>
+
 
 </resources>

@@ -11,13 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
@@ -60,7 +64,7 @@ public class ActivityMessagesViewer extends AppCompatActivity {
     public boolean isSelectAll = false;
     private ArrayList<Messages> multiSelectedItemList;
     private String selected;
-    private String currentMessagesTitle = "";
+    public String currentMessagesTitle = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,7 @@ public class ActivityMessagesViewer extends AppCompatActivity {
         }
         initViews();
         setUpToolBar();
+        setToolbarAndStatusBarColor(currentMessagesTitle);
         iniRecyclerView();
         buildRecyclerView();
     }
@@ -136,7 +141,6 @@ public class ActivityMessagesViewer extends AppCompatActivity {
     private void setUpToolBar() {
         selected = getResources().getString(R.string.item_selected);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         toolBarTitleTv = (TextView) findViewById(R.id.toolBar_title_tv);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -149,6 +153,49 @@ public class ActivityMessagesViewer extends AppCompatActivity {
         });
         updateToolBarTitle(currentMessagesTitle);
     }
+
+    private void setToolbarColor(int color) {
+        toolbar.setBackgroundColor(color);
+        loadingBar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+    }
+
+    public void setUpStatusBar(int color) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(color);
+        }
+    }
+
+    private void setToolbarAndStatusBarColor(String currentMessagesTitle) {
+        switch (currentMessagesTitle) {
+            case "Whatsapp Messages": {
+                setUpStatusBar(getResources().getColor(R.color.colorFragmentWhatsappStatusBar));
+                setToolbarColor(getResources().getColor(R.color.colorFragmentWhatsappToolbar));
+
+            }
+            break;
+            case "Instagram Messages": {
+                setUpStatusBar(getResources().getColor(R.color.colorFragmentInstaStatusBar));
+                setToolbarColor(getResources().getColor(R.color.colorFragmentInstaToolbar));
+            }
+            break;
+            case "Facebook Messages": {
+                setUpStatusBar(getResources().getColor(R.color.colorFragmentFbStatusBar));
+                setToolbarColor(getResources().getColor(R.color.colorFragmentFbToolbar));
+            }
+            break;
+            case "Sms": {
+                setUpStatusBar(getResources().getColor(R.color.colorFragmentSmsStatusBar));
+                setToolbarColor(getResources().getColor(R.color.colorFragmentSmsToolbar));
+            }
+            break;
+
+
+        }
+    }
+
 
     private void updateToolBarTitle(String title) {
         toolBarTitleTv.setText(title);

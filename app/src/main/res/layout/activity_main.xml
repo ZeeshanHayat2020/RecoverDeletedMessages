@@ -16,10 +16,12 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView_permissionHolder_acMain"
         android:layout_width="@dimen/_250sdp"
-        android:layout_height="@dimen/_150sdp"
+        android:layout_height="@dimen/_120sdp"
         android:layout_centerInParent="true"
         android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginRight="@dimen/_10sdp">
+        android:layout_marginRight="@dimen/_10sdp"
+        android:elevation="@dimen/_3sdp"
+        app:cardCornerRadius="@dimen/_10sdp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -27,19 +29,37 @@
             android:layout_margin="@dimen/_5sdp">
 
             <TextView
+                android:id="@+id/acMainPermissionHeadTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:text="Read External Storage"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/acMainPermissionHeadTv"
                 android:layout_centerInParent="true"
+                android:layout_margin="@dimen/_10sdp"
                 android:text="@string/storagePermission"
                 android:textSize="18sp" />
 
             <Button
                 android:id="@+id/btnAllow_acMain"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerInParent="true"
-                android:text="@string/allow" />
+                android:background="@drawable/background_btns"
+                android:text="@string/allow"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp" />
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
@@ -51,7 +71,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:background="@drawable/ic_main_bottom_whatsapp"
-
         >
 
         <androidx.recyclerview.widget.RecyclerView
@@ -61,8 +80,10 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/_2sdp"
             android:layout_marginRight="@dimen/_2sdp"
-
-            android:scrollbars="none" />
+            android:layoutAnimation="@anim/layout_anim_right_to_left"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </RelativeLayout>
 
 

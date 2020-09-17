@@ -27,7 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/_15sdp"
         android:contentDescription="@string/fab_whatsApp"
         android:src="@drawable/ic_fab_direct"
@@ -40,5 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:indeterminateTint="@color/colorFragmentFbToolbar"
+        />
 </RelativeLayout>

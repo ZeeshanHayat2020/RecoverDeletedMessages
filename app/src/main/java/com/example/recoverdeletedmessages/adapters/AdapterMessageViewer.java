@@ -1,6 +1,8 @@
 package com.example.recoverdeletedmessages.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.widget.CompoundButtonCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recoverdeletedmessages.R;
@@ -47,12 +51,14 @@ public class AdapterMessageViewer extends RecyclerView.Adapter<AdapterMessageVie
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        public CardView cardView;
         public TextView messageTV;
         public TextView timeTv;
         public CheckBox checkBox;
 
         public MyViewHolder(View view) {
             super(view);
+            cardView = view.findViewById(R.id.itemView_ac_msgView_cardView);
             messageTV = view.findViewById(R.id.itemView_ac_msgView_msgTV);
             timeTv = view.findViewById(R.id.itemView_ac_msgView_timeTV);
             checkBox = view.findViewById(R.id.itemView_ac_msgView_checkBox);
@@ -64,7 +70,7 @@ public class AdapterMessageViewer extends RecyclerView.Adapter<AdapterMessageVie
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_view_msg_viewer, parent, false);
+                .inflate(R.layout.item_view_msg_viewer2, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -75,6 +81,26 @@ public class AdapterMessageViewer extends RecyclerView.Adapter<AdapterMessageVie
         holder.messageTV.setText(currentItem.getMessage());
         holder.timeTv.setText(createDate(currentItem.getTimeStamp()));
 
+        switch (activityMessagesViewer.currentMessagesTitle) {
+            case "Whatsapp Messages": {
+                setCheckBoxTintColor(holder.checkBox, context.getResources().getColor(R.color.colorFragmentWhatsappToolbar));
+            }
+            break;
+            case "Instagram Messages": {
+                setCheckBoxTintColor(holder.checkBox, context.getResources().getColor(R.color.colorFragmentInstaToolbar));
+
+            }
+            break;
+            case "Facebook Messages": {
+                setCheckBoxTintColor(holder.checkBox, context.getResources().getColor(R.color.colorFragmentFbToolbar));
+
+            }
+            break;
+            case "Sms": {
+                setCheckBoxTintColor(holder.checkBox, context.getResources().getColor(R.color.colorFragmentSmsToolbar));
+            }
+            break;
+        }
 
         if (activityMessagesViewer.isContextualMenuOpen) {
             if (activityMessagesViewer.isSelectAll) {
@@ -87,8 +113,9 @@ public class AdapterMessageViewer extends RecyclerView.Adapter<AdapterMessageVie
         } else {
             holder.timeTv.setVisibility(View.VISIBLE);
             holder.checkBox.setVisibility(View.INVISIBLE);
+
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (onRecyclerItemClickeListener != null) {
@@ -103,7 +130,7 @@ public class AdapterMessageViewer extends RecyclerView.Adapter<AdapterMessageVie
             }
         });
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 if (onRecyclerItemClickeListener != null) {
@@ -138,14 +165,15 @@ public class AdapterMessageViewer extends RecyclerView.Adapter<AdapterMessageVie
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(timestamp);
         Date d = c.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, HH:mm a");
         return sdf.format(d);
     }
-   /* private String formatDate(long timestamp) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(timestamp * 1000L);
-        String date = DateFormat.format("MMMM d hh:mm a", cal).toString();
 
-        return date;
-    }*/
+    private void setCheckBoxTintColor(CheckBox btn, int tintColor) {
+        if (Build.VERSION.SDK_INT < 21) {
+            CompoundButtonCompat.setButtonTintList(btn, ColorStateList.valueOf(tintColor));
+        } else {
+            btn.setButtonTintList(ColorStateList.valueOf(tintColor));
+        }
+    }
 }

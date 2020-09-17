@@ -1,49 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorOffWhite"
     tools:context=".activities.ActivityOpenWhatsApp">
 
     <include
         android:id="@+id/toolBar_acOpenWhatsApp"
         layout="@layout/toolbar_custom" />
 
-    <com.hbb20.CountryCodePicker
-        android:id="@+id/countryPicker"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_marginTop="56dp"
-        app:ccp_countryPreference="us,in"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar_acOpenWhatsApp" />
 
-    <EditText
-        android:id="@+id/editText_acOpenWhatsApp"
-        android:layout_width="324dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="Enter Number"
-        android:inputType="number"
-        android:padding="@dimen/_5sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countryPicker" />
-
-    <Button
-        android:id="@+id/btnOpenChat_acOpenWhatsApp"
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Open Chat"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_acOpenWhatsApp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_below="@+id/toolBar_acOpenWhatsApp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:elevation="@dimen/_3sdp"
+        app:cardBackgroundColor="@color/colorWhite"
+        app:cardCornerRadius="@dimen/_10sdp">
+
+        <LinearLayout
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/countryPicker"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_10sdp" />
+
+            <EditText
+                android:id="@+id/editText_acOpenWhatsApp"
+                android:layout_width="@dimen/_200sdp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:backgroundTint="@color/colorGray"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Enter Number"
+                android:inputType="number"
+                android:padding="@dimen/_5sdp"
+                android:textColor="@color/colorBlack" />
+
+            <Button
+                android:id="@+id/btnOpenChat_acOpenWhatsApp"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_10sdp"
+                android:background="@drawable/background_btns"
+                android:text="Open Chat"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

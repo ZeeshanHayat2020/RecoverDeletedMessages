@@ -10,9 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="@dimen/_5sdp"
-        app:cardCornerRadius="@dimen/_10sdp"
-        android:elevation="@dimen/_3sdp"
-        >
+        android:elevation="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_20sdp">
 
         <ImageView
             android:id="@+id/intro_slideOne_imageView"
@@ -28,18 +27,21 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/slide_cardView"
         android:layout_centerInParent="true"
-        android:text="Facebook Messages"
-        android:textColor="@color/colorFragmentFbToolbar"
-        android:textSize="18sp"
         android:layout_margin="@dimen/_5sdp"
-        />
+        android:text="@string/fbIntroHead"
+        android:textColor="@color/colorFragmentFbToolbar"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/slide_titleTV"
         android:layout_centerInParent="true"
-        android:text="See all Facebook messages on just one click"
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:gravity="center"
+        android:text="@string/introSlideFbDesc"
         android:textColor="@color/colorFragmentFbToolbar"
         android:textSize="16sp" />
 </RelativeLayout>

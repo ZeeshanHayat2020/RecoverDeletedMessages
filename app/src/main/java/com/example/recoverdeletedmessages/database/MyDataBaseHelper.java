@@ -7,14 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import com.example.recoverdeletedmessages.constants.TableName;
 import com.example.recoverdeletedmessages.models.Messages;
 import com.example.recoverdeletedmessages.models.Users;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.example.recoverdeletedmessages.constants.TableName.TABLE_NAME_MESSAGES_DEFAULT;
 import static com.example.recoverdeletedmessages.constants.TableName.TABLE_NAME_MESSAGES_FACEBOOK;
@@ -189,17 +186,16 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public long insertMessages(String MESSAGE_TABLE_NAME, String User_title, String message, long time, String readStatus) {
+    public void insertMessages(String MESSAGE_TABLE_NAME, String User_title, String message, long time, String readStatus) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(KEY_USER_TITLE, User_title);
         values.put(KEY_MESSAGE, message);
         values.put(KEY_TIME, time);
         values.put(KEY_USER_READ_STATUS, readStatus);
         // insert row
-        long todo_id = db.insert(MESSAGE_TABLE_NAME, null, values);
-        return todo_id;
+        db.insert(MESSAGE_TABLE_NAME, null, values);
+        db.close();
     }
 
     public void deleteMessages(String MESSAGE_TABLE_NAME, String columnName) {

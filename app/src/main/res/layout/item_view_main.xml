@@ -27,7 +27,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             android:layout_margin="@dimen/_5sdp"
-            android:src="@drawable/ic_bottom_nav_whatsapp" />
+            android:src="@drawable/ic_nouser" />
 
         <TextView
             android:id="@+id/itemView_main_readStatus_tv"
@@ -48,6 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/_2sdp"
             android:layout_toRightOf="@+id/itemView_main_iv"
             android:orientation="vertical">
 

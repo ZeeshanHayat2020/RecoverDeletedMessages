@@ -51,6 +51,7 @@ public class NotificationService extends NotificationListenerService {
     public void onCreate() {
         super.onCreate();
         createNotification();
+
     }
 
     @Override
@@ -79,6 +80,12 @@ public class NotificationService extends NotificationListenerService {
             Log.d(TAG, "May be twice");
             return;
         }
+        Bundle extras = sbn.getNotification().extras;
+        String title = extras.getString("android.title");
+        String message = extras.getCharSequence("android.text").toString();
+
+//        Log.i(TAG, "Title :" + title + " \t " + "Message:" + message);
+
         checkNotificationComeFrom(sbn);
     }
 
@@ -100,11 +107,12 @@ public class NotificationService extends NotificationListenerService {
             String title = extras.getString("android.title");
             String message = extras.getCharSequence("android.text").toString();
             String readStatus = "unRead";
-            if (title != null) {
+            if (title != null && !title.contains("Message not sent")) {
                 boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_DEFAULT, myDataBaseHelper.KEY_USER_TITLE, title);
                 if (!recordExists) {
                     getLargeIcon(extras);
                     myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_DEFAULT, id, title, largeIconUri);
+                    largeIconUri = "";
                 }
                 if (!message.contains("new messages")) {
                     myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, title, message, timeStamp, readStatus);
@@ -125,11 +133,12 @@ public class NotificationService extends NotificationListenerService {
                     String message = extras.getCharSequence("android.text").toString();
                     String readStatus = "unRead";
 
-                    if (title != null) {
+                    if (title != null && !title.contains("Messenger")) {
                         boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_FACEBOOK, myDataBaseHelper.KEY_USER_TITLE, title);
                         if (!recordExists) {
                             getLargeIcon(extras);
                             myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_FACEBOOK, id, title, largeIconUri);
+                            largeIconUri = "";
                         }
                         if (!message.contains("new messages")) {
                             myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, title, message, timeStamp, readStatus);
@@ -147,11 +156,12 @@ public class NotificationService extends NotificationListenerService {
                     String message = extras.getCharSequence("android.text").toString();
                     String readStatus = "unRead";
 
-                    if (!title.contains("Instagram") || title != null) {
+                    if (!title.contains("Instagram") && title != null) {
                         boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_INSTAGRAM, myDataBaseHelper.KEY_USER_TITLE, title);
                         if (!recordExists) {
                             getLargeIcon(extras);
                             myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_INSTAGRAM, id, title, largeIconUri);
+                            largeIconUri = "";
                         }
                         if (!message.contains("new messages")) {
                             myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_INSTAGRAM, title, message, timeStamp, readStatus);
@@ -174,8 +184,10 @@ public class NotificationService extends NotificationListenerService {
                             if (!recordExists) {
                                 getLargeIcon(extras);
                                 myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_WHATS_APP, id, title, largeIconUri);
+                                largeIconUri = "";
                             }
                             if (!message.contains("new messages")) {
+                                Log.i(TAG, "Title :" + title + " \t " + "Message:" + message);
                                 myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, title, message, timeStamp, readStatus);
                             }
                             sendBroadCast(Constant.ACTION_INTENT_FILTER_WHATS_APP_RECEIVER);

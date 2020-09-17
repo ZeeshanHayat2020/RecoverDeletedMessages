@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recoverdeletedmessages.R;
 import com.example.recoverdeletedmessages.activities.ActivityMessagesViewer;
+import com.example.recoverdeletedmessages.activities.MainActivity;
 import com.example.recoverdeletedmessages.adapters.AdapterMain;
 import com.example.recoverdeletedmessages.constants.Constant;
 import com.example.recoverdeletedmessages.constants.TableName;
@@ -182,7 +183,7 @@ public class FragmentInstagram extends FragmentBase {
                 if (isContextualMenuOpen) {
                     closeContextualMenu();
                 } else {
-                    getBackToWhatsAppFragment();
+                    ((MainActivity) getActivity()).onBackPressed();
                 }
             }
         });

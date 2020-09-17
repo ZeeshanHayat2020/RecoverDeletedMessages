@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -61,13 +65,12 @@ public class MainActivity extends ActivityBase {
     private FragmentDefault fragmentDefault;
 
     private RelativeLayout recyclerRootView;
-    private RecyclerView recyclerView;
+    public RecyclerView recyclerView;
     RecyclerView.LayoutManager mLayoutManager;
 
     private AdapterMainBottomView mAdapter;
     private List<ModelBottomView> bottomViewList = new ArrayList<>();
-    public int selectedIndex = -1;
-
+    public int selectedIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +92,6 @@ public class MainActivity extends ActivityBase {
             permissionHolder.setVisibility(View.VISIBLE);
         }
 
-
     }
 
     protected void onResume() {
@@ -107,6 +109,9 @@ public class MainActivity extends ActivityBase {
             super.onBackPressed();
             this.finish();
         } else {
+            selectedIndex = 0;
+            mAdapter.notifyDataSetChanged();
+            setUpBottomBacgorund(R.drawable.ic_main_bottom_whatsapp);
             openFragment(fragmentWhatsApp);
 
         }
@@ -123,7 +128,20 @@ public class MainActivity extends ActivityBase {
         fragmentInstagram = new FragmentInstagram();
         fragmentDefault = new FragmentDefault();
         btnAllow.setOnClickListener(onClickListener);
+        changeButtonBackground(btnAllow, R.color.colorFragmentWhatsappToolbar);
 
+    }
+
+    private void changeButtonBackground(Button btnAccept, int colorId) {
+        Drawable background = btnAccept.getBackground();
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable) background).getPaint().setColor(ContextCompat.getColor(this, colorId));
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background).setColor(ContextCompat.getColor(this, colorId));
+
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable) background).setColor(ContextCompat.getColor(this, colorId));
+        }
     }
 
     private void iniRecyclerView() {
@@ -196,12 +214,12 @@ public class MainActivity extends ActivityBase {
     }
 
 
-    private void setUpBottomBacgorund(int source) {
+    public void setUpBottomBacgorund(int source) {
         recyclerRootView.setBackgroundResource(source);
 
     }
 
-    private void openFragment(Fragment fragment) {
+    public void openFragment(Fragment fragment) {
         if (hasStoragePermission()) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.acMain_fragments_container, fragment)

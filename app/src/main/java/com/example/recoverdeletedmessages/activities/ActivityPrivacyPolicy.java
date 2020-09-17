@@ -2,8 +2,10 @@ package com.example.recoverdeletedmessages.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.recoverdeletedmessages.R;
 import com.example.recoverdeletedmessages.database.MyPreferences;
@@ -22,8 +25,8 @@ import com.example.recoverdeletedmessages.database.MyPreferences;
 
 public class ActivityPrivacyPolicy extends AppCompatActivity {
 
-    private TextView tvPrivacyPolicy;
-    private TextView tvPrivacyPolicyLinkView;
+    private TextView tvPPLink;
+    private TextView tvPPDesc;
 
     private Button btnAccept;
     private Button bntDecline;
@@ -33,23 +36,56 @@ public class ActivityPrivacyPolicy extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStatusBarGradient(this);
         setContentView(R.layout.activity_privacy_policy);
         myPreferences = new MyPreferences(this);
         initViews();
+        setPrivacyPolicyText();
 
     }
 
+    public static void setStatusBarGradient(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = activity.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(activity.getResources().getColor(R.color.colorOffWhite));
+            window.setNavigationBarColor(activity.getResources().getColor(R.color.colorOffWhite));
+        }
+    }
 
-/*
+    private void initViews() {
+        tvPPDesc = (TextView) findViewById(R.id.acPP_DescTV);
+        tvPPLink = (TextView) findViewById(R.id.acPP_LinkTV);
+
+        btnAccept = findViewById(R.id.acPP_btnAccept);
+        bntDecline = findViewById(R.id.acPP_btnDecline);
+        btnAccept.setOnClickListener(onClickListener);
+        bntDecline.setOnClickListener(onClickListener);
+        changeButtonBackground(btnAccept, R.color.colorBtnPPAloww);
+        changeButtonBackground(bntDecline, R.color.colorBtnPPDecline);
+    }
+
+    private void changeButtonBackground(Button btnAccept, int colorId) {
+        Drawable background = btnAccept.getBackground();
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable) background).getPaint().setColor(ContextCompat.getColor(this, colorId));
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background).setColor(ContextCompat.getColor(this, colorId));
+
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable) background).setColor(ContextCompat.getColor(this, colorId));
+        }
+    }
+
     private void setPrivacyPolicyText() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            tvPrivacyPolicy.setText(Html.fromHtml(getString(R.string.privacy_policy_text), Html.FROM_HTML_MODE_LEGACY));
-            tvPrivacyPolicyLinkView.setText(Html.fromHtml(getString(R.string.privacy_policy_linkText), Html.FROM_HTML_MODE_LEGACY));
+            tvPPDesc.setText(Html.fromHtml(getString(R.string.privacy_policy_text), Html.FROM_HTML_MODE_LEGACY));
+            tvPPLink.setText(Html.fromHtml(getString(R.string.privacy_policy_linkText), Html.FROM_HTML_MODE_LEGACY));
         } else {
-            tvPrivacyPolicy.setText(Html.fromHtml(getString(R.string.privacy_policy_text)));
-            tvPrivacyPolicyLinkView.setText(Html.fromHtml(getString(R.string.privacy_policy_linkText)));
+            tvPPDesc.setText(Html.fromHtml(getString(R.string.privacy_policy_text)));
+            tvPPLink.setText(Html.fromHtml(getString(R.string.privacy_policy_linkText)));
         }
-        tvPrivacyPolicyLinkView.setOnClickListener(new View.OnClickListener() {
+        tvPPLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String url = getString(R.string.pp_url);
@@ -59,14 +95,8 @@ public class ActivityPrivacyPolicy extends AppCompatActivity {
             }
         });
 
-    }*/
-
-    private void initViews() {
-        btnAccept = findViewById(R.id.acPP_btnAccept);
-        bntDecline = findViewById(R.id.acPP_btnDecline);
-        btnAccept.setOnClickListener(onClickListener);
-        bntDecline.setOnClickListener(onClickListener);
     }
+
 
     private GradientDrawable getGradient(int color1, int color2) {
         int[] colors = {Integer.parseInt(String.valueOf(color1)),

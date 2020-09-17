@@ -1,5 +1,6 @@
 package com.example.recoverdeletedmessages.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -8,9 +9,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,7 +31,7 @@ import com.hbb20.CountryCodePicker;
 import java.net.URLEncoder;
 
 
-public class ActivityOpenWhatsApp extends AppCompatActivity {
+public class ActivityOpenWhatsApp extends ActivityBase {
     private String TAG = "ActivityOpenWhatsApp";
     private Toolbar toolbar;
     private TextView toolBarTitleTv;
@@ -33,9 +42,44 @@ public class ActivityOpenWhatsApp extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setUpStatusBar(getResources().getColor(R.color.colorFragmentWhatsappStatusBar));
         setContentView(R.layout.activity_open_whats_app);
         initViews();
         setUpToolBar();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_ac_main, menu);
+        return true;
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.acMain_menu_btnCreateNotification: {
+
+            }
+            break;
+            case R.id.acMain_btm_nav_btnSettings: {
+
+            }
+            break;
+        }
+        return true;
+    }
+
+    public void setUpStatusBar(int color) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(color);
+        }
     }
 
     private void initViews() {
@@ -76,10 +120,12 @@ public class ActivityOpenWhatsApp extends AppCompatActivity {
                         e.printStackTrace();
                         String message = getResources().getString(R.string.whatsAppNotInstalled);
                         showToast(message);
-
                     }
                 } else {
+                    etNumber.setText("");
                     etNumber.setHint("Enter valid number");
+                    blinkEditText();
+                    Log.d(TAG, "onValidityChanged: Phone NUMber" + phoneNumber);
                 }
             }
         });
@@ -100,7 +146,7 @@ public class ActivityOpenWhatsApp extends AppCompatActivity {
 
     private void setUpToolBar() {
         this.setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.colorFragmentWhatsappToolbar));
         toolBarTitleTv = (TextView) findViewById(R.id.toolBar_title_tv);
         toolBarTitleTv.setText("Open Whatsapp Chat");
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -111,4 +157,13 @@ public class ActivityOpenWhatsApp extends AppCompatActivity {
             }
         });
     }
+
+
+    private void blinkEditText() {
+        Animation animation;
+        animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.anim_blink);
+        etNumber.startAnimation(animation);
+    }
+
 }

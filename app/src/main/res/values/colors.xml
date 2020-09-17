@@ -7,9 +7,14 @@
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorOffWhite">#F7F6F6</color>
-    <color name="colorGray">#A8A8A8</color>
+    <color name="colorGray">#7E7E7E</color>
     <color name="colorSplashText">#009BFF</color>
     <color name="colorbackgrounMain">#F7F6F6</color>
+    <color name="colorInsta">#E03C62</color>
+    <color name="colorIntroSlideBtn">#7646FF</color>
+
+    <color name="colorBtnPPAloww">#E03C62</color>
+    <color name="colorBtnPPDecline">#3BDE58</color>
 
     <color name="colorFragmentWhatsappToolbar">#06711C</color>
     <color name="colorFragmentFbToolbar">#009BFF</color>
@@ -23,9 +28,9 @@
 
 
     <!-- dots inactive colors -->
-    <color name="dot_dark_screen1">#B306711C</color>
-    <color name="dot_dark_screen2">#B3009BFF</color>
-    <color name="dot_dark_screen3">#B3BD338E</color>
+    <color name="dot_dark_screen1">#8006711C</color>
+    <color name="dot_dark_screen2">#80009BFF</color>
+    <color name="dot_dark_screen3">#80BD338E</color>
 
     <!-- dots active colors -->
     <color name="dot_light_screen1">#045314</color>

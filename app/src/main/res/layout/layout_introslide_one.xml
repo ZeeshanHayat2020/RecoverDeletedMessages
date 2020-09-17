@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+
+    >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/slide_cardView"
@@ -10,9 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="@dimen/_5sdp"
-        app:cardCornerRadius="@dimen/_10sdp"
-        android:elevation="@dimen/_3sdp"
-        >
+        android:elevation="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_20sdp">
 
         <ImageView
             android:id="@+id/intro_slideOne_imageView"
@@ -31,13 +32,17 @@
         android:layout_margin="@dimen/_5sdp"
         android:text="@string/introSlideWaTtitle"
         android:textColor="@color/colorFragmentWhatsappToolbar"
-        android:textSize="18sp" />
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/slide_titleTV"
         android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:gravity="center"
         android:text="@string/introSlideWaDesc"
         android:textColor="@color/colorFragmentWhatsappToolbar"
         android:textSize="16sp" />

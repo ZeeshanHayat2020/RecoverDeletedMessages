@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recoverdeletedmessages.R;
 import com.example.recoverdeletedmessages.activities.ActivityMessagesViewer;
+import com.example.recoverdeletedmessages.activities.MainActivity;
 import com.example.recoverdeletedmessages.adapters.AdapterMain;
 import com.example.recoverdeletedmessages.constants.Constant;
 import com.example.recoverdeletedmessages.constants.TableName;
@@ -192,7 +193,7 @@ public class FragmentDefault extends FragmentBase {
                 if (isContextualMenuOpen) {
                     closeContextualMenu();
                 } else {
-                    getBackToWhatsAppFragment();
+                    ((MainActivity) getActivity()).onBackPressed();
                 }
             }
         });
@@ -218,7 +219,7 @@ public class FragmentDefault extends FragmentBase {
                 Intent intent = new Intent(context, ActivityMessagesViewer.class);
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_MAIN_ITEM_TITLE, usersList.get(position).getUserTitle());
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_TABLE_NAME, TableName.TABLE_NAME_MESSAGES_DEFAULT);
-                intent.putExtra(Constant.KEY_INTENT_SELECTED_MESSAGES_TITLE, "Default Messages");
+                intent.putExtra(Constant.KEY_INTENT_SELECTED_MESSAGES_TITLE, "Sms");
                 startActivity(intent);
 
             }

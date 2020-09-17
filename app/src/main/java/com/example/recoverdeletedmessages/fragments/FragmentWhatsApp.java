@@ -191,7 +191,7 @@ public class FragmentWhatsApp extends FragmentBase {
                 if (isContextualMenuOpen) {
                     closeContextualMenu();
                 } else {
-                    getBackToWhatsAppFragment();
+                    ((MainActivity) getActivity()).onBackPressed();
                 }
             }
         });

@@ -2,12 +2,17 @@ package com.example.recoverdeletedmessages.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,6 +22,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.recoverdeletedmessages.R;
@@ -26,7 +32,7 @@ import com.example.recoverdeletedmessages.database.MyPreferences;
 import java.util.Objects;
 
 
-public class ActivityIntroSLides extends AppCompatActivity {
+public class ActivityIntroSLides extends ActivityBase {
 
 
     private Toolbar toolbar;
@@ -50,13 +56,12 @@ public class ActivityIntroSLides extends AppCompatActivity {
         initViews();
         setUpViewPager();
         addBottomDots(0);
-//        setUpToolBar();
+
     }
 
     public static void setStatusBarGradient(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
-
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(activity.getResources().getColor(R.color.colorOffWhite));
             window.setNavigationBarColor(activity.getResources().getColor(R.color.colorOffWhite));
@@ -72,25 +77,19 @@ public class ActivityIntroSLides extends AppCompatActivity {
         viewPager.setOnPageChangeListener(viewPagerPageChangeListener);
         btnNext.setOnClickListener(onButtonsClicked);
         btnSkip.setOnClickListener(onButtonsClicked);
+        changeButtonBackground();
     }
 
-    private void setUpToolBar() {
-//        toolbar = findViewById(R.id.toolBar_acIntroSlide);
-        toolBarTitleTv = findViewById(R.id.toolBar_title_tv);
-        setSupportActionBar(toolbar);
-        changeColors(getResources().getColor(R.color.colorFragmentWhatsappToolbar), getResources().getColor(R.color.colorFragmentWhatsappToolbar), "Whats App");
+    private void changeButtonBackground() {
+        Drawable background = btnNext.getBackground();
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable) background).getPaint().setColor(ContextCompat.getColor(this, R.color.colorIntroSlideBtn));
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background).setColor(ContextCompat.getColor(this, R.color.colorIntroSlideBtn));
 
-    }
-
-    private void changeColors(int statusBarColor, int toolbarColor, String currentSlideHead) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(statusBarColor);
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable) background).setColor(ContextCompat.getColor(this, R.color.colorIntroSlideBtn));
         }
-        toolbar.setBackgroundColor(toolbarColor);
-        toolBarTitleTv.setText(currentSlideHead);
     }
 
     private void setUpViewPager() {
@@ -135,9 +134,9 @@ public class ActivityIntroSLides extends AppCompatActivity {
         dotsLayout.removeAllViews();
         for (int i = 0; i < dots.length; i++) {
             dots[i] = new TextView(this);
-            dots[i].setText(Html.fromHtml("¯"));
+            dots[i].setText(Html.fromHtml("&#8226;"));
             dots[i].setTextSize(40);
-            dots[i].setTextColor(colorsInactive[currentPage]);
+            dots[i].setTextColor(colorsInactive[i]);
             dotsLayout.addView(dots[i]);
         }
 

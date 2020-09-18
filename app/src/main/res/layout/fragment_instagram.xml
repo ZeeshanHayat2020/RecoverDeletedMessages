@@ -8,16 +8,27 @@
         android:id="@+id/fr_instagram_toolbar"
         layout="@layout/toolbar_custom" />
 
+
+    <FrameLayout
+        android:id="@+id/fr_instagram_bannerContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fr_instagram_toolbar"
+        android:layout_marginTop="@dimen/_2sdp" />
+
     <RelativeLayout
         android:id="@+id/rootView_recycler_fr_instagram"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fr_instagram_toolbar">
+        android:layout_below="@+id/fr_instagram_bannerContainer">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_fr_instagram"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:theme="@style/Theme.RecyclerInsta"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
     </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -39,7 +50,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="visible"
         android:indeterminateTint="@color/colorFragmentInstaToolbar"
-        />
+        android:visibility="visible" />
 </RelativeLayout>

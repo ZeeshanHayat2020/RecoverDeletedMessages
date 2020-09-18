@@ -13,5 +13,21 @@
         <item name="colorAccent">@color/colorWhite</item>
     </style>
 
+    <style name="Theme.RecyclerWhatsApp" parent="AppTheme">
+        <item name="android:colorEdgeEffect">@color/colorFragmentWhatsappToolbar</item>
+    </style>
+
+    <style name="Theme.RecyclerFb" parent="AppTheme">
+        <item name="android:colorEdgeEffect">@color/colorFragmentFbToolbar</item>
+    </style>
+
+    <style name="Theme.RecyclerInsta" parent="AppTheme">
+        <item name="android:colorEdgeEffect">@color/colorFragmentInstaToolbar</item>
+    </style>
+
+    <style name="Theme.RecyclerSms" parent="AppTheme">
+        <item name="android:colorEdgeEffect">@color/colorFragmentSmsToolbar</item>
+    </style>
+
 
 </resources>

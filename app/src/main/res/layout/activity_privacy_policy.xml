@@ -19,7 +19,7 @@
         <RelativeLayout
             android:id="@+id/rootView_pp_texts"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_350sdp"
+            android:layout_height="@dimen/_300sdp"
             android:layout_centerInParent="true"
             android:layout_marginBottom="@dimen/_10sdp"
             android:background="@drawable/ic_bg_privacy_policy">
@@ -33,7 +33,7 @@
                 android:layout_margin="@dimen/_5sdp"
                 android:text="Privacy Policy"
                 android:textColor="@color/colorWhite"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -47,18 +47,6 @@
                 android:text="Privacy Policy"
                 android:textColor="@color/colorBlack"
                 android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/acPP_LinkTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/acPP_DescTV"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:autoLink="web"
-                android:linksClickable="true"
-                android:textSize="16sp" />
 
         </RelativeLayout>
 

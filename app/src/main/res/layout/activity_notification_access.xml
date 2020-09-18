@@ -12,7 +12,7 @@
         android:id="@+id/btn_acNotificationAccess"
         android:layout_width="166dp"
         android:layout_height="@dimen/_30sdp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/_25sdp"
         android:background="@drawable/background_btns"
         android:text="Allow"
         android:textColor="@color/colorWhite"

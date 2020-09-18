@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <include
         android:id="@+id/fr_default_toolbar"
         layout="@layout/toolbar_custom" />
 
+    <FrameLayout
+        android:id="@+id/fr_default_bannerContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fr_default_toolbar"
+        android:layout_marginTop="@dimen/_2sdp" />
+
     <RelativeLayout
         android:id="@+id/rootView_recycler_fr_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fr_default_toolbar">
+        android:layout_below="@+id/fr_default_bannerContainer">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_fr_default"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:theme="@style/Theme.RecyclerSms"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -29,18 +38,16 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/_15sdp"
         android:contentDescription="@string/fab_whatsApp"
+        android:src="@drawable/ic_fab_direct"
         app:backgroundTint="@color/colorFragmentSmsToolbar"
         app:borderWidth="0dp"
-        app:elevation="6dp"
-        android:src="@drawable/ic_fab_direct"
-        />
+        app:elevation="6dp" />
 
     <ProgressBar
         android:id="@+id/fr_default_loadingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="visible"
         android:indeterminateTint="@color/colorFragmentSmsToolbar"
-        />
+        android:visibility="visible" />
 </RelativeLayout>

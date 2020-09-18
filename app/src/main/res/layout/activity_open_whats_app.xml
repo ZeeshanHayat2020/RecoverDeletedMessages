@@ -11,11 +11,17 @@
         android:id="@+id/toolBar_acOpenWhatsApp"
         layout="@layout/toolbar_custom" />
 
+    <FrameLayout
+        android:id="@+id/acOpenWhatsApp_bannerContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolBar_acOpenWhatsApp"
+        android:layout_marginTop="@dimen/_2sdp" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolBar_acOpenWhatsApp"
+        android:layout_below="@+id/acOpenWhatsApp_bannerContainer"
         android:layout_centerInParent="true"
         android:layout_marginTop="@dimen/_30sdp"
         android:elevation="@dimen/_3sdp"

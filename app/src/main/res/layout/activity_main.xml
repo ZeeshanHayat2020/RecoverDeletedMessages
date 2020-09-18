@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorOffWhite"
-    tools:context="activities.MainActivity">
+    tools:context=".activities.MainActivity">
 
     <FrameLayout
         android:id="@+id/acMain_fragments_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/acMain_bottomRecycler_root" />
+        android:layout_above="@+id/acMain_bottomRecycler_root"
+        android:layout_marginBottom="@dimen/_5sdp" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView_permissionHolder_acMain"
@@ -72,7 +73,6 @@
         android:layout_centerInParent="true"
         android:background="@drawable/ic_main_bottom_whatsapp"
         >
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/acMain_bottom_recycler"
             android:layout_width="wrap_content"

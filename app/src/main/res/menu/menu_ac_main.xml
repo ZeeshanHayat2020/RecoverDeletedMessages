@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/acMain_menu_btnCreateNotification"
-        android:title="Create Notification" />
+        android:id="@+id/acMain_menu_btnShareUs"
+        android:title="Share Us" />
     <item
-        android:id="@+id/acMain_btm_nav_btnSettings"
-        android:title="Settings" />
+        android:id="@+id/acMain_menu_btnRateUs"
+        android:title="Rate Us" />
 
 </menu>

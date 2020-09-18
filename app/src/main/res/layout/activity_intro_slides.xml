@@ -17,10 +17,12 @@
         android:id="@+id/acIntroSlides_barsRoot"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="51dp"
         android:gravity="center"
-        android:orientation="horizontal"></LinearLayout>
+        android:orientation="horizontal"
+        android:layout_above="@+id/acIntroSlides_btnNext"
+        >
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/acIntroSlides_btnNext"
@@ -28,7 +30,8 @@
         android:layout_height="@dimen/_30sdp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_25sdp"
         android:background="@drawable/background_btns"
         android:text="@string/next"
         android:textAllCaps="false"

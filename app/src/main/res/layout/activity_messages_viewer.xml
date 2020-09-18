@@ -15,9 +15,9 @@
         android:id="@+id/rootView_recycler_ac_messageViewer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/acMessageViewer_bannerContainer"
         android:layout_below="@+id/toolBar_ac_messageViewer"
         android:layout_margin="@dimen/_10sdp">
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_ac_messageViewer"
             android:layout_width="match_parent"
@@ -32,5 +32,11 @@
         android:layout_centerInParent="true"
         android:visibility="visible" />
 
+    <FrameLayout
+        android:id="@+id/acMessageViewer_bannerContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/_2sdp" />
 
 </RelativeLayout>

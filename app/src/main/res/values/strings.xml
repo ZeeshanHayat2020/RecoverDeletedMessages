@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">RecoverDeletedMessages</string>
+    <string name="app_name">Deleted Message Recovery</string>
+    <!--Package Name:-->
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="item_selected">Selected</string>
@@ -51,6 +53,8 @@
 <a href="">Click here to visit privacy policy…</a>
 ]]></string>
     <string name="allowNotificationText">Application needs notification access to read messages and store in database.\nTo allow access click on Allow button.</string>
+    <string name="stopServiceMessage">App uses this service to receive and store messages .On stopping this service ,\nThe app will not be able to receive and store messages. \n Do yo want to stop.</string>
+    <string name="stopServiceHeading">Stop Service</string>
 
 
 </resources>

@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.messages.recovery.deleted.messages.recovery.R;
 import com.messages.recovery.deleted.messages.recovery.activities.ActivityMessagesViewer;
 import com.messages.recovery.deleted.messages.recovery.activities.ActivityOpenWhatsApp;
@@ -61,6 +62,7 @@ public class FragmentWhatsApp extends FragmentBase {
 
     private String TAG = "FragmentWhatsApp";
     private View view;
+    private RelativeLayout emptyAnimViewRoot;
     private Toolbar toolbar;
     private TextView toolBarTitleTv;
     private ProgressBar loadingBar;
@@ -155,6 +157,7 @@ public class FragmentWhatsApp extends FragmentBase {
         handler = new Handler(Looper.getMainLooper());
         recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_whatsApp);
         toolbar = (Toolbar) view.findViewById(R.id.fr_whatsApp_toolbar);
+        emptyAnimViewRoot = view.findViewById(R.id.emptyAnimView_root_fr_whatsApp);
         btnFab = view.findViewById(R.id.btnFab_fr_whatsApp);
         btnFab.setOnClickListener(onFabButtonClicked);
         loadingBar = (ProgressBar) view.findViewById(R.id.fr_whatsApp_loadingBar);
@@ -210,13 +213,17 @@ public class FragmentWhatsApp extends FragmentBase {
     }
 
     private void buildRecyclerView() {
+        if (usersList.isEmpty()) {
+            emptyAnimViewRoot.setVisibility(View.VISIBLE);
+        } else {
+            emptyAnimViewRoot.setVisibility(View.INVISIBLE);
+        }
         mAdapter = new AdapterMain(context, this, null, null, null, usersList, Constant.ACTIVE_FRAGMENT_WHATS_APP);
         recyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         mAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickeListener() {
             @Override
             public void onItemClicked(int position) {
-
                 updateTableMessages(position);
                 Intent intent = new Intent(context, ActivityMessagesViewer.class);
                 intent.putExtra(Constant.KEY_INTENT_SELECTED_MAIN_ITEM_TITLE, usersList.get(position).getUserTitle());

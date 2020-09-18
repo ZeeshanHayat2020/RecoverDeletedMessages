@@ -27,7 +27,39 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:theme="@style/Theme.RecyclerInsta"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/emptyAnimView_root_fr_insta"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_165sdp"
+        android:layout_centerInParent="true"
+        android:visibility="invisible">
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/emptyAnimView_fr_insta"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_150sdp"
+            android:visibility="visible"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/empty_view"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/notMsgFoundTV"
+            />
+
+        <TextView
+            android:id="@+id/notMsgFoundTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:text="No Message Found"
+            android:textSize="24sp"
+
             />
     </RelativeLayout>
 

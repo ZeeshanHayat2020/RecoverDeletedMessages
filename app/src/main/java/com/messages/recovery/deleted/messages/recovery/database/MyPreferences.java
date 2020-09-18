@@ -68,7 +68,7 @@ public class MyPreferences {
         Set<String> listnerSet = NotificationManagerCompat.getEnabledListenerPackages(_context);
         boolean haveAccess = false;
         for (String sd : listnerSet) {
-            if (sd.equals("com.example.recoverdeletedmessages")) {
+            if (sd.equals("com.messages.recovery.deleted.messages.recovery")) {
                 haveAccess = true;
             }
         }

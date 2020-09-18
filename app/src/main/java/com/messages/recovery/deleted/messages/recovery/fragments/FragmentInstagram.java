@@ -52,13 +52,13 @@ import java.util.Objects;
 
 public class FragmentInstagram extends FragmentBase {
 
+    private String TAG = "FragmentInstagram";
+    private View view;
+    private RelativeLayout emptyAnimViewRoot;
     private Toolbar toolbar;
     private TextView toolBarTitleTv;
     private ProgressBar loadingBar;
     private CheckBox selectAllMenuItem;
-
-    private String TAG = "FragmentInstagram";
-    private View view;
     private Context context;
     private RelativeLayout recyclerRootView;
     private RecyclerView recyclerView;
@@ -146,6 +146,7 @@ public class FragmentInstagram extends FragmentBase {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
         recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_instagram);
         toolbar = (Toolbar) view.findViewById(R.id.fr_instagram_toolbar);
+        emptyAnimViewRoot = view.findViewById(R.id.emptyAnimView_root_fr_insta);
         btnFab = view.findViewById(R.id.btnFab_fr_instagram);
         btnFab.setOnClickListener(onFabButtonClicked);
         loadingBar = (ProgressBar) view.findViewById(R.id.fr_instagram_loadingBar);
@@ -225,6 +226,11 @@ public class FragmentInstagram extends FragmentBase {
     }
 
     private void buildRecyclerView() {
+        if (usersList.isEmpty()) {
+            emptyAnimViewRoot.setVisibility(View.VISIBLE);
+        } else {
+            emptyAnimViewRoot.setVisibility(View.INVISIBLE);
+        }
         mAdapter = new AdapterMain(context, null, null, this, null, usersList, Constant.ACTIVE_FRAGMENT_ACTIVE_INSTA);
         recyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();

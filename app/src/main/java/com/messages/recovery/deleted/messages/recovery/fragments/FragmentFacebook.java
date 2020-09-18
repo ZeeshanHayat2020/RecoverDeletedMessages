@@ -57,6 +57,7 @@ public class FragmentFacebook extends FragmentBase {
     private TextView toolBarTitleTv;
     private ProgressBar loadingBar;
     private CheckBox selectAllMenuItem;
+    private RelativeLayout emptyAnimViewRoot;
 
     private String TAG = "FragmentFacebook";
     private View view;
@@ -143,6 +144,7 @@ public class FragmentFacebook extends FragmentBase {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
         recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_facebook);
         toolbar = (Toolbar) view.findViewById(R.id.fr_facebook_toolbar);
+        emptyAnimViewRoot = view.findViewById(R.id.emptyAnimView_root_fr_fb);
         btnFab = view.findViewById(R.id.btnFab_fr_facebook);
         btnFab.setOnClickListener(onFabButtonClicked);
         loadingBar = (ProgressBar) view.findViewById(R.id.fr_facebook_loadingBar);
@@ -226,6 +228,11 @@ public class FragmentFacebook extends FragmentBase {
     }
 
     private void buildRecyclerView() {
+        if (usersList.isEmpty()) {
+            emptyAnimViewRoot.setVisibility(View.VISIBLE);
+        } else {
+            emptyAnimViewRoot.setVisibility(View.INVISIBLE);
+        }
         mAdapter = new AdapterMain(context, null, this, null, null, usersList, Constant.ACTIVE_FRAGMENT_FACEBOOK);
         recyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();

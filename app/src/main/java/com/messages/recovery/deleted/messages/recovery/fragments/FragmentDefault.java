@@ -56,6 +56,7 @@ public class FragmentDefault extends FragmentBase {
     private TextView toolBarTitleTv;
     private ProgressBar loadingBar;
     private CheckBox selectAllMenuItem;
+    private RelativeLayout emptyAnimViewRoot;
 
     private String TAG = "FragmentDefault";
     private View view;
@@ -146,6 +147,7 @@ public class FragmentDefault extends FragmentBase {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
         recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_default);
         toolbar = (Toolbar) view.findViewById(R.id.fr_default_toolbar);
+        emptyAnimViewRoot = view.findViewById(R.id.emptyAnimView_root_fr_default);
         btnFab = view.findViewById(R.id.btnFab_fr_default);
         btnFab.setOnClickListener(onFabButtonClicked);
         loadingBar = (ProgressBar) view.findViewById(R.id.fr_default_loadingBar);
@@ -231,6 +233,11 @@ public class FragmentDefault extends FragmentBase {
     }
 
     private void buildRecyclerView() {
+        if (usersList.isEmpty()) {
+            emptyAnimViewRoot.setVisibility(View.VISIBLE);
+        } else {
+            emptyAnimViewRoot.setVisibility(View.INVISIBLE);
+        }
         mAdapter = new AdapterMain(context, null, null, null, this, usersList, Constant.ACTIVE_FRAGMENT_DEFAULT);
         recyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();

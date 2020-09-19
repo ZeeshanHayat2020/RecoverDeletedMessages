@@ -12,10 +12,10 @@
         android:name=".activities.ActivityApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_my_app_icon"
+        android:icon="@drawable/ic_app_icon"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_my_app_icon_round"
+        android:roundIcon="@drawable/ic_app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.messages.recovery.deleted.messages.recovery.activities.ActivityNotificationAccess" />

@@ -73,7 +73,7 @@ public class FragmentDefault extends FragmentBase {
     public boolean isSelectAll = false;
     private ArrayList<Users> multiSelectedItemList;
     private String selected;
-    private String currentFragmentTitle = "Default Messages";
+    private String currentFragmentTitle = "Sms";
 
 
     @Override
@@ -437,6 +437,7 @@ public class FragmentDefault extends FragmentBase {
                             protected void onPostExecute(Void aVoid) {
                                 super.onPostExecute(aVoid);
                                 closeContextualMenu();
+                                buildRecyclerView();
                                 loadingBar.setVisibility(View.GONE);
                                 recyclerRootView.setVisibility(View.VISIBLE);
                             }

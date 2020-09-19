@@ -71,7 +71,7 @@ public class NotificationService extends NotificationListenerService {
         Notification notification = new NotificationCompat.Builder(this, Constant.CHANNEL_ID)
                 .setContentTitle(getResources().getString(R.string.app_name))
                 .setContentText("Background service is running tap to stop.")
-                .setSmallIcon(R.drawable.ic_my_app_icon_background)
+                .setSmallIcon(R.mipmap.ic_notification_round)
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(1, notification);

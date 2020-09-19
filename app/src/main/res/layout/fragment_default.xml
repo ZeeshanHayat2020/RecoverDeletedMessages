@@ -40,13 +40,13 @@
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="@dimen/_150sdp"
             android:layout_height="@dimen/_150sdp"
+            android:layout_above="@+id/notMsgFoundTV"
+            android:layout_centerInParent="true"
             android:visibility="visible"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/empty_view"
-            android:layout_centerInParent="true"
-            android:layout_above="@+id/notMsgFoundTV"
-            />
+            app:lottie_rawRes="@raw/empty_view_sms"
+             />
 
         <TextView
             android:id="@+id/notMsgFoundTV"

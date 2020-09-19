@@ -427,6 +427,7 @@ public class FragmentWhatsApp extends FragmentBase {
                             protected void onPostExecute(Void aVoid) {
                                 super.onPostExecute(aVoid);
                                 closeContextualMenu();
+                                buildRecyclerView();
                                 loadingBar.setVisibility(View.GONE);
                                 recyclerRootView.setVisibility(View.VISIBLE);
                             }

@@ -100,9 +100,8 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         Users currentItem = usersList.get(position);
-        holder.titleTV.setText(currentItem.getUserTitle());
         setImageFromFile(currentItem.getLargeIconUri(), holder.imageView);
-
+        setLimitedTitle(currentItem.getUserTitle(), holder.titleTV);
         MyDataBaseHelper helper = new MyDataBaseHelper(context);
         switch (activeFragment) {
             case Constant.ACTIVE_FRAGMENT_WHATS_APP: {
@@ -301,10 +300,20 @@ public class AdapterMain extends RecyclerView.Adapter<AdapterMain.MyViewHolder> 
         return sdf.format(d);
     }
 
+    private void setLimitedTitle(String title, TextView textView) {
+
+        if (title.length() > 30) {
+            title = title.substring(0, 30) + "...";
+            textView.setText(title);
+        } else {
+            textView.setText(title);
+        }
+    }
+
     private void setLimitedMessage(String message, TextView textView) {
 
-        if (message.length() > 25) {
-            message = message.substring(0, 25) + "...";
+        if (message.length() > 33) {
+            message = message.substring(0, 33) + "...";
             textView.setText(message);
         } else {
 

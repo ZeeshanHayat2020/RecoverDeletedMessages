@@ -2,6 +2,8 @@ package com.messages.recovery.deleted.messages.recovery.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,21 +35,25 @@ public class ActivitySplash extends ActivityBase {
 
     public static void setStatusBarGradient(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Drawable background = activity.getResources().getDrawable(R.drawable.backgrond_splash);
             Window window = activity.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(activity.getResources().getColor(R.color.colorOffWhite));
-            window.setNavigationBarColor(activity.getResources().getColor(R.color.colorOffWhite));
+        /*    window.setStatusBarColor(activity.getResources().getColor(R.color.colorOffWhite));
+            window.setNavigationBarColor(activity.getResources().getColor(R.color.colorOffWhite));*/
+            window.setStatusBarColor(Color.TRANSPARENT);
+            window.setNavigationBarColor(Color.TRANSPARENT);
+            window.setBackgroundDrawable(background);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (haveNetworkConnection()) {
+       /* if (haveNetworkConnection()) {
             loadInterstitial();
         } else {
             launchWithDelay();
-        }
+        }*/
     }
 
     private void launchWithDelay() {
@@ -89,7 +95,7 @@ public class ActivitySplash extends ActivityBase {
         }.execute();
 
     }
-    
+
     void loadInterstitial() {
         mInterstitialAd.setAdListener(new AdListener() {
             @Override

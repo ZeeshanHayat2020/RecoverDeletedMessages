@@ -74,15 +74,13 @@ public class MainActivity extends ActivityBase {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        if (!isNotificationServiceRunning()) {
-            startNotificationService();
-        }
         reqNewInterstitial(this);
         setUpInAppUpdate();
         initViews();
         iniRecyclerView();
         setUpRecyclerView();
         checkForStopService(intent);
+
         if (hasStoragePermission()) {
             permissionHolder.setVisibility(View.INVISIBLE);
             fragmentContainer.setVisibility(View.VISIBLE);
@@ -288,28 +286,11 @@ public class MainActivity extends ActivityBase {
 
     }
 
-    public boolean isNotificationServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        assert manager != null;
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (NotificationService.class.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void startNotificationService() {
-        Intent serviceIntent = new Intent(this, NotificationService.class);
-        ContextCompat.startForegroundService(this, serviceIntent);
-    }
-
     private void stopNotificationService() {
-        Intent serviceIntent = new Intent(this, NotificationService.class);
-        serviceIntent.putExtra(Constant.KEY_INTENT_STOP_SERVICE, "STOP");
-        startService(serviceIntent);
-    }
+        Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+        startActivity(intent);
 
+    }
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {

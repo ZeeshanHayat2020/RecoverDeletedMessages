@@ -12,6 +12,7 @@
     <color name="colorbackgrounMain">#F7F6F6</color>
     <color name="colorInsta">#E03C62</color>
     <color name="colorIntroSlideBtn">#7646FF</color>
+    <color name="colorTransparent">#00000000</color>
 
     <color name="colorBtnPPAloww">#E03C62</color>
     <color name="colorBtnPPDecline">#3BDE58</color>

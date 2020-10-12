@@ -202,7 +202,7 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
 
     public void deleteMessages(String MESSAGE_TABLE_NAME, String columnName) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(MESSAGE_TABLE_NAME, KEY_USER_TITLE + " = ?",
+        db.delete(MESSAGE_TABLE_NAME, KEY_MESSAGE + " = ?",
                 new String[]{String.valueOf(columnName)});
         db.close();
     }

@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="@dimen/_4sdp"
     android:layout_marginRight="@dimen/_4sdp"
-    android:background="@android:color/transparent"
-    >
+    android:background="@android:color/transparent">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/itemView_ac_main_bottomRecycler_cardView"
@@ -14,10 +13,10 @@
         android:layout_height="@dimen/_65sdp"
         android:layout_centerInParent="true"
         android:clickable="true"
-        android:elevation="@dimen/_4sdp"
         android:foreground="?attr/selectableItemBackground"
         app:cardBackgroundColor="@color/colorWhite"
-        app:cardCornerRadius="@dimen/_9sdp">
+        app:cardCornerRadius="@dimen/_9sdp"
+        app:cardElevation="@dimen/_2sdp">
 
 
         <LinearLayout

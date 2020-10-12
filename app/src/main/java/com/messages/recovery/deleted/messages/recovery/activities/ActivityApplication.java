@@ -11,7 +11,6 @@ import com.messages.recovery.deleted.messages.recovery.constants.Constant;
 public class ActivityApplication extends Application {
 
 
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -23,7 +22,7 @@ public class ActivityApplication extends Application {
             NotificationChannel serviceChannel = new NotificationChannel(
                     Constant.CHANNEL_ID,
                     "DELETED MESSAGE RECOVERY APP",
-                    NotificationManager.IMPORTANCE_DEFAULT
+                    NotificationManager.IMPORTANCE_LOW
             );
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);

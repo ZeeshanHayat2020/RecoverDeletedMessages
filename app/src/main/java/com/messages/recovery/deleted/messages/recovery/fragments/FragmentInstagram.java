@@ -94,13 +94,12 @@ public class FragmentInstagram extends FragmentBase {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         context = getContext();
+        setUpToolBar();
         if (haveNetworkConnection()) {
             requestBanner((FrameLayout) view.findViewById(R.id.fr_instagram_bannerContainer));
         }
         reqNewInterstitial(context);
-
         initViews();
-        setUpToolBar();
         iniRecyclerView();
         registerReceiver();
     }
@@ -145,7 +144,7 @@ public class FragmentInstagram extends FragmentBase {
     private void initViews() {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
         recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_instagram);
-        toolbar = (Toolbar) view.findViewById(R.id.fr_instagram_toolbar);
+
         emptyAnimViewRoot = view.findViewById(R.id.emptyAnimView_root_fr_insta);
         btnFab = view.findViewById(R.id.btnFab_fr_instagram);
         btnFab.setOnClickListener(onFabButtonClicked);
@@ -199,6 +198,7 @@ public class FragmentInstagram extends FragmentBase {
     }
 
     private void setUpToolBar() {
+        toolbar = (Toolbar) view.findViewById(R.id.fr_instagram_toolbar);
         selected = getResources().getString(R.string.item_selected);
         ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorFragmentInstaToolbar));

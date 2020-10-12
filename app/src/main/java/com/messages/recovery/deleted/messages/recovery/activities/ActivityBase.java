@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
@@ -20,6 +21,7 @@ import android.widget.FrameLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -36,6 +38,7 @@ public class ActivityBase extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onStart();
     }
 
@@ -156,5 +159,6 @@ public class ActivityBase extends AppCompatActivity {
                     Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
         }
     }
+
 
 }

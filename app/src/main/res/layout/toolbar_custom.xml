@@ -8,6 +8,7 @@
     android:elevation="2dp"
     android:foregroundGravity="center"
     android:gravity="center"
+    android:paddingRight="@dimen/_10sdp"
     android:textAlignment="center"
     android:theme="@style/Theme.CustomToolbar">
 

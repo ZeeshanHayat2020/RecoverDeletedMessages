@@ -6,5 +6,4 @@
     <item
         android:id="@+id/acMain_menu_btnRateUs"
         android:title="Rate Us" />
-
 </menu>

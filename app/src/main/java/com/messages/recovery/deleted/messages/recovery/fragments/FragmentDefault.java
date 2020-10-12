@@ -95,13 +95,12 @@ public class FragmentDefault extends FragmentBase {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         context = getContext();
+        setUpToolBar();
         if (haveNetworkConnection()) {
             requestBanner((FrameLayout) view.findViewById(R.id.fr_default_bannerContainer));
         }
         reqNewInterstitial(context);
-
         initViews();
-        setUpToolBar();
         iniRecyclerView();
         registerReceiver();
     }
@@ -146,7 +145,7 @@ public class FragmentDefault extends FragmentBase {
     private void initViews() {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
         recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_default);
-        toolbar = (Toolbar) view.findViewById(R.id.fr_default_toolbar);
+
         emptyAnimViewRoot = view.findViewById(R.id.emptyAnimView_root_fr_default);
         btnFab = view.findViewById(R.id.btnFab_fr_default);
         btnFab.setOnClickListener(onFabButtonClicked);
@@ -206,6 +205,7 @@ public class FragmentDefault extends FragmentBase {
 
 
     private void setUpToolBar() {
+        toolbar = (Toolbar) view.findViewById(R.id.fr_default_toolbar);
         selected = getResources().getString(R.string.item_selected);
         ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorFragmentSmsToolbar));
@@ -283,8 +283,6 @@ public class FragmentDefault extends FragmentBase {
                 }
             }
         });
-
-
     }
 
     private void updateToolBarTitle(String title) {

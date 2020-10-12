@@ -58,7 +58,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:text="No Message Found"
-            android:textSize="24sp"
+            android:textSize="22sp"
+            android:layout_marginTop="@dimen/_5sdp"
 
             />
     </RelativeLayout>

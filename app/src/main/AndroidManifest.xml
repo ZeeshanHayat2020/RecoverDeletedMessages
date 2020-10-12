@@ -18,8 +18,12 @@
         android:roundIcon="@drawable/ic_app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.messages.recovery.deleted.messages.recovery.activities.ActivityNotificationAccess" />
-        <activity android:name="com.messages.recovery.deleted.messages.recovery.activities.ActivityPrivacyPolicy" />
+        <activity
+            android:name="com.messages.recovery.deleted.messages.recovery.activities.ActivityNotificationAccess"
+            android:theme="@style/AppTheme.DarkStatusBar" />
+        <activity
+            android:name="com.messages.recovery.deleted.messages.recovery.activities.ActivityPrivacyPolicy"
+            android:theme="@style/AppTheme.DarkStatusBar" />
         <activity android:name="com.messages.recovery.deleted.messages.recovery.activities.ActivitySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +31,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.messages.recovery.deleted.messages.recovery.activities.ActivityIntroSLides" />
+        <activity
+            android:name="com.messages.recovery.deleted.messages.recovery.activities.ActivityIntroSLides"
+            android:theme="@style/AppTheme.DarkStatusBar" />
         <activity android:name="com.messages.recovery.deleted.messages.recovery.activities.ActivityOpenWhatsApp" />
         <activity android:name="com.messages.recovery.deleted.messages.recovery.activities.ActivityMessagesViewer" />
         <activity android:name="com.messages.recovery.deleted.messages.recovery.activities.MainActivity" />

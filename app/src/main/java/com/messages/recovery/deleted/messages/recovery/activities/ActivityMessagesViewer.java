@@ -7,9 +7,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,8 +22,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EdgeEffect;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -35,6 +39,7 @@ import com.messages.recovery.deleted.messages.recovery.database.MyDataBaseHelper
 import com.messages.recovery.deleted.messages.recovery.interfaces.OnRecyclerItemClickeListener;
 import com.messages.recovery.deleted.messages.recovery.models.Messages;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class ActivityMessagesViewer extends ActivityBase {
@@ -75,8 +80,8 @@ public class ActivityMessagesViewer extends ActivityBase {
         }
         initViews();
         setUpToolBar();
-        setToolbarAndStatusBarColor(currentMessagesTitle);
         iniRecyclerView();
+        setToolbarAndStatusBarColor(currentMessagesTitle);
         buildRecyclerView();
     }
 
@@ -196,7 +201,6 @@ public class ActivityMessagesViewer extends ActivityBase {
 
         }
     }
-
 
     private void updateToolBarTitle(String title) {
         toolBarTitleTv.setText(title);

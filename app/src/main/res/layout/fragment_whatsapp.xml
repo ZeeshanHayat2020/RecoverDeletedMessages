@@ -20,7 +20,9 @@
         android:id="@+id/rootView_recycler_fr_whatsApp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fr_whatsApp_bannerContainer">
+        android:layout_below="@+id/fr_whatsApp_bannerContainer"
+
+        >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_fr_whatsApp"
@@ -55,7 +57,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:text="No Message Found"
-            android:textSize="24sp"
+            android:textSize="22sp"
+            android:layout_marginTop="@dimen/_5sdp"
 
             />
     </RelativeLayout>

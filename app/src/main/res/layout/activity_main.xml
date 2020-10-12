@@ -21,8 +21,8 @@
         android:layout_centerInParent="true"
         android:layout_marginLeft="@dimen/_10sdp"
         android:layout_marginRight="@dimen/_10sdp"
-        android:elevation="@dimen/_3sdp"
-        app:cardCornerRadius="@dimen/_10sdp">
+        app:cardCornerRadius="@dimen/_10sdp"
+        app:cardElevation="@dimen/_3sdp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -71,8 +71,8 @@
         android:layout_height="@dimen/_90sdp"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        android:background="@drawable/ic_main_bottom_whatsapp"
-        >
+        android:background="@drawable/ic_main_bottom_whatsapp">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/acMain_bottom_recycler"
             android:layout_width="wrap_content"

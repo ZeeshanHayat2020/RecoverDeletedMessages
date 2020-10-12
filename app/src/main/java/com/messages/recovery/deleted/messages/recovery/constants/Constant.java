@@ -25,8 +25,8 @@ public class Constant {
     public static final String ACTIVE_FRAGMENT_DEFAULT = "ACTIVE_FRAGMENT_DEFAULT";
 
     public static final int REQUEST_STORAGE_PERMISSION = 192;
-    public static final int REQUEST_CODE_FOR_IN_APP_UPDATE =124;
-    public static final int REQUEST_CODE_IN_APP_REVIEW =129;
-    public static final String KEY_INTENT_FROM_NOTIFICATION ="KEY_INTENT_FROM_NOTIFICATION" ;
-    public static final String KEY_INTENT_STOP_SERVICE ="KEY_INTENT_STOP_SERVICE" ;
+    public static final int REQUEST_CODE_FOR_IN_APP_UPDATE = 124;
+    public static final int REQUEST_CODE_IN_APP_REVIEW = 129;
+    public static final String KEY_INTENT_FROM_NOTIFICATION = "KEY_INTENT_FROM_NOTIFICATION";
+    public static final String KEY_INTENT_START_STOP_SERVICE ="KEY_INTENT_START_STOP_SERVICE" ;
 }

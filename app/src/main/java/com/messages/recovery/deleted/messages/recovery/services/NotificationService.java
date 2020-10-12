@@ -39,28 +39,35 @@ public class NotificationService extends NotificationListenerService {
     private String TAG = this.getClass().getSimpleName();
     private final static String default_notification_channel_id = "default";
     private String largeIconUri = "";
-    private long lastMessageTime;
-    private String lastMessageContent;
     private MyDataBaseHelper myDataBaseHelper;
 
     @Override
     public void onCreate() {
         super.onCreate();
         createNotification();
-
     }
 
-    @Override
+  /*  @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String command = intent.getStringExtra(Constant.KEY_INTENT_STOP_SERVICE);
+        String command = intent.getStringExtra(Constant.KEY_INTENT_START_STOP_SERVICE);
         if (command != null) {
-            if (command.equals("STOP")) {
-                stopForeground(true);
-                stopSelf();
+            switch (command) {
+                case "START": {
+                    createNotification();
+                    Log.d(TAG, "onStartCommand: Command to START");
+                }
+                break;
+                case "STOP": {
+                    *//*stopForeground(true);
+                    stopSelf();*//*
+                    Log.d(TAG, "onStartCommand: Command to STOP");
+                }
+                break;
             }
+
         }
         return START_STICKY;
-    }
+    }*/
 
     private void createNotification() {
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -85,7 +92,6 @@ public class NotificationService extends NotificationListenerService {
             Log.d(TAG, "May be twice");
             return;
         }
-
         checkNotificationComeFrom(sbn);
     }
 
@@ -97,97 +103,101 @@ public class NotificationService extends NotificationListenerService {
     private void checkNotificationComeFrom(StatusBarNotification sbn) {
         myDataBaseHelper = new MyDataBaseHelper(getApplicationContext());
         String packageName = sbn.getPackageName();
-        Bundle extras = sbn.getNotification().extras;
-        if (packageName.equals(Telephony.Sms.getDefaultSmsPackage(getApplicationContext()))) {
-            long id = sbn.getId();
-            long timeStamp = sbn.getPostTime();
-            String title = extras.getString("android.title");
-            String message = extras.getCharSequence("android.text").toString();
-            String readStatus = "unRead";
-            if (title != null && !title.toLowerCase().equals("Message not sent".toLowerCase())) {
-                boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_DEFAULT, myDataBaseHelper.KEY_USER_TITLE, title);
-                if (!recordExists) {
-                    getLargeIcon(extras);
-                    myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_DEFAULT, id, title, largeIconUri);
-                    largeIconUri = "";
-                }
-                if (!message.contains("new messages")) {
-                    myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, title, message, timeStamp, readStatus);
-                }
-                sendBroadCast(Constant.ACTION_INTENT_FILTER_DEFAULT_RECEIVER);
-            }
-        } else {
-            switch (packageName) {
-                case ApplicationPackagesName.FACEBOOK_MESSENGER_PACK_NAME: {
+        if (packageName != null) {
+            Bundle extras = sbn.getNotification().extras;
+            if (extras != null) {
+                if (packageName.equals(Telephony.Sms.getDefaultSmsPackage(getApplicationContext()))) {
                     long id = sbn.getId();
                     long timeStamp = sbn.getPostTime();
                     String title = extras.getString("android.title");
                     String message = extras.getCharSequence("android.text").toString();
                     String readStatus = "unRead";
-
-                    if (title != null && !title.toLowerCase().equals("Messenger".toLowerCase())) {
-                        boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_FACEBOOK, myDataBaseHelper.KEY_USER_TITLE, title);
+                    if (title != null && !title.toLowerCase().equals("Mes sage not sent".toLowerCase())) {
+                        boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_DEFAULT, myDataBaseHelper.KEY_USER_TITLE, title);
                         if (!recordExists) {
                             getLargeIcon(extras);
-                            myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_FACEBOOK, id, title, largeIconUri);
+                            myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_DEFAULT, id, title, largeIconUri);
                             largeIconUri = "";
                         }
                         if (!message.contains("new messages")) {
-                            myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, title, message, timeStamp, readStatus);
+                            myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_DEFAULT, title, message, timeStamp, readStatus);
                         }
-                        sendBroadCast(Constant.ACTION_INTENT_FILTER_FACEBOOK_RECEIVER);
+                        sendBroadCast(Constant.ACTION_INTENT_FILTER_DEFAULT_RECEIVER);
+                    }
+                } else {
+                    switch (packageName) {
+                        case ApplicationPackagesName.FACEBOOK_MESSENGER_PACK_NAME: {
+                            long id = sbn.getId();
+                            long timeStamp = sbn.getPostTime();
+                            String title = extras.getString("android.title");
+                            String message = extras.getCharSequence("android.text").toString();
+                            String readStatus = "unRead";
+
+                            if (title != null && !title.toLowerCase().equals("Messenger".toLowerCase())) {
+                                boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_FACEBOOK, myDataBaseHelper.KEY_USER_TITLE, title);
+                                if (!recordExists) {
+                                    getLargeIcon(extras);
+                                    myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_FACEBOOK, id, title, largeIconUri);
+                                    largeIconUri = "";
+                                }
+                                if (!message.contains("new messages")) {
+                                    myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_FACEBOOK, title, message, timeStamp, readStatus);
+                                }
+                                sendBroadCast(Constant.ACTION_INTENT_FILTER_FACEBOOK_RECEIVER);
+                            }
+                        }
+                        break;
+
+                        case ApplicationPackagesName.INSTAGRAM_PACK_NAME: {
+
+                            long id = sbn.getId();
+                            long timeStamp = sbn.getPostTime();
+                            String title = extras.getString("android.title");
+                            String message = extras.getCharSequence("android.text").toString();
+                            String readStatus = "unRead";
+
+                            if (title != null) {
+                                if (!title.toLowerCase().equals("Instagram".toLowerCase())) {
+                                    boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_INSTAGRAM, myDataBaseHelper.KEY_USER_TITLE, title);
+                                    if (!recordExists) {
+                                        getLargeIcon(extras);
+                                        myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_INSTAGRAM, id, title, largeIconUri);
+                                        largeIconUri = "";
+                                    }
+                                    if (!message.contains("new messages")) {
+                                        myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_INSTAGRAM, title, message, timeStamp, readStatus);
+                                    }
+                                    sendBroadCast(Constant.ACTION_INTENT_FILTER_INSTAGRAM_RECEIVER);
+                                }
+                            }
+
+
+                        }
+                        break;
+                        case ApplicationPackagesName.WHATSAPP_PACK_NAME: {
+                            long id = sbn.getId();
+                            long timeStamp = sbn.getPostTime();
+                            String title = extras.getString("android.title");
+                            String message = extras.getCharSequence("android.text").toString();
+                            String readStatus = "unRead";
+                            if (title != null) {
+                                if (!title.equals("WhatsApp") && !title.toLowerCase().equals("Backup Paused".toLowerCase()) && !title.toLowerCase().equals("Backup in progress".toLowerCase())) {
+                                    boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_WHATS_APP, myDataBaseHelper.KEY_USER_TITLE, title);
+                                    if (!recordExists) {
+                                        getLargeIcon(extras);
+                                        myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_WHATS_APP, id, title, largeIconUri);
+                                        largeIconUri = "";
+                                    }
+                                    if (!message.contains("new messages")) {
+                                        myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, title, message, timeStamp, readStatus);
+                                    }
+                                    sendBroadCast(Constant.ACTION_INTENT_FILTER_WHATS_APP_RECEIVER);
+                                }
+                            }
+                        }
+                        break;
                     }
                 }
-                break;
-
-                case ApplicationPackagesName.INSTAGRAM_PACK_NAME: {
-
-                    long id = sbn.getId();
-                    long timeStamp = sbn.getPostTime();
-                    String title = extras.getString("android.title");
-                    String message = extras.getCharSequence("android.text").toString();
-                    String readStatus = "unRead";
-
-                    if (title != null) {
-                        if (!title.toLowerCase().equals("Instagram".toLowerCase())) {
-                            boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_INSTAGRAM, myDataBaseHelper.KEY_USER_TITLE, title);
-                            if (!recordExists) {
-                                getLargeIcon(extras);
-                                myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_INSTAGRAM, id, title, largeIconUri);
-                                largeIconUri = "";
-                            }
-                            if (!message.contains("new messages")) {
-                                myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_INSTAGRAM, title, message, timeStamp, readStatus);
-                            }
-                            sendBroadCast(Constant.ACTION_INTENT_FILTER_INSTAGRAM_RECEIVER);
-                        }
-                    }
-
-
-                }
-                break;
-                case ApplicationPackagesName.WHATSAPP_PACK_NAME: {
-                    long id = sbn.getId();
-                    long timeStamp = sbn.getPostTime();
-                    String title = extras.getString("android.title");
-                    String message = extras.getCharSequence("android.text").toString();
-                    String readStatus = "unRead";
-                    if (title != null) {
-                        if (!title.equals("WhatsApp") && !title.toLowerCase().equals("Backup Paused".toLowerCase()) && !title.toLowerCase().equals("Backup in progress".toLowerCase())) {
-                            boolean recordExists = myDataBaseHelper.checkIsRecordExist(TableName.TABLE_NAME_USER_WHATS_APP, myDataBaseHelper.KEY_USER_TITLE, title);
-                            if (!recordExists) {
-                                getLargeIcon(extras);
-                                myDataBaseHelper.insertUsers(TableName.TABLE_NAME_USER_WHATS_APP, id, title, largeIconUri);
-                                largeIconUri = "";
-                            }
-                            if (!message.contains("new messages")) {
-                                myDataBaseHelper.insertMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, title, message, timeStamp, readStatus);
-                            }
-                            sendBroadCast(Constant.ACTION_INTENT_FILTER_WHATS_APP_RECEIVER);
-                        }
-                    }
-                }
-                break;
             }
         }
 
@@ -272,5 +282,13 @@ public class NotificationService extends NotificationListenerService {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopForeground(true);
+        stopSelf();
+        Log.d(TAG, "onDestroy: Service Destroyed");
     }
 }

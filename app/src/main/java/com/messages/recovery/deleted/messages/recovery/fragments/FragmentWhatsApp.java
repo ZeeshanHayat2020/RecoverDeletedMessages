@@ -106,12 +106,12 @@ public class FragmentWhatsApp extends FragmentBase {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         context = getContext();
+        setUpToolBar();
         if (haveNetworkConnection()) {
             requestBanner((FrameLayout) view.findViewById(R.id.fr_whatsApp_bannerContainer));
         }
         reqNewInterstitial(context);
         initViews();
-        setUpToolBar();
         iniRecyclerView();
         registerReceiver();
         setUpInAppReview();
@@ -156,7 +156,6 @@ public class FragmentWhatsApp extends FragmentBase {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
         handler = new Handler(Looper.getMainLooper());
         recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_whatsApp);
-        toolbar = (Toolbar) view.findViewById(R.id.fr_whatsApp_toolbar);
         emptyAnimViewRoot = view.findViewById(R.id.emptyAnimView_root_fr_whatsApp);
         btnFab = view.findViewById(R.id.btnFab_fr_whatsApp);
         btnFab.setOnClickListener(onFabButtonClicked);
@@ -185,6 +184,7 @@ public class FragmentWhatsApp extends FragmentBase {
 
 
     private void setUpToolBar() {
+        toolbar = (Toolbar) view.findViewById(R.id.fr_whatsApp_toolbar);
         selected = getResources().getString(R.string.item_selected);
         ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorFragmentWhatsappToolbar));

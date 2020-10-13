@@ -81,11 +81,6 @@ public class FragmentWhatsApp extends FragmentBase {
     private String selected;
     private String currentFragmentTitle = "Whats App";
 
-    ReviewManager reviewManager;
-    ReviewInfo reviewInfo = null;
-    Handler handler;
-    private int reviewCounter = 0;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,7 +109,6 @@ public class FragmentWhatsApp extends FragmentBase {
         initViews();
         iniRecyclerView();
         registerReceiver();
-        setUpInAppReview();
     }
 
     @Override
@@ -154,7 +148,6 @@ public class FragmentWhatsApp extends FragmentBase {
 
     private void initViews() {
         myDataBaseHelper = new MyDataBaseHelper(getContext());
-        handler = new Handler(Looper.getMainLooper());
         recyclerRootView = (RelativeLayout) view.findViewById(R.id.rootView_recycler_fr_whatsApp);
         emptyAnimViewRoot = view.findViewById(R.id.emptyAnimView_root_fr_whatsApp);
         btnFab = view.findViewById(R.id.btnFab_fr_whatsApp);
@@ -359,7 +352,6 @@ public class FragmentWhatsApp extends FragmentBase {
         }.execute();
     }
 
-
     private void updateTableMessages(int position) {
         Users currentUser = usersList.get(position);
         List<Messages> list = myDataBaseHelper.getSelectedMessages(TableName.TABLE_NAME_MESSAGES_WHATS_APP, currentUser.getUserTitle());
@@ -478,25 +470,6 @@ public class FragmentWhatsApp extends FragmentBase {
     }
 
 
-    private void setUpInAppReview() {
-//        reviewManager = ReviewManagerFactory.create(context);
-        reviewManager = new FakeReviewManager(context);
-        Task<ReviewInfo> request = reviewManager.requestReviewFlow();
-        request.addOnCompleteListener(new OnCompleteListener<ReviewInfo>() {
-            @Override
-            public void onComplete(@NonNull Task<ReviewInfo> task) {
-                if (task.isSuccessful()) {
-                    // We can get the ReviewInfo object
-                    reviewInfo = task.getResult();
-                } else {
-                    // There was some problem, continue regardless of the result.
-                    reviewInfo = null;
-                }
-            }
-        });
-
-    }
-
     @Override
     public void onRequestPermissionsResult(final int requestCode,
                                            @NonNull final String[] permissions,
@@ -509,42 +482,4 @@ public class FragmentWhatsApp extends FragmentBase {
         }
     }
 
-
- /*   @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constant.REQUEST_CODE_IN_APP_REVIEW) {
-            if (resultCode == RESULT_OK) {
-                reviewCounter++;
-                if (reviewCounter > 0) {
-                    reviewCounter = 0;
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Task<Void> flow = reviewManager.launchReviewFlow(getActivity(), reviewInfo);
-                            flow.addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    Log.d(TAG, "onComplete: Thanks for the feedback!");
-                                }
-                            });
-                            flow.addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void result) {
-                                    Log.d(TAG, "onSuccess:  Reviewed successfully");
-                                }
-                            });
-                            flow.addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(Exception e) {
-                                    Log.d(TAG, "onFailed:  Reviewed Failed!");
-                                }
-                            });
-                        }
-                    }, 3000);
-                }
-            }
-        }
-    }*/
 }

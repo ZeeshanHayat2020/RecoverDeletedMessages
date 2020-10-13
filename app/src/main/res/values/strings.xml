@@ -17,15 +17,15 @@
     <string name="whatsAppNotInstalled" type="id">Whats app is not installed in your phone./</string>
 
     <!--Real Ads-->
-<!--    <string name="app_Id" translatable="false">ca-app-pub-3433618040569361~1770835994</string>
+    <string name="app_Id" translatable="false">ca-app-pub-3433618040569361~1770835994</string>
     <string name="banner_Id" translatable="false">ca-app-pub-3433618040569361/7612343709</string>
-    <string name="interstitial_Id" translatable="false">ca-app-pub-3433618040569361/5518509310</string>-->
+    <string name="interstitial_Id" translatable="false">ca-app-pub-3433618040569361/5518509310</string>
 
 
     <!--Test Ads-->
-    <string name="app_Id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+ <!--   <string name="app_Id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
     <string name="banner_Id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="interstitial_Id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="interstitial_Id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>-->
     <string name="start">Start</string>
     <string name="next">Next</string>
     <string name="decline">Decline</string>
@@ -33,7 +33,7 @@
     <string name="skip">Skip</string>
     <string name="storagePermission">Allow application to reade and write storage permission.</string>
     <string name="allow">Allow</string>
-    <string name="splash_heading">Delete Message Recovery</string>
+    <string name="splash_heading">Deleted Messages Recovery</string>
     <string name="splash_description">Recover all your social media messages</string>
     <string name="introSlideWaTtitle">Whats App Messages</string>
 

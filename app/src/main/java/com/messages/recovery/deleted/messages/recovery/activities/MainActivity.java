@@ -255,7 +255,6 @@ public class MainActivity extends ActivityBase {
         });
     }
 
-
     public void setUpBottomBacgorund(int source) {
         recyclerRootView.setBackgroundResource(source);
 
@@ -288,9 +287,11 @@ public class MainActivity extends ActivityBase {
 
     private void stopNotificationService() {
         Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
     }
+
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {

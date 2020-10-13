@@ -22,6 +22,7 @@ public class ActivitySplash extends ActivityBase {
     private Runnable runnable;
     private int loadAttempts;
     private MyPreferences myPreferences;
+    private boolean isAdLeftApp = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +39,8 @@ public class ActivitySplash extends ActivityBase {
             Drawable background = activity.getResources().getDrawable(R.drawable.backgrond_splash);
             Window window = activity.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        /*    window.setStatusBarColor(activity.getResources().getColor(R.color.colorOffWhite));
-            window.setNavigationBarColor(activity.getResources().getColor(R.color.colorOffWhite));*/
-            window.setStatusBarColor(Color.TRANSPARENT);
-            window.setNavigationBarColor(Color.TRANSPARENT);
+            window.setStatusBarColor(activity.getResources().getColor(R.color.colorTransparent));
+            window.setNavigationBarColor(activity.getResources().getColor(R.color.colorTransparent));
             window.setBackgroundDrawable(background);
         }
     }
@@ -49,22 +48,25 @@ public class ActivitySplash extends ActivityBase {
     @Override
     protected void onResume() {
         super.onResume();
-       /* if (haveNetworkConnection()) {
+        isAdLeftApp = false;
+        if (haveNetworkConnection()) {
             loadInterstitial();
         } else {
             launchWithDelay();
-        }*/
+        }
     }
 
     private void launchWithDelay() {
         runnable = new Runnable() {
             @Override
             public void run() {
-                launchLanguageActivity();
+                if (!isAdLeftApp) {
+                    launchLanguageActivity();
+                }
             }
         };
         handler = new Handler();
-        handler.postDelayed(runnable, 1000);
+        handler.postDelayed(runnable, 1500);
     }
 
     private void launchLanguageActivity() {
@@ -73,15 +75,15 @@ public class ActivitySplash extends ActivityBase {
             protected Void doInBackground(Void... voids) {
                 final Intent intent;
                 if (myPreferences.isFirstTimeLaunch()) {
-                    intent = new Intent(ActivitySplash.this, ActivityIntroSLides.class);
+                    intent = new Intent(ActivitySplash.this, ActivityIntroSLides.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 } else {
                     if (!myPreferences.isPrivacyPolicyAccepted()) {
-                        intent = new Intent(ActivitySplash.this, ActivityPrivacyPolicy.class);
+                        intent = new Intent(ActivitySplash.this, ActivityPrivacyPolicy.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     } else {
                         if (myPreferences.haveNotificationAccess()) {
-                            intent = new Intent(ActivitySplash.this, MainActivity.class);
+                            intent = new Intent(ActivitySplash.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         } else {
-                            intent = new Intent(ActivitySplash.this, ActivityNotificationAccess.class);
+                            intent = new Intent(ActivitySplash.this, ActivityNotificationAccess.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         }
 
                     }
@@ -100,11 +102,13 @@ public class ActivitySplash extends ActivityBase {
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                if (mInterstitialAd.isLoaded() && !myPreferences.isItemPurchased()) {
+                if (mInterstitialAd.isLoaded() && !isAdLeftApp) {
                     mInterstitialAd.show();
                 } else {
-                    launchWithDelay();
-                    Log.d("TAG", "The interstitial wasn't loaded yet.");
+                    if (!isAdLeftApp) {
+                        launchWithDelay();
+                        Log.d("TAG", "The interstitial wasn't loaded yet.");
+                    }
                 }
                 super.onAdLoaded();
             }
@@ -129,4 +133,15 @@ public class ActivitySplash extends ActivityBase {
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isAdLeftApp = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isAdLeftApp = true;
+    }
 }

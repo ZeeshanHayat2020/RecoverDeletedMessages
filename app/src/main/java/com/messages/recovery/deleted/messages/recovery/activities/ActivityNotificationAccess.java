@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.messages.recovery.deleted.messages.recovery.R;
-import com.messages.recovery.deleted.messages.recovery .database.MyPreferences;
+import com.messages.recovery.deleted.messages.recovery.database.MyPreferences;
 
 public class ActivityNotificationAccess extends ActivityBase {
 
@@ -43,7 +43,6 @@ public class ActivityNotificationAccess extends ActivityBase {
         changeButtonBackground(btnNotifyAccess, R.color.colorFragmentFbToolbar);
     }
 
-
     private void changeButtonBackground(Button btnAccept, int colorId) {
         Drawable background = btnAccept.getBackground();
         if (background instanceof ShapeDrawable) {
@@ -68,12 +67,12 @@ public class ActivityNotificationAccess extends ActivityBase {
     };
 
     void intentMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         finish();
     }
 
     private void settingsIntent() {
-        Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+        Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS").setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 }

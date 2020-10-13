@@ -37,7 +37,6 @@ import java.util.Locale;
 public class NotificationService extends NotificationListenerService {
 
     private String TAG = this.getClass().getSimpleName();
-    private final static String default_notification_channel_id = "default";
     private String largeIconUri = "";
     private MyDataBaseHelper myDataBaseHelper;
 
@@ -46,28 +45,6 @@ public class NotificationService extends NotificationListenerService {
         super.onCreate();
         createNotification();
     }
-
-  /*  @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        String command = intent.getStringExtra(Constant.KEY_INTENT_START_STOP_SERVICE);
-        if (command != null) {
-            switch (command) {
-                case "START": {
-                    createNotification();
-                    Log.d(TAG, "onStartCommand: Command to START");
-                }
-                break;
-                case "STOP": {
-                    *//*stopForeground(true);
-                    stopSelf();*//*
-                    Log.d(TAG, "onStartCommand: Command to STOP");
-                }
-                break;
-            }
-
-        }
-        return START_STICKY;
-    }*/
 
     private void createNotification() {
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -78,12 +55,11 @@ public class NotificationService extends NotificationListenerService {
         Notification notification = new NotificationCompat.Builder(this, Constant.CHANNEL_ID)
                 .setContentTitle(getResources().getString(R.string.app_name))
                 .setContentText("Background service is running tap to stop.")
-                .setSmallIcon(R.mipmap.ic_notification_round)
+                .setSmallIcon(R.mipmap.ic_my_notification_round)
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(1, notification);
     }
-
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
@@ -200,9 +176,7 @@ public class NotificationService extends NotificationListenerService {
                 }
             }
         }
-
     }
-
 
     private void sendBroadCast(String action) {
         Intent intent = new Intent(action);/*

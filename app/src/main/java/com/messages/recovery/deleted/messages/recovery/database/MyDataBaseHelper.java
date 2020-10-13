@@ -134,9 +134,6 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     public ArrayList<Users> getALLUsers(String USERS_TABLE_NAME) {
         ArrayList<Users> usersList = new ArrayList<Users>();
         String selectQuery = "SELECT  * FROM " + USERS_TABLE_NAME;
-
-        Log.e(LOG, selectQuery);
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -237,9 +234,6 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     public ArrayList<Messages> getAllMessages(String MESSAGE_TABLE_NAME) {
         ArrayList<Messages> messagesList = new ArrayList<Messages>();
         String selectQuery = "SELECT  * FROM " + MESSAGE_TABLE_NAME;
-
-        Log.e(LOG, selectQuery);
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -263,9 +257,6 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
         ArrayList<Messages> messagesList = new ArrayList<Messages>();
         String selectQuery = "SELECT  * FROM " + MESSAGES_TABLE_NAME + " WHERE "
                 + KEY_USER_TITLE + " = '" + title + "'";
-
-        Log.e(LOG, selectQuery);
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
@@ -291,12 +282,10 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
             Cursor cursor = objDatabase.rawQuery("SELECT " + columnName + " FROM " + nameOfTable + " WHERE " + columnName + "='" + columnValue + "'", null);
             if (cursor.moveToFirst()) {
 
-                Log.d(LOG, "Record  Already Exists" + "Table is:" + nameOfTable + " ColumnName:" + columnName);
                 objDatabase.close();
                 return true;//record Exists
 
             }
-            Log.d(LOG, "New Record  " + "Table is:" + nameOfTable + " ColumnName:" + columnName + " Column Value:" + columnValue);
 
         } catch (Exception errorException) {
             Log.d(LOG, "Exception occured" + "Exception occured " + errorException);

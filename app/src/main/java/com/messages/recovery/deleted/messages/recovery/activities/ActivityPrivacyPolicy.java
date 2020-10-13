@@ -100,9 +100,9 @@ public class ActivityPrivacyPolicy extends AppCompatActivity {
     private void startNotificationAccessActivity() {
         Intent intent;
         if (!myPreferences.haveNotificationAccess()) {
-            intent = new Intent(this, ActivityNotificationAccess.class);
+            intent = new Intent(this, ActivityNotificationAccess.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         } else {
-            intent = new Intent(this, MainActivity.class);
+            intent = new Intent(this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         }
         startActivity(intent);
         this.finish();

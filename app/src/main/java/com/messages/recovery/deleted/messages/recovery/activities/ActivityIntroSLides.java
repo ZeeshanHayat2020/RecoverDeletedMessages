@@ -104,12 +104,12 @@ public class ActivityIntroSLides extends ActivityBase {
             protected Void doInBackground(Void... voids) {
                 Intent intent;
                 if (!myPreferences.isPrivacyPolicyAccepted()) {
-                    intent = new Intent(ActivityIntroSLides.this, ActivityPrivacyPolicy.class);
+                    intent = new Intent(ActivityIntroSLides.this, ActivityPrivacyPolicy.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 } else {
                     if (!myPreferences.haveNotificationAccess()) {
-                        intent = new Intent(ActivityIntroSLides.this, ActivityNotificationAccess.class);
+                        intent = new Intent(ActivityIntroSLides.this, ActivityNotificationAccess.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     } else {
-                        intent = new Intent(ActivityIntroSLides.this, MainActivity.class);
+                        intent = new Intent(ActivityIntroSLides.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     }
                 }
                 startActivity(intent);
